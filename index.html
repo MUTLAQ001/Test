@@ -169,10 +169,15 @@
         .data-btn:hover { border-color: var(--color-primary); color: var(--color-primary); background: rgba(var(--rgb-primary), 0.1); }
         .data-btn.danger { border-color: rgba(var(--rgb-danger), 0.5); color: var(--color-danger); }
         .data-btn.danger:hover { background: rgba(var(--rgb-danger), 0.1); color: var(--color-danger); }
+        
         .mobile-view .page-wrapper, .mobile-view #install-section { display: none !important; }
         #mobile-app-container { display: none; flex-direction: column; height: 100dvh; width: 100vw; overflow: hidden; background-color: var(--color-bg); }
         .mobile-view #mobile-app-container { display: flex; }
-        .mobile-page { display: none; flex-grow: 1; overflow-y: auto; padding: 1.5rem 1rem calc(70px + 1.5rem + env(safe-area-inset-bottom)); }
+        
+        /* SCROLL FIX */
+        main.mobile-content-wrapper { flex-grow: 1; overflow-y: auto; min-height: 0; }
+        .mobile-page { padding: 1.5rem 1rem calc(70px + 1.5rem + env(safe-area-inset-bottom)); }
+
         .mobile-page.active { display: block; animation: fadeInUp .5s ease both; }
         .mobile-header { font-family: var(--font-title); font-size: 1.8rem; font-weight: 700; margin: 0 0 1.5rem 0; color: var(--color-text-dark); }
         .mobile-tab-bar { position: fixed; bottom: 0; left: 0; right: 0; height: calc(70px + env(safe-area-inset-bottom)); background-color: var(--color-card); border-top: 1px solid var(--color-border); display: flex; justify-content: space-around; align-items: flex-start; z-index: 100; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding-top: 8px; padding-bottom: env(safe-area-inset-bottom); }
@@ -322,7 +327,7 @@
                     PRESET_COLORS: { purple: '#8b5cf6', blue: '#3b82f6', pink: '#ec4899', green: '#22c55e', orange: '#f97316' },
                     COLOR_PALETTE: ['#8b5cf6', '#3b82f6', '#ec4899', '#22c55e', '#f97316', '#ef4444', '#06b6d4', '#d946ef'],
                     DAY_MAPPING: { 'الأحد': 0, 'الاثنين': 1, 'الثلاثاء': 2, 'الأربعاء': 3, 'الخميس': 4, 'الجمعة': 5, 'السبت': 6 },
-                    STORAGE_KEYS: { SETTINGS: 'quScheduleSettings_v18', COURSES: 'quScheduleCourses_v18', SELECTED: 'quScheduleSelected_v18', COLORS: 'quScheduleColors_v18' },
+                    STORAGE_KEYS: { SETTINGS: 'quScheduleSettings_v19', COURSES: 'quScheduleCourses_v19', SELECTED: 'quScheduleSelected_v19', COLORS: 'quScheduleColors_v19' },
                     EXTRACTOR_URL: 'https://mutlaq001.github.io/Test/extractor.js',
                     EXAMS_DATA_URL: 'https://mutlaq001.github.io/Test/exams.json',
                     LONG_PRESS_DURATION: 500,
@@ -341,9 +346,8 @@
                        this._updateBookmarkletCode();
                     }
                 },
-                _populateDOMElements() { const desktopIds = ['courses-list', 'exams-list', 'my-schedule-container', 'my-schedule-summary', 'my-schedule-table-container', 'total-credits-summary', 'calendar', 'clear-calendar-btn', 'sidebar', 'settings-btn', 'install-section', 'no-data-message', 'conflict-banner']; const mobileIds = ['mobile-courses-list', 'mobile-calendar', 'preview-calendar-modal', 'preview-modal-close-btn', 'mobile-preview-calendar']; const sharedIds = ['modal-overlay', 'settings-modal']; if (!isMobile) { desktopIds.forEach(id => { this.dom[id.replace(/-(\w)/g, (_, c) => c.toUpperCase())] = document.getElementById(id); }); this.dom.tabButtons = document.querySelectorAll('.tab-btn'); this.dom.tabContents = document.querySelectorAll('.tab-content'); } else { this.dom.mobileTabButtons = document.querySelectorAll('.mobile-tab-btn'); this.dom.mobilePages = document.querySelectorAll('.mobile-page'); mobileIds.forEach(id => { this.dom[id.replace(/-(\w)/g, (_, c) => c.toUpperCase())] = document.getElementById(id); }); } sharedIds.forEach(id => { this.dom[id.replace(/-(\w)/g, (_, c) => c.toUpperCase())] = document.getElementById(id); }); },
                 
-                // ... (All other functions from previous version are here) ...
+                // ... (The rest of the JS code is identical to the previous version, I'm including the full block for completeness) ...
                 async _fetchExamSchedule() { try { const response = await fetch(`${this.constants.EXAMS_DATA_URL}?v=${Date.now()}`); if (!response.ok) throw new Error(`Network response: ${response.statusText}`); this.state.examSchedule = await response.json(); } catch (error) { console.error('Failed to fetch exam schedule:', error); this.state.examSchedule = {}; Swal.fire({ toast: true, position: 'bottom', icon: 'warning', title: 'فشل تحميل جدول الاختبارات', showConfirmButton: false, timer: 3000 }); } },
                 _loadDataFromStorage() { const storedCourses = localStorage.getItem(this.constants.STORAGE_KEYS.COURSES); if (storedCourses) { try { const courses = JSON.parse(storedCourses); this._processAndDisplayData(courses).then(() => { this._loadSelectedSections(); this.updateViewsAndConflicts(); }); } catch (e) { localStorage.removeItem(this.constants.STORAGE_KEYS.COURSES); if(!isMobile) this.dom.installSection.style.display = 'block'; } } else { if(!isMobile) this.dom.installSection.style.display = 'block'; } },
                 _listenForDataFromOpener() { window.addEventListener('message', (event) => { if (event.data && event.data.type === 'universityCoursesData') { const courses = event.data.data; localStorage.setItem(this.constants.STORAGE_KEYS.COURSES, JSON.stringify(courses)); this.state.selectedSections.clear(); localStorage.removeItem(this.constants.STORAGE_KEYS.SELECTED); this._processAndDisplayData(courses).then(() => this.updateViewsAndConflicts()); } }, false); if (window.opener) { window.opener.postMessage('request_schedule_data', '*'); } },
@@ -372,7 +376,7 @@
                 _handleMobileLongPress(sectionBtn) { const uniqueId = sectionBtn.dataset.uniqueId; const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId); if (section) this._showMobilePreview(section); },
                 _showMobilePreview(section) { this.state.mobilePreviewCalendar.removeAllEvents(); const group = this.state.groupedCourses[section.code]; if (!group) return; const previewEventSource = this._createLectureEventsForSection(section, true, group.color); this.state.mobilePreviewCalendar.addEventSource(previewEventSource); setTimeout(() => this.state.mobilePreviewCalendar.updateSize(), 50); this._togglePreviewModal(true); },
                 _togglePreviewModal(show) { this.dom.modalOverlay.classList.toggle('open', show); this.dom.previewCalendarModal.classList.toggle('open', show); },
-                _handleMobileTabClick(button) { this.dom.mobileTabButtons.forEach(btn => btn.classList.remove('active')); button.classList.add('active'); this.dom.mobilePages.forEach(page => page.classList.remove('active')); const targetPage = document.getElementById(`mobile-page-${button.dataset.page}`); targetPage.classList.add('active'); if (button.dataset.page === 'calendar' && this.state.mobileCalendar) { setTimeout(() => this.state.mobileCalendar.updateSize(), 50); } },
+                _handleMobileTabClick(button) { this.dom.mobileTabButtons.forEach(btn => btn.classList.remove('active')); button.classList.add('active'); this.dom.mobilePages.forEach(page => page.classList.remove('active')); const targetPage = document.getElementById(`mobile-page-${button.dataset.page}`); targetPage.classList.add('active'); if (button.dataset.page === 'calendar' && this.state.mobileCalendar) { setTimeout(() => this.state.mobileCalendar.updateSize(), 100); } },
                 _handleMobileCourseListClick(e) { const sectionBtn = e.target.closest('.section-btn'); const header = e.target.closest('.mobile-course-header'); if (sectionBtn) { const uniqueId = sectionBtn.dataset.uniqueId; sectionBtn.classList.toggle('selected'); if (this.state.selectedSections.has(uniqueId)) { this.state.selectedSections.delete(uniqueId); } else { this.state.selectedSections.add(uniqueId); } this.updateViewsAndConflicts(); } else if (header) { header.parentElement.classList.toggle('open'); } },
                 _handleSectionHover(event, isHovering) { const sectionBtn = event.target.closest('.section-btn'); if (!sectionBtn || isMobile) return; if (isHovering) { const uniqueId = sectionBtn.dataset.uniqueId; const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId); if (section) this._showDesktopPreviewEvent(section); } else { this._removeDesktopPreviewEvent(); } },
                 _showDesktopPreviewEvent(section) { this._removeDesktopPreviewEvent(); const group = this.state.groupedCourses[section.code]; if (!group) return; const previewEventSource = this._createLectureEventsForSection(section, true, group.color); this.state.desktopCalendar.addEventSource(previewEventSource); },
