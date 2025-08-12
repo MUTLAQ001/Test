@@ -170,7 +170,7 @@
         .settings-item:not(:last-child) { border-bottom: 1px solid rgba(255,255,255,0.05); }
         .light .settings-item:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.05); }
 
-        .settings-item-label { display: flex; flex-direction: column; gap: 0.25rem; flex-grow: 1; padding-right: 0.5rem; }
+        .settings-item-label { display: flex; flex-direction: column; gap: 0.25rem; flex-grow: 1; padding-left: 0.5rem; }
         .settings-item-label span { font-size: 1rem; color: var(--color-text-dark); font-weight: 600; }
         .settings-item-label small { font-size: 0.85rem; color: var(--color-text-muted); }
         
@@ -338,10 +338,10 @@
         <div class="modal-content-box">
             <h2>🎉 أهلاً بك في QU Schedule</h2>
             <p>هذه الأداة تساعدك على تنظيم جدولك الدراسي بسهولة. <strong>لاستخراج بيانات المقررات، يجب استخدام الأداة المرجعية (Bookmarklet) من متصفح الكمبيوتر أولاً.</strong></p>
-            <strong>لأفضل تجربة على الجوال:</strong>
-            <div class="instruction">
+            <strong>لأفضل تجربة على الآيفون:</strong>
+             <div class="instruction">
                 <strong><i class="ri-apple-fill"></i> لآيفون (iOS):</strong>
-                <span>اضغط على زر المشاركة <i class="ri-share-line"></i> في متصفح سفاري، ثم اختر "إضافة إلى الشاشة الرئيسية".</span>
+                <span>اضغط على زر المشاركة <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display: inline-block; vertical-align: middle; margin-bottom: -3px; margin-right: 4px;"><path d="M12 4v12m0 -12l-4 4m4 -4l4 4" /><path d="M4 12v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2 -2v-6" /></svg> في متصفح سفاري، ثم اختر "إضافة إلى الشاشة الرئيسية".</span>
             </div>
             <div class="instruction">
                 <strong><i class="ri-android-fill"></i> لأندرويد:</strong>
@@ -658,8 +658,8 @@
                         }
                     }, 500);
                 },
-                _handleTouchEnd(e) { clearTimeout(this.state.touchTimer); },
-                _handleTouchMove(e) { clearTimeout(this.state.touchTimer); },
+                _handleTouchEnd(e) { if(this.state.touchTimer) clearTimeout(this.state.touchTimer); },
+                _handleTouchMove(e) { clearTimeout(this.state.touchTimer); this.state.touchTimer = null; },
 
                 _handleSectionHover(event, isHovering) { const sectionBtn = event.target.closest('.section-btn'); if (!sectionBtn || this.isMobileView) return; if (isHovering) { const uniqueId = sectionBtn.dataset.uniqueId; const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId); if (section) this._showPreviewEvent(section); } else { this._removePreviewEvent(); } },
                 _showPreviewEvent(section) { this._removePreviewEvent(); const group = this.state.groupedCourses[section.code]; if (!group) return; const previewEventSource = this._createLectureEventsForSection(section, true, group.color); this.state.calendar.addEventSource(previewEventSource); },
