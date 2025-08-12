@@ -94,7 +94,7 @@
         .course-info { flex-grow: 1; min-width: 0; }
         .course-info h3 { margin: 0; font-family: var(--font-title); font-size: 1.1rem; font-weight: 400; color: var(--color-text-dark); }
         .course-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--color-text-muted); }
-        .toggle-icon { margin-right: auto; }
+        .toggle-icon { margin-left: auto; }
         .course-item.open .sections-wrapper { max-height: 9999px; }
         .sections-wrapper { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; background-color: rgba(0,0,0,0.1); }
         .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.75rem; padding: 1rem 1.25rem 1.25rem; }
@@ -365,7 +365,7 @@
                     calendar: null, allCoursesData: [], groupedCourses: {}, selectedSections: new Set(),
                     hiddenCourseCodes: new Set(), customColors: {},
                     userSettings: { theme: 'dark', accentColor: '#8b5cf6', showWeekends: false, minTime: '08:00:00', maxTime: '22:00:00', hiddenCourseCodes: [], showSky: true },
-                    touchTimer: null
+                    touchTimer: null, longPressTriggered: false
                 },
                 constants: {
                     PRESET_COLORS: { purple: '#8b5cf6', blue: '#3b82f6', pink: '#ec4899', green: '#22c55e', orange: '#f97316' },
@@ -639,8 +639,9 @@
                 _handleTouchStart(e) {
                     const sectionBtn = e.target.closest('.section-btn');
                     if (!sectionBtn) return;
+                    this.state.longPressTriggered = false;
                     this.state.touchTimer = setTimeout(() => {
-                        this.state.touchTimer = null; // Prevent click event after long press
+                        this.state.longPressTriggered = true;
                         const uniqueId = sectionBtn.dataset.uniqueId;
                         const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId);
                         if (section) {
@@ -657,16 +658,20 @@
                         }
                     }, 500);
                 },
-                _handleTouchEnd(e) { if(this.state.touchTimer) clearTimeout(this.state.touchTimer); },
-                _handleTouchMove(e) { clearTimeout(this.state.touchTimer); this.state.touchTimer = null; },
+                _handleTouchEnd(e) { clearTimeout(this.state.touchTimer); },
+                _handleTouchMove(e) { clearTimeout(this.state.touchTimer); },
 
                 _handleSectionHover(event, isHovering) { const sectionBtn = event.target.closest('.section-btn'); if (!sectionBtn || this.isMobileView) return; if (isHovering) { const uniqueId = sectionBtn.dataset.uniqueId; const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId); if (section) this._showPreviewEvent(section); } else { this._removePreviewEvent(); } },
                 _showPreviewEvent(section) { this._removePreviewEvent(); const group = this.state.groupedCourses[section.code]; if (!group) return; const previewEventSource = this._createLectureEventsForSection(section, true, group.color); this.state.calendar.addEventSource(previewEventSource); },
                 _removePreviewEvent() { const existingSource = this.state.calendar.getEventSourceById('preview-source'); if (existingSource) existingSource.remove(); },
-                _handleCourseListClick(e) { 
-                    if (this.state.touchTimer === null) return;
-                    clearTimeout(this.state.touchTimer);
-
+                
+                _handleCourseListClick(e) {
+                    if (this.state.longPressTriggered) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        this.state.longPressTriggered = false;
+                        return;
+                    }
                     const sectionBtn = e.target.closest('.section-btn'); 
                     const header = e.target.closest('.course-item-header'); 
                     if (sectionBtn) { const uniqueId = sectionBtn.dataset.uniqueId; sectionBtn.classList.toggle('selected'); if (this.state.selectedSections.has(uniqueId)) { this.state.selectedSections.delete(uniqueId); } else { this.state.selectedSections.add(uniqueId); } this.updateCalendarAndConflicts(); } else if (header) { header.parentElement.classList.toggle('open'); } 
