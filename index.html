@@ -33,7 +33,8 @@
         .filter-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.3); }
         .question-card { margin-bottom: 1.5rem; padding: 1.5rem; border-right: 4px solid var(--color-primary); transition: transform 0.3s ease; }
         .question-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.6; color: var(--color-text); display: flex; flex-direction: column; gap: 0.5rem; }
-        .tag-badge { align-self: flex-start; font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); background: rgba(var(--rgb-primary), 0.15); color: var(--color-primary); font-weight: 600; border: 1px solid rgba(var(--rgb-primary), 0.2); }
+        .tag-badge { align-self: flex-start; text-decoration: none; font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); background: rgba(var(--rgb-primary), 0.15); color: var(--color-primary); font-weight: 600; border: 1px solid rgba(var(--rgb-primary), 0.2); transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+        .tag-badge:hover { background: rgba(var(--rgb-primary), 0.3); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(var(--rgb-primary), 0.2); }
         .options-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
         .option-btn { width: 100%; text-align: right; padding: 1rem 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text); cursor: pointer; transition: all 0.2s ease; font-family: var(--font-body); font-size: 1rem; position: relative; overflow: hidden; }
         .option-btn:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: var(--color-text-muted); }
@@ -64,6 +65,9 @@
         .scroll-top-btn { position: fixed; bottom: 2rem; left: 2rem; width: 50px; height: 50px; background: var(--color-primary); color: #fff; border: none; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; z-index: 100; }
         .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
         .scroll-top-btn:hover { background: var(--color-primary-dark); transform: translateY(-5px); }
+        .source-link-container { display: flex; justify-content: center; margin-bottom: 1.5rem; animation: fadeInUp 0.5s ease; }
+        .source-external-btn { display: flex; align-items: center; gap: 8px; background: rgba(var(--rgb-primary), 0.1); border: 1px solid var(--color-primary); color: var(--color-primary); padding: 0.5rem 1rem; border-radius: var(--radius-md); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
+        .source-external-btn:hover { background: var(--color-primary); color: #fff; }
     </style>
 </head>
 <body>
@@ -82,7 +86,7 @@
             { source: "462", q: "مما يُستدل به على مشروعية زكاة الفطر قوله تعالى:", options: ["أ) قَدْ أَفْلَحَ مَن تَزَكَّىٰ", "ب) قَدْ أَفْلَحَ مَن زَكَّاهَا", "ج) وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ", "د) وَأَنفِقُوا مِن مَّا رَزَقْنَاكُم"], ans: 0 },
             { source: "462", q: "نظرية العقد الاجتماعي، هي فكرة مادية تقوم في حقيقتها على تبادل المصالح حال التعايش بين الناس؛ لكنها أيضاً:", options: ["أ) تقوي هي ومثيلاتها على التأليف بين قلوب أفراد المجتمع", "ب) تستطيع بث المحبة بين أفراد المجتمع", "ج) تعمل على زرع التسامح في المجتمع", "د) لا تزيد على كونها محاولة للتوفيق بين الرغائب، والملائمة بين المصالح"], ans: 3 },
             { source: "462", q: "في قول النبي ﷺ «المسلم أخو المسلم، لا يظلمه، ولا يُسلمه...» من ستر مسلماً ستره الله يوم القيامة:", options: ["أ) ترغيب في العناية بقضايا المجتمع وحاجات أفراده", "ب) حث لأفراد المجتمع على محبة الآخرين", "ج) تنظيم للعلاقة بين أفراد المجتمع المسلم", "د) جميع ما ذكر صحيح"], ans: 2 },
-            { source: "462", q: "الأصل في حكم الإيلاء في الشرع أنه:", options: ["أ) مباح", "ب) مكروه", "ج) حرام", "د) واجب"], ans: 0 },
+            { source: "462", q: "الأصل في حكم الإيلاء في الشرع أنه:", options: ["أ) مباح", "ب) مكروه", "ج) حرام", "د) واجب"], ans: 2 },
             { source: "462", q: "روى أبو هريرة أن رسول الله ﷺ قال: «والذي نفسي بيده لقد هممت أن آمر بحطب فيحتطب...» هذا الوعيد كان بسبب:", options: ["أ) ترك الصلاة تكاسلاً", "ب) ترك الصلاة جحوداً ونكراناً", "ج) التخلف عن الاجتماع لها (صلاة الجماعة)", "د) أ + ب إجابتان صحيحتان"], ans: 2 },
             { source: "462", q: "من الأسباب التي شُرعت تقوية للروابط الاجتماعية، تشريع بعض الصلوات، مثل:", options: ["أ) صلاة الجنازة", "ب) صلاة الاستسقاء", "ج) صلاة كسوف الشمس", "د) صلاة خسوف القمر"], ans: 0 },
             { source: "462", q: "تعتد المرأة بالأشهر إذا كانت:", options: ["أ) يائسة كالكبيرة في السن", "ب) صغيرة لا تحيض", "ج) توفي عنها زوجها ولم تكن حاملاً", "د) جميع ما ذكر صحيح"], ans: 3 },
@@ -101,7 +105,7 @@
             { source: "462", q: "كانت المرأة في الحضارة الهندية القديمة:", options: ["أ) تباع وتشترى", "ب) قاصرة غير مكلفة", "ج) معدومة الأهلية كالصغير والمجنون", "د) أحد أملاك الزوج"], ans: 1 },
             { source: "462", q: "إذا نكح الرجل المرأة بشيء من المال مدة معينة ينتهي النكاح بانتهائها (نكاح المتعة) فهو:", options: ["أ) باطل باتفاق علماء المسلمين", "ب) جائز باتفاق", "ج) مكروه", "د) مندوب"], ans: 0 },
             { source: "462", q: "من مقاصد النكاح:", options: ["أ) قرار النساء في البيوت", "ب) تحقيق الستر للرجل والمراة (الإعفاف)", "ج) تحريم الخلوة", "د) الغيرة على المحارم"], ans: 1 },
-            { source: "462", q: "من عقد على امرأة، وطلقها قبل الدخول، ثم أراد بعد ذلك أن يتزوج ابنتها، فإن هذا الزواج حكمه:", options: ["أ) حرام", "ب) جائز", "ج) مكروه", "د) مستحب"], ans: 1 },
+            { source: "462", q: "من عقد على امرأة، وطلقها قبل الدخول، ثم أراد بعد ذلك أن يتزوج ابنتها، فإن هذا الزواج حكمه:", options: ["أ) حرام", "ب) جائز", "ج) مكروه", "د) مستحب"], ans: 0 },
             { source: "462", q: "يُعد حق (الإرث) حقاً من:", options: ["أ) الحقوق المشتركة بين الزوجين", "ب) من حقوق الزوجة المادية", "ج) حقوق الأولاد", "د) جميع ما ذكر صحيح"], ans: 0 },
             { source: "462", q: "الطلاق البدعي: طلاق مخالف للسنة التي أمر الله بها، ومن صوره:", options: ["أ) طلقة واحدة", "ب) ثلاث مرات تباعاً في مجلس واحد", "ج) في طهر لم يمسها فيه", "د) أ + ج"], ans: 1 },
             { source: "462", q: "إذا وقع الطلاق من الزوج بأحد ألفاظ الكناية (مثل: الحقي بأهلك)، فحكم الطلاق أنه:", options: ["أ) يقع إذا نواه الزوج", "ب) يقع ولو لم ينوه", "ج) لا يقع أبداً", "د) جميع ما ذكر صحيح"], ans: 0 },
@@ -200,6 +204,13 @@
             { source: "451", q: "حكم جماع الرجل زوجته التي ظاهر منها قبل الكفارة:", options: ["أ) حرام", "ب) مكروه", "ج) مستحب", "د) جائز"], ans: 0 }
         ];
 
+        const sourceLinks = {
+            "462": "https://t.me/ExamsQU/4/1836",
+            "461": "https://t.me/ExamsQU/4/1652",
+            "452": "https://t.me/ExamsQU/4/1403",
+            "451": "https://t.me/ExamsQU/4/1308"
+        };
+
         const useAnimatedNumber = (target, duration = 500) => {
             const [currentNumber, setCurrentNumber] = useState(target);
             const frameRef = useRef();
@@ -244,7 +255,8 @@
         const Icons = {
             Moon: props => <SvgIcon d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" {...props} />,
             Sun: props => <SvgIcon d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" fill="none" strokeWidth="2" stroke="currentColor" {...props} />,
-            ArrowUp: props => <SvgIcon d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" {...props} />
+            ArrowUp: props => <SvgIcon d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" {...props} />,
+            Link: props => <SvgIcon d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
         };
 
         function App() {
@@ -332,6 +344,15 @@
                                 ))}
                             </div>
                             
+                            {currentFilter !== 'all' && sourceLinks[currentFilter] && (
+                                <div className="source-link-container">
+                                    <a href={sourceLinks[currentFilter]} target="_blank" rel="noopener noreferrer" className="source-external-btn">
+                                        <span>📄 فتح ملف التجميعات ({currentFilter})</span>
+                                        <Icons.Link size={14} />
+                                    </a>
+                                </div>
+                            )}
+
                             {filteredQuestions.length > 0 && <button className="reset-btn" onClick={resetQuiz} style={{width:'100%', marginBottom: '1.5rem'}}>إعادة الاختبار</button>}
 
                             <div>
@@ -340,9 +361,15 @@
                                     return (
                                         <div key={index} className="question-card">
                                             <div className="question-header">
-                                                <span className="tag-badge">
-                                                    {item.source}
-                                                </span>
+                                                <a 
+                                                    href={sourceLinks[item.source]} 
+                                                    target="_blank" 
+                                                    rel="noopener noreferrer"
+                                                    className="tag-badge"
+                                                    title="فتح الملف الأصلي"
+                                                >
+                                                    {item.source} <Icons.Link size={12}/>
+                                                </a>
                                                 <span>{index + 1}. {item.q}</span>
                                             </div>
                                             <div className="options-list">
