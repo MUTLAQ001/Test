@@ -1,499 +1,1630 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>تجميعات سلم 102</title>
-    <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        @import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap");
-        @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&display=swap");
-        :root{--color-primary:#5e9cff;--color-primary-dark:#4b7dcc;--color-danger-red:#ff5252;--color-save-green:#00c853;--color-bg:#0a0a0a;--color-card:rgba(20,20,22,0.75);--color-border:rgba(255,255,255,0.1);--color-text:#e0e0e0;--color-text-muted:#999;--font-body:"Cairo",sans-serif;--font-title:"IBM Plex Sans Arabic",sans-serif;--radius:20px;--radius-md:16px;--radius-full:999px;--transition:0.3s cubic-bezier(0.25,0.8,0.25,1);--transition-smooth:0.5s cubic-bezier(0.2,0.8,0.2,1);--rgb-primary:94,156,255;--primary-hue:217;--secondary-hue:257;}
-        * {margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color: transparent;}
-        html{scroll-behavior:smooth;scrollbar-gutter: stable;scrollbar-width: none;}
-        ::-webkit-scrollbar {display: none;}
-        @keyframes gradient-animation{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-        @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @keyframes scaleIn{from{opacity:0;transform:scale(.95)}to{opacity:1;transform:scale(1)}}
-        body{font-family:var(--font-body);background-color:var(--color-bg);color:var(--color-text);direction:rtl;overflow-x:hidden;-webkit-font-smoothing:antialiased;transition: background-color var(--transition-smooth), color var(--transition-smooth);}
-        .cosmic-bg-container{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;overflow:hidden}
-        #starfield-canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-        .nebula-glow{position:absolute;top:50%;left:50%;width:90vmax;height:90vmax;margin-top:-45vmax;margin-left:-45vmax;background:radial-gradient(circle,hsl(var(--primary-hue),90%,60%,.15) 0%,hsl(var(--secondary-hue),80%,50%,.1) 40%,transparent 70%);filter:blur(100px);border-radius:50%;animation:move-nebula 90s infinite alternate ease-in-out;transition:opacity .5s ease,background .5s ease}
-        .app{min-height:100vh;position:relative;padding:2rem 1rem;}
-        .container{width:100%;max-width:800px;z-index:1;display:flex;flex-direction:column;gap:1.5rem;margin:0 auto;position:relative}
-        .header{text-align:center;animation:fadeInUp .8s var(--transition-smooth) both}
-        .title{font-family:var(--font-title);font-weight:700;font-size:2.8rem;margin-bottom:0.25rem;background:linear-gradient(90deg,var(--color-primary-dark),var(--color-primary));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% 200%;animation:gradient-animation 5s ease-in-out infinite;}
-        .subtitle{color:var(--color-text-muted);font-size:1rem;animation:fadeInUp .8s var(--transition-smooth) .2s both; letter-spacing: 0.5px;}
-        .card{background:var(--color-card);border:1px solid var(--color-border);border-radius:var(--radius);padding:1.5rem;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);position:relative;animation:scaleIn .8s var(--transition-smooth) .4s both;box-shadow: 0 16px 40px -12px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05);}
-        .filter-controls { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-        .filter-btn { background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); color: var(--color-text-muted); padding: 0.6rem 1.2rem; border-radius: var(--radius-full); cursor: pointer; transition: all 0.3s ease; font-family: var(--font-body); font-weight: 600; font-size: 0.95rem; }
-        .filter-btn:hover { border-color: var(--color-primary); color: var(--color-text); transform: translateY(-2px); }
-        .filter-btn.active { background: var(--color-primary); color: #fff; border-color: var(--color-primary); box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.3); }
-        .question-card { margin-bottom: 1.5rem; padding: 1.5rem; border-right: 4px solid var(--color-primary); transition: transform 0.3s ease; }
-        .question-header { font-size: 1.1rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.6; color: var(--color-text); display: flex; flex-direction: column; gap: 0.5rem; }
-        .tag-badge { align-self: flex-start; text-decoration: none; font-size: 0.75rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); background: rgba(var(--rgb-primary), 0.15); color: var(--color-primary); font-weight: 600; border: 1px solid rgba(var(--rgb-primary), 0.2); transition: all 0.2s; display: inline-flex; align-items: center; gap: 4px; }
-        .tag-badge:hover { background: rgba(var(--rgb-primary), 0.3); transform: translateY(-1px); box-shadow: 0 2px 8px rgba(var(--rgb-primary), 0.2); }
-        .options-list { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
-        .option-btn { width: 100%; text-align: right; padding: 1rem 1.2rem; background: rgba(255,255,255,0.03); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text); cursor: pointer; transition: all 0.2s ease; font-family: var(--font-body); font-size: 1rem; position: relative; overflow: hidden; }
-        .option-btn:hover:not(:disabled) { background: rgba(255,255,255,0.08); border-color: var(--color-text-muted); }
-        .option-btn.correct { background: rgba(0, 200, 83, 0.15); border-color: var(--color-save-green); color: #4caf50; font-weight: 700; }
-        .option-btn.wrong { background: rgba(255, 82, 82, 0.15); border-color: var(--color-danger-red); color: var(--color-danger-red); opacity: 0.7; }
-        .option-btn:disabled { cursor: default; }
-        .score-section { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; gap: 1rem; }
-        .chart-container{position:relative;min-width:140px;height:140px}
-        .donut-chart{width:100%;height:100%;transform:rotate(-90deg)}
-        .donut-chart-bg{fill:none;stroke:var(--color-border);stroke-width:8;}
-        .donut-chart-fg{fill:none;stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 0.6s cubic-bezier(0.215, 0.61, 0.355, 1), stroke 0.4s ease; stroke: var(--color-primary);}
-        .chart-info{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;width:100%;display:flex;flex-direction:column;justify-content:center;align-items:center}
-        .chart-info span{font-family:var(--font-title);font-weight:700;font-size:2rem;color:#fff;line-height:1.1;}
-        .chart-info p{font-size:.8rem;color:var(--color-text-muted);margin-top:0.25rem;}
-        .reset-btn { margin-top: 1rem; background: transparent; border: 1px solid var(--color-danger-red); color: var(--color-danger-red); padding: 0.6rem 1.5rem; border-radius: var(--radius-full); cursor: pointer; transition: all 0.3s; font-family: var(--font-body); font-weight: 600; }
-        .reset-btn:hover { background: var(--color-danger-red); color: #fff; box-shadow: 0 4px 15px rgba(255, 82, 82, 0.3); }
-        .light-mode { --color-bg: #f4f7f6; --color-card: rgba(255, 255, 255, 0.85); --color-border: rgba(0, 0, 0, 0.08); --color-text: #2c3e50; --color-text-muted: #7f8c8d; }
-        .light-mode .title { background: linear-gradient(90deg, #2c3e50, #3498db); -webkit-background-clip: text; }
-        .light-mode .filter-btn { background: rgba(0,0,0,0.05); }
-        .light-mode .filter-btn:hover { border-color: var(--color-primary); background: #fff; }
-        .light-mode .option-btn { background: #fff; }
-        .light-mode .option-btn:hover:not(:disabled) { background: #f8f9fa; border-color: var(--color-primary); }
-        .light-mode .chart-info span { color: var(--color-text); }
-        .light-mode .option-btn.correct { background: #d4edda; border-color: #28a745; color: #155724; }
-        .light-mode .option-btn.wrong { background: #f8d7da; border-color: #dc3545; color: #721c24; }
-        .settings-toggle { position: absolute; top: 1rem; left: 1rem; background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 1.5rem; transition: 0.3s; }
-        .settings-toggle:hover { color: var(--color-primary); transform: rotate(45deg); }
-        .scroll-top-btn { position: fixed; bottom: 2rem; left: 2rem; width: 50px; height: 50px; background: var(--color-primary); color: #fff; border: none; border-radius: 50%; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; opacity: 0; visibility: hidden; transform: translateY(20px); transition: all 0.3s ease; z-index: 100; }
-        .scroll-top-btn.visible { opacity: 1; visibility: visible; transform: translateY(0); }
-        .scroll-top-btn:hover { background: var(--color-primary-dark); transform: translateY(-5px); }
-        .source-link-container { display: flex; justify-content: center; margin-bottom: 1.5rem; animation: fadeInUp 0.5s ease; }
-        .source-external-btn { display: flex; align-items: center; gap: 8px; background: rgba(var(--rgb-primary), 0.1); border: 1px solid var(--color-primary); color: var(--color-primary); padding: 0.5rem 1rem; border-radius: var(--radius-md); text-decoration: none; font-size: 0.9rem; transition: all 0.2s; }
-        .source-external-btn:hover { background: var(--color-primary); color: #fff; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>QU Schedule</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;700&family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.11/index.global.min.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet">
+<meta name="theme-color" content="#0a0a0a">
+<style>
+:root {
+--color-primary: #8b5cf6;
+--color-primary-dark: #7c3aed;
+--color-danger: #ff5252;
+--color-warning: #ffc400;
+--color-success: #00c853;
+--color-bg: #0a0a0a;
+--color-card: rgba(20, 20, 22, 0.75);
+--color-border: rgba(255, 255, 255, 0.1);
+--color-text: #e0e0e0;
+--color-text-muted: #9e9e9e;
+--color-text-dark: #ffffff;
+--font-body: "Cairo", sans-serif;
+--font-title: "IBM Plex Sans Arabic", sans-serif;
+--radius: 20px;
+--radius-md: 16px;
+--radius-full: 999px;
+--transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+--transition-smooth: 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+--rgb-primary: 139, 92, 246;
+--rgb-warning: 255, 196, 0;
+--rgb-danger: 255, 82, 82;
+--rgb-success: 0, 200, 83;
+--primary-hue: 257;
+--secondary-hue: 287;
+}
+.light {
+--color-primary: #7c3aed;
+--color-primary-dark: #6d28d9;
+--color-danger: #ef4444;
+--color-warning: #d97706;
+--color-success: #16a34a;
+--color-bg: #f4f4f5;
+--color-card: rgba(255, 255, 255, 0.75);
+--color-border: rgba(0, 0, 0, 0.09);
+--color-text: #18181b;
+--color-text-muted: #71717a;
+--color-text-dark: #18181b;
+}
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px) } to { opacity: 1; transform: translateY(0) } }
+@keyframes scaleIn { from { opacity: 0; transform: scale(.95) } to { opacity: 1; transform: scale(1) } }
+@keyframes gradient-animation { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
+@keyframes swal-scale-in { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes swal-scale-out { from { transform: scale(1); opacity: 1; } to { transform: scale(0.9); opacity: 0; } }
+@keyframes rowIn { to { opacity: 1; transform: translateY(0); } }
+*, *::before, *::after { box-sizing: border-box; -webkit-tap-highlight-color: transparent; -webkit-touch-callout: none; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--font-body); background-color: var(--color-bg); color: var(--color-text); margin: 0; height: 100vh; width: 100vw; overflow: hidden; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; -ms-overflow-style: none; scrollbar-width: none; }
+body::-webkit-scrollbar { display: none; }
+.cosmic-bg-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; overflow: hidden }
+#starfield-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100% }
+.nebula-glow { position: absolute; top: 50%; left: 50%; width: 80vmax; height: 80vmax; margin-top: -40vmax; margin-left: -40vmax; background: radial-gradient(circle,hsl(var(--primary-hue),90%,60%,.15) 0%,hsl(var(--secondary-hue),80%,50%,.1) 40%,transparent 70%); filter: blur(100px); border-radius: 50%; transition: background 1s ease; }
+#install-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; display: none; align-items: center; justify-content: center; padding: 1rem; opacity: 0; transition: opacity 0.3s ease; }
+#install-overlay.visible { opacity: 1; }
+.desktop-view #install-overlay { align-items: flex-start; padding-top: 5rem; }
+#install-section-container { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 2rem; width: 90%; max-width: 500px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); animation: scaleIn .4s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.light #install-section-container { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1); }
+#install-header { text-align: center; margin-bottom: 2rem; }
+#install-header i { font-size: 3rem; color: var(--color-primary); line-height: 1; margin-bottom: 0.5rem; display: block; }
+#install-header h2 { margin: 0; font-family: var(--font-title); font-size: 1.75rem; color: var(--color-text-dark); }
+#install-section-container p, #install-section-container li { text-align: right; color: var(--color-text-muted); line-height: 1.6;}
+.bookmarklet-button { display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; background: linear-gradient(90deg, var(--color-primary-dark), var(--color-primary)); color: white; padding: 0.8rem 1.8rem; border-radius: var(--radius-full); font-weight: 700; text-decoration: none; cursor: grab; transition: transform .2s ease, box-shadow .2s ease; box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.2); }
+.bookmarklet-button:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 8px 25px rgba(var(--rgb-primary), 0.3); }
+.bookmarklet-button i { font-size: 1.2rem; }
+.install-actions { display: flex; flex-direction: column; gap: 1rem; text-align: center;}
+.or-divider { color: var(--color-text-muted); font-weight: 600; margin: 0.5rem 0;}
+#install-section-mobile ol { list-style: none; padding: 0; margin: 0 0 1.5rem 0;}
+#install-section-mobile li { position: relative; padding-right: 2.5rem; margin-bottom: 1.25rem; font-size: 0.95rem; font-weight: 500; }
+#install-section-mobile li::before { content: attr(data-step); position: absolute; top: -5px; right: 0; width: 32px; height: 32px; border-radius: 50%; background: rgba(var(--rgb-primary), 0.1); color: var(--color-primary); display: flex; align-items: center; justify-content: center; font-weight: 700; font-family: var(--font-title); }
+.code-container { margin-bottom: 1rem; }
+.code-container pre { background: rgba(0,0,0,0.3); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--color-border); font-size: 0.8rem; white-space: pre-wrap; word-wrap: break-word; text-align: left; direction: ltr; }
+.light .code-container pre { background: rgba(0,0,0,0.04); }
+.code-container pre .highlight { color: var(--color-primary); font-weight: 700; }
+#copy-code-btn { display: block; width: 100%; background: var(--color-primary); color: white; padding: 0.8rem; border-radius: var(--radius-md); border: none; font-weight: 700; font-size: 1rem; cursor: pointer; transition: all .2s ease; box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.2); }
+#copy-code-btn:hover { background: var(--color-primary-dark); transform: translateY(-2px); box-shadow: 0 8px 20px rgba(var(--rgb-primary), 0.3); }
+.js-warning { border-top: 1px solid var(--color-border); padding-top: 1rem; margin-top: 1.5rem; font-size: 0.85rem; text-align: center; color: var(--color-text-muted); }
+.js-warning code { background: rgba(var(--rgb-warning), 0.1); color: var(--color-warning); padding: 0.1rem 0.4rem; border-radius: 4px; font-weight: 600; }
+.custom-scrollbar::-webkit-scrollbar { width: 8px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background-color: rgba(var(--rgb-primary), 0.3); border-radius: 10px; border: 2px solid transparent; background-clip: content-box; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background-color: rgba(var(--rgb-primary), 0.5); }
+.custom-scrollbar::-webkit-scrollbar-button { display: none; }
+.custom-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(var(--rgb-primary), 0.3) transparent; }
+.page-wrapper .sidebar .custom-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+.page-wrapper .sidebar .custom-scrollbar::-webkit-scrollbar { display: none; }
+.page-wrapper { display: flex; height: 100vh; }
+.main-content { flex-grow: 1; height: 100%; display: flex; flex-direction: column; padding: 2rem; gap: 1.5rem; overflow-y: auto; }
+.sidebar { width: 420px; height: 100%; background-color: var(--color-card); border-left: 1px solid var(--color-border); display: flex; flex-direction: column; flex-shrink: 0; backdrop-filter: blur(16px); }
+.main-header { display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; animation: fadeInUp .8s var(--transition-smooth) both; position: sticky; top: -2rem; margin: -2rem -2rem 0; padding: 2rem 2rem 1.5rem; z-index: 100; background-color: rgba(10, 10, 10, 0.5); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); transition: box-shadow .25s ease; border-bottom: 1px solid transparent; }
+.light .main-header { background-color: rgba(244, 244, 245, 0.6); border-bottom: 1px solid var(--color-border); }
+.main-content:not([scrollTop="0"]) .main-header { box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.main-content[scrollTop="0"] .main-header { background-color: transparent; -webkit-backdrop-filter: none; backdrop-filter: none; }
+.main-header h1 { font-family: var(--font-title); font-weight: 700; font-size: 2.5rem; background: linear-gradient(90deg,var(--color-primary-dark),var(--color-primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-size: 200% 200%; animation: gradient-animation 5s ease-in-out infinite; display: flex; align-items: center; gap: 1rem; }
+.header-actions { display: flex; gap: 0.75rem; }
+.header-actions button { background: rgba(var(--rgb-primary), 0.1); border: 1px solid var(--color-border); color: var(--color-primary); padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; transition: all var(--transition); }
+.header-actions button:hover { background: rgba(var(--rgb-primary), 0.2); border-color: var(--color-primary); transform: translateY(-2px); box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.2); }
+.demo-badge { font-size: .8rem; font-weight: 700; padding: .2rem .7rem; border-radius: 99px; background: rgba(var(--rgb-warning), 0.15); color: var(--color-warning); border: 1px solid rgba(var(--rgb-warning), 0.3); }
+.card { width: 100%; height: 100%; background-color: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius); display: flex; flex-direction: column; backdrop-filter: blur(16px); box-shadow: 0 16px 40px -12px rgba(0,0,0,0.4); overflow: hidden; animation: scaleIn .8s var(--transition-smooth) .2s both; transition: transform 0.25s ease, box-shadow 0.25s ease; }
+.card:hover { transform: translateY(-4px); box-shadow: 0 20px 45px -15px rgba(0,0,0,0.5); }
+.light .card { box-shadow: 0 16px 40px -12px rgba(0,0,0,0.1); }
+.light .card:hover { box-shadow: 0 20px 45px -15px rgba(0,0,0,0.15); }
+.schedule-tabs-container { display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: rgba(0,0,0,0.2); border-radius: var(--radius); flex-shrink: 0; animation: fadeInUp .8s var(--transition-smooth) .1s both; overflow-x: auto;}
+.light .schedule-tabs-container { background: rgba(0,0,0,0.05); }
+.schedule-tab { padding: 0.6rem 1.2rem; border: none; border-radius: var(--radius-md); background: transparent; color: var(--color-text); font-weight: 600; cursor: pointer; transition: var(--transition); display: flex; align-items: center; gap: 0.5rem; white-space: nowrap; }
+.schedule-tab-name { outline: none; }
+.schedule-tab .delete-schedule-btn { font-size: 1.1rem; color: rgba(255,255,255,0.6); background: none; border: none; padding: 0; margin-right: -5px; display: none; cursor: pointer; }
+.schedule-tab.active .delete-schedule-btn { display: inline-block; }
+.schedule-tab.active .delete-schedule-btn:hover { color: white; }
+#add-schedule-btn { width: 40px; height: 40px; border-radius: 50%; background: rgba(var(--rgb-primary), 0.1); color: var(--color-primary); border: 1px solid var(--color-border); font-size: 1.5rem; cursor: pointer; transition: var(--transition); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+#add-schedule-btn:hover { background: var(--color-primary); color: white; transform: rotate(90deg); }
+.calendar-wrapper { flex: 1 1 auto; min-height: 500px; }
+.calendar-wrapper .card { padding: 1.5rem; display: flex; flex-direction: column;}
+#calendar { height: 100%; flex-grow: 1;}
+
+.sidebar-header { padding: 1.5rem 1.5rem 1rem; border-bottom: 1px solid var(--color-border); flex-shrink: 0; display: flex; flex-direction: column; gap: 1rem; }
+.sidebar-title-row { display: flex; justify-content: space-between; align-items: center; }
+.sidebar-title-row h2 { margin: 0; font-family: var(--font-title); font-size: 1.5rem; font-weight: 700; display: flex; align-items: center; gap: 0.75rem; color: var(--color-text-dark); }
+#desktop-search-toggle { background: none; border: none; color: var(--color-text-muted); cursor: pointer; font-size: 1.2rem; transition: var(--transition); padding: 0.5rem; display: flex; align-items: center; justify-content: center; border-radius: 50%; }
+#desktop-search-toggle:hover, #desktop-search-toggle.active { color: var(--color-primary); background-color: rgba(var(--rgb-primary), 0.1); }
+.sidebar-search-container { position: relative; width: 100%; overflow: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); max-height: 0; opacity: 0; margin-top: 0; }
+.sidebar-search-container.active { max-height: 60px; opacity: 1; margin-top: 0.5rem; }
+
+.search-input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--color-border); padding: 0.8rem 1rem 0.8rem 2.5rem; border-radius: var(--radius-md); color: var(--color-text); font-family: var(--font-body); font-size: 0.9rem; transition: var(--transition); outline: none; }
+.search-input:focus { border-color: var(--color-primary); background: rgba(var(--rgb-primary), 0.05); }
+.search-icon { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--color-text-muted); pointer-events: none; }
+.light .search-input { background: rgba(0,0,0,0.05); }
+
+.sidebar-content-wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+.sidebar-tabs { display: flex; padding: 0 1rem 0; border-bottom: 1px solid var(--color-border); }
+.tab-btn { flex: 1; text-align: center; padding: 0.75rem 0.5rem; background: none; border: none; color: var(--color-text-muted); font-size: 1rem; font-weight: 600; cursor: pointer; transition: var(--transition); border-bottom: 2px solid transparent; }
+.tab-btn.active { color: var(--color-primary); border-bottom-color: var(--color-primary); }
+.tab-content { padding: 1rem; display: none; overflow-y: auto; flex-grow: 1; }
+.tab-content.active { display: block; }
+.tab-header-actions { display: flex; justify-content: flex-end; padding-bottom: 0.5rem; margin-bottom: 0.5rem; border-bottom: 1px solid var(--color-border); align-items: center; gap: 0.5rem; }
+.sidebar-footer { padding: 1.25rem; border-top: 1px solid var(--color-border); text-align: center; flex-shrink: 0; }
+.course-item { margin-bottom: 0.75rem; animation: fadeInUp .5s ease both; overflow: hidden; contain: content; }
+.course-item-header { display: flex; align-items: center; gap: 0.75rem; padding: 1.25rem; cursor: pointer; }
+.course-item .color-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 10px 1px; }
+.course-info { flex-grow: 1; }
+.course-info h3 { margin: 0; font-family: var(--font-title); font-size: 1.1rem; font-weight: 400; color: var(--color-text-dark); }
+.course-info p { margin: 4px 0 0; font-size: 0.8rem; color: var(--color-text-muted); }
+.course-item.open .sections-wrapper { grid-template-rows: 1fr; }
+.sections-wrapper { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); background-color: rgba(0,0,0,0.1); }
+.light .sections-wrapper { background-color: rgba(0,0,0,0.02); }
+.sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 0.75rem; overflow: hidden; min-height: 0; padding: 0 1.25rem; transition: padding 0.3s; }
+.course-item.open .sections-grid { padding: 1rem 1.25rem 1.25rem; }
+.section-btn { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.25rem; padding: 0.5rem; border: 1px solid var(--color-border); border-radius: var(--radius-full); text-align: center; cursor: pointer; background-color: transparent; transition: all var(--transition); position: relative;}
+.section-status-dot { position: absolute; top: 6px; right: 6px; width: 8px; height: 8px; border-radius: 50%; box-shadow: 0 0 5px; }
+.section-status-dot.open { background-color: var(--color-success); box-shadow-color: var(--color-success); }
+.section-status-dot.closed { background-color: var(--color-danger); box-shadow-color: var(--color-danger); }
+.section-btn:hover { border-color: var(--color-primary); color: var(--color-primary); background: rgba(var(--rgb-primary), 0.1); }
+.section-btn.conflicted { background-color: rgba(var(--rgb-danger), 0.08); border-color: rgba(var(--rgb-danger),0.5); color: var(--color-text-dark); }
+.section-btn .section-type { font-size: 0.7rem; color: var(--color-text-muted); }
+.section-btn.selected .section-type { color: rgba(255,255,255,0.8); }
+.section-btn.no-time { border-bottom: 3px solid var(--item-color); padding-bottom: calc(0.5rem - 3px); }
+.my-schedule-container { flex-shrink: 0; display: none; flex-direction: column; }
+.my-schedule-container .my-schedule-card { animation: scaleIn .8s var(--transition-smooth) .2s both; }
+.my-schedule-section { flex: 1; min-height: 0; display: flex; flex-direction: column; padding: 1.5rem; }
+.my-schedule-table-wrapper { overflow-x: auto; }
+.status-badge { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: var(--radius-full); font-size: 0.8rem; font-weight: 600; }
+.status-badge::before { content: ''; display: block; width: 8px; height: 8px; border-radius: 50%; }
+.status-badge.status-open { background-color: rgba(var(--rgb-success), 0.1); color: var(--color-success); }
+.status-badge.status-open::before { background-color: var(--color-success); }
+.status-badge.status-closed { background-color: rgba(var(--rgb-danger), 0.1); color: var(--color-danger); }
+.status-badge.status-closed::before { background-color: var(--color-danger); }
+.my-schedule-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 1.5rem; }
+.copy-crn-btn { background: rgba(var(--rgb-primary), 0.1); color: var(--color-primary); border: 1px solid var(--color-border); border-radius: var(--radius-full); padding: 0.4rem 1rem; font-size: 0.8rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: var(--transition); }
+.copy-crn-btn:hover { background: var(--color-primary); color: white; transform: translateY(-1px); }
+.toggle-date-btn { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-muted); border-radius: var(--radius-full); padding: 0 0.8rem; height: 32px; font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem; transition: var(--transition); white-space: nowrap;}
+.toggle-date-btn:hover, .toggle-date-btn.active { border-color: var(--color-primary); color: var(--color-primary); background: rgba(var(--rgb-primary), 0.1); }
+
+#exam-schedule-select {
+background: var(--color-card);
+border: 1px solid var(--color-border);
+color: var(--color-text-muted);
+border-radius: var(--radius-full);
+padding: 0 0.6rem 0 0.2rem;
+height: 32px;
+font-size: 0.8rem;
+font-family: var(--font-body);
+cursor: pointer;
+outline: none;
+transition: var(--transition);
+direction: rtl;
+text-align: center;
+}
+#exam-schedule-select:focus, #exam-schedule-select:hover {
+border-color: var(--color-primary);
+color: var(--color-primary);
+}
+
+.fc { --fc-border-color: var(--color-border); --fc-event-text-color: #fff; --fc-page-bg-color: transparent; font-family: var(--font-body); }
+.fc-theme-standard .fc-scrollgrid { border: none; }
+.fc-event { border: none !important; border-radius: 8px !important; font-weight: 600; padding: 4px 8px !important; cursor: pointer; }
+.fc-event.preview-event { border-style: dashed !important; border-width: 2px !important; }
+.no-data { display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100%; text-align: center; padding: 2rem; color: var(--color-text-muted); }
+.no-data i { font-size: 4rem; margin-bottom: 1.5rem; color: var(--color-primary); opacity: 0.5; }
+html.swal2-shown, body.swal2-shown { overflow: hidden !important; }
+.swal2-container { z-index: 4000 !important; }
+.swal2-container.swal2-top, .swal2-container.swal2-center, .swal2-container.swal2-bottom { pointer-events: none; }
+.swal2-popup, .swal2-toast { pointer-events: all; }
+.swal2-popup { background: var(--color-card)!important; color: var(--color-text)!important; border-radius: var(--radius)!important; border: 1px solid var(--color-border)!important; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+.swal2-popup.wide-swal { max-width: 600px; width: 95%; }
+.swal2-title { color: var(--color-text-dark)!important; font-family: var(--font-title) !important; }
+.swal2-html-container { color: var(--color-text-muted)!important; margin: 1em 0 !important; font-size: 1em !important; display: block !important; text-align: right !important; padding: 0 0.5rem; }
+.swal2-confirm { background: var(--color-primary)!important; border-radius: var(--radius-full)!important; padding: .6rem 1.5rem!important; font-family: var(--font-body)!important; }
+.swal2-confirm:focus { box-shadow: 0 0 0 3px rgba(var(--rgb-primary),0.5)!important }
+.swal2-cancel { background: rgba(255,255,255,0.1)!important; color: var(--color-text)!important; border-radius: var(--radius-full)!important; padding: .6rem 1.5rem!important; font-family: var(--font-body)!important; }
+.light .swal2-cancel { background: rgba(0,0,0,0.1)!important; }
+.swal-popup-animation-in { animation: swal-scale-in 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
+.swal-popup-animation-out { animation: swal-scale-out 0.3s cubic-bezier(0.25, 0.8, 0.25, 1) forwards; }
+.swal2-toast { border-radius: var(--radius-md) !important; border: 1px solid var(--color-border) !important; padding: 0.75rem 1rem !important; transition: background-color var(--transition-smooth), border-color var(--transition-smooth); box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: flex !important; align-items: center !important; gap: 0.75rem !important; }
+.swal2-toast .swal2-title { font-size: 1rem !important; margin: 0 !important; padding: 0 !important; text-align: right !important; color: var(--color-text) !important; font-family: var(--font-body) !important; font-weight: 600 !important; }
+.swal2-toast .swal2-icon { margin: 0 !important; width: 2em !important; height: 2em !important; align-self: center !important; }
+.swal2-timer-progress-bar { background: linear-gradient(to right, var(--color-primary), var(--color-primary-dark)); height: 4px !important; }
+.modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(10px); z-index: 2999; opacity: 0; visibility: hidden; transition: all .3s ease; will-change: opacity; }
+.modal-overlay.open { opacity: 1; visibility: visible; }
+.settings-modal { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.95); width: 90%; max-width: 550px; background-color: var(--color-card); border-radius: var(--radius); box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 3000; opacity: 0; visibility: hidden; transition: all 0.3s; border: 1px solid var(--color-border); will-change: transform, opacity; }
+.settings-modal.open { opacity: 1; visibility: visible; transform: translate(-50%, -50%) scale(1); }
+.modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--color-border); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { margin: 0; font-family: var(--font-title); font-size: 1.3rem; color: var(--color-text-dark); }
+.modal-header .modal-close-btn { cursor: pointer; font-size: 1.5rem; color: var(--color-text-muted); transition: all .2s; }
+.modal-header .modal-close-btn:hover { color: var(--color-text-dark); transform: rotate(90deg); }
+.modal-content { padding: 1.5rem; max-height: 70vh; overflow-y: auto; }
+.designer-credit { font-size: 0.9rem; font-weight: 600; color: var(--color-text-muted); text-decoration: none; transition: color 0.2s ease; display: inline-flex; align-items: center; gap: 0.5rem; }
+.designer-credit:hover { color: var(--color-primary); }
+.faisal-link { text-decoration: none; color: var(--color-primary); font-weight: 700; border: 1px solid var(--color-primary); border-radius: var(--radius-full); padding: 0.3rem 1rem; display: inline-block; transition: var(--transition); }
+.faisal-link:hover { background: rgba(var(--rgb-primary), 0.1); }
+.settings-group { margin-bottom: 2rem; }
+.settings-group:last-of-type { margin-bottom: 0; }
+.settings-group-title { font-size: 1.2rem; font-weight: 600; color: var(--color-primary); padding-bottom: 0.75rem; border-bottom: 1px solid var(--color-border); margin-bottom: 1.25rem; display: flex; align-items: center; gap: 0.75rem; }
+.settings-item { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.settings-item:last-of-type { margin-bottom: 0; }
+.settings-item-label { display: flex; flex-direction: column; gap: 0.25rem; flex-grow: 1; }
+.settings-item-label span { font-size: 1rem; }
+.settings-item-label small { font-size: 0.8rem; color: var(--color-text-muted); }
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(255,255,255,0.2); transition: .4s; border-radius: 34px; }
+.light .slider { background-color: rgba(0,0,0,0.2); }
+.slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .4s; border-radius: 50%; }
+input:checked + .slider { background-color: var(--color-primary); }
+input:checked + .slider:before { transform: translateX(20px); }
+.mode-toggle { display: flex; background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); border-radius: 999px; padding: 4px; gap: 4px; }
+.light .mode-toggle { background: rgba(0,0,0,0.04); border-color: rgba(0,0,0,0.08); }
+.mode-btn { padding: 0.4rem 1rem; border: none; border-radius: 999px; font-size: 0.9rem; font-weight: 600; cursor: pointer; background: transparent; color: var(--color-text-muted); transition: all 0.2s ease; }
+.mode-btn.active { background: var(--color-primary); color: #fff; box-shadow: 0 2px 5px rgba(var(--rgb-primary), 0.2); }
+.theme-picker { display: flex; gap: .5rem; align-items: center; }
+.theme-dot { width: 24px; height: 24px; border-radius: 50%; cursor: pointer; transition: all .2s ease; border: 2px solid transparent }
+.theme-dot:hover { transform: scale(1.2) }
+.theme-dot.active { border-color: #fff; transform: scale(1.1); }
+.light .theme-dot.active { border-color: var(--color-text-dark); }
+.color-picker-label { position: relative; width: 24px; height: 24px; border-radius: 50%; cursor: pointer; border: 2px solid var(--color-border); overflow: hidden; }
+.color-picker-label:hover { transform: scale(1.2); }
+.color-picker-label.active { border-color: #fff; transform: scale(1.1); }
+.light .color-picker-label.active { border-color: var(--color-text-dark); }
+.color-picker-input { position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; border: none; padding: 0; cursor: pointer; }
+.course-visibility-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+.course-visibility-btn { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.8rem; border: 1px solid; border-radius: var(--radius-md); text-align: right; cursor: pointer; transition: all 0.2s; font-size: 0.9rem; }
+.course-visibility-btn .color-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; transition: all 0.2s; }
+.course-visibility-btn.visible { border-color: var(--item-color); background-color: rgba(var(--item-color-rgb), 0.1); color: var(--color-text-dark); }
+.course-visibility-btn.visible .color-dot { background-color: var(--item-color); box-shadow: 0 0 8px var(--item-color); }
+.course-visibility-btn.visible:hover { background-color: rgba(var(--item-color-rgb), 0.15); }
+.course-visibility-btn.hidden { background-color: #2a2a2e; border-color: #3f3f46; color: var(--color-text-muted); }
+.course-visibility-btn.hidden .color-dot { background-color: var(--color-text-muted); opacity: 0.5; }
+.course-visibility-btn.hidden:hover { background-color: #343438; border-color: var(--color-text-muted); }
+.light .course-visibility-btn.hidden { background-color: #e4e4e7; border-color: #d4d4d8; color: #a1a1aa; }
+.light .course-visibility-btn.hidden:hover { background-color: #e7e7ea; border-color: #b8b8be; }
+.action-picker-wrapper { position: relative; }
+.action-picker-display { width: 100%; padding: .5rem 1rem; font-family: var(--font-body); font-size: 0.9rem; color: var(--color-text); background: rgba(0,0,0,0.3); border: 1px solid var(--color-border); border-radius: 8px; cursor: pointer; transition: all var(--transition); text-align: center; }
+.action-picker-display:hover { border-color: var(--color-primary); }
+.light .action-picker-display { background: rgba(0,0,0,0.04); }
+.action-picker-panel { position: absolute; bottom: calc(100% + 8px); left: 0; right: 0; z-index: 3500; background-color: rgba(30,30,32,0.9); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 0.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.3); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); animation: scaleIn 0.2s ease-out; transform-origin: bottom center; max-height: 200px; overflow-y: auto; }
+.light .action-picker-panel { background-color: rgba(250,250,250,0.9); }
+.action-picker-option { width: 100%; padding: 0.7rem 1rem; font-family: var(--font-body); font-size: 0.9rem; color: var(--color-text-muted); background-color: transparent; border-radius: var(--radius-full); border: none; cursor: pointer; transition: all var(--transition); text-align: center; }
+.action-picker-option:hover { background-color: rgba(var(--rgb-primary), 0.1); }
+.action-picker-option.selected { color: var(--color-primary); font-weight: 700; background-color: transparent; }
+.data-actions-group { display: flex; gap: 0.5rem; }
+.data-btn { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--color-border); color: var(--color-text-muted); padding: 0.6rem 1.2rem; border-radius: var(--radius-full); font-size: 0.9rem; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; transition: all var(--transition); }
+.data-btn:hover { background: rgba(255, 255, 255, 0.1); color: var(--color-text-dark); border-color: rgba(255, 255, 255, 0.2); transform: translateY(-2px); }
+.data-btn.danger { background: rgba(var(--rgb-danger), 0.1); border-color: rgba(var(--rgb-danger), 0.2); color: var(--color-danger); }
+.data-btn.danger:hover { background: rgba(var(--rgb-danger), 0.2); border-color: rgba(var(--rgb-danger), 0.4); color: #fff; box-shadow: 0 4px 15px rgba(var(--rgb-danger), 0.2); }
+.light .data-btn { background: rgba(0, 0, 0, 0.04); }
+.light .data-btn:hover { background: rgba(0, 0, 0, 0.08); border-color: rgba(0, 0, 0, 0.15); }
+.light .data-btn.danger { background: rgba(var(--rgb-danger), 0.1); border-color: rgba(var(--rgb-danger), 0.2); }
+.light .data-btn.danger:hover { background: rgba(var(--rgb-danger), 0.2); border-color: rgba(var(--rgb-danger), 0.4); color: #fff; }
+#conflict-modal-content { max-height: 60vh; overflow-y: auto; padding: 1rem .5rem 1rem 1rem; text-align: right;}
+.conflict-group-container { border: 1px solid var(--color-border); border-radius: var(--radius-md); margin-bottom: 1.5rem; overflow: hidden; }
+.conflict-group-title { font-family: var(--font-title); font-size: 1.1rem; font-weight: 700; padding: .8rem 1.2rem; background-color: rgba(var(--rgb-warning), 0.1); color: var(--color-warning); display: flex; justify-content: space-between; align-items: center; }
+.conflict-item { padding: .75rem; border-bottom: 1px solid var(--color-border); }
+.conflict-item:last-child { border-bottom: none; }
+.conflict-item-main-label { display: flex; align-items: center; gap: 1rem; width: 100%; cursor: pointer; padding: .5rem; border-radius: var(--radius-md); border: 2px solid transparent; transition: all .2s ease; }
+.conflict-item-main-label:has(input:checked) { border-color: var(--color-primary); box-shadow: 0 0 15px rgba(var(--rgb-primary), 0.4); background-color: rgba(var(--rgb-primary), 0.05); }
+.conflict-item-flex { display: flex; align-items: center; justify-content: space-between; gap: 1rem;}
+.conflict-item-main-label input[type="radio"] { position: absolute; opacity: 0; width: 0; height: 0; }
+.custom-radio { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 2px solid var(--color-text-muted); position: relative; transition: .2s; }
+.custom-radio::after { content: ''; position: absolute; width: 12px; height: 12px; background-color: var(--color-primary); border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); transition: .2s; }
+.conflict-item-main-label:has(input:checked) .custom-radio { border-color: var(--color-primary); }
+.conflict-item-main-label:has(input:checked) .custom-radio::after { transform: translate(-50%, -50%) scale(1); }
+.conflict-item-info { flex-grow: 1; text-align: right; }
+.conflict-item-info h4 {margin: 0 0 .2rem; font-family: var(--font-title); color: var(--color-text-dark); font-size: 1.1rem; }
+.conflict-item-info span {font-size: .85rem; color: var(--color-text-muted); }
+.conflict-details-btn { background: transparent; border: 1px solid var(--color-border); color: var(--color-text-muted); padding: .4rem 1.2rem; font-size: .8rem; font-weight: 600; border-radius: var(--radius-full); cursor: pointer; transition: all .2s ease; flex-shrink: 0; }
+.conflict-details-btn:hover { background: rgba(255,255,255,0.08); border-color: var(--color-text); color: var(--color-text); }
+.light .conflict-details-btn:hover { background: rgba(0,0,0,0.04); }
+.conflict-extra-details { max-height: 0; overflow: hidden; transition: all .3s ease; font-size: .85rem; }
+.conflict-extra-details.visible { max-height: 200px; padding: .75rem 1rem .25rem; margin-top: .75rem; background: rgba(0,0,0,0.1); border-radius: var(--radius-md); }
+.light .conflict-extra-details.visible { background: rgba(0,0,0,0.03); }
+.mobile-wrapper, .mobile-nav { display: none; }
+#mobile-my-schedule-list { padding: 1rem; padding-bottom: calc(1rem + 65px); display: flex; flex-direction: column; gap: 1rem; flex-grow: 1; overflow-y: auto; min-height: 0; }
+.mobile-schedule-item { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 8px 25px -10px rgba(0,0,0,0.3); }
+.light .mobile-schedule-item { box-shadow: 0 8px 25px -10px rgba(0,0,0,0.1); }
+.mobile-schedule-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; }
+.mobile-schedule-title { display: flex; flex-direction: column; }
+.mobile-schedule-title h3 { font-family: var(--font-title); font-size: 1.1rem; color: var(--color-text-dark); margin: 0; }
+.mobile-schedule-title span { font-size: 0.9rem; color: var(--color-text-muted); }
+.mobile-conflict-icon { color: var(--color-warning); font-size: 1.5rem; cursor: help; }
+.mobile-schedule-details { display: flex; flex-direction: column; gap: 0.75rem; font-size: 0.9rem; }
+.mobile-detail-row { display: flex; align-items: center; gap: 0.75rem; }
+.mobile-detail-row i { color: var(--color-primary); font-size: 1.2rem; min-width: 20px; text-align: center; }
+.mobile-detail-row strong { color: var(--color-text-muted); }
+.mobile-schedule-footer { position: fixed; bottom: 75px; left: 0; right: 0; z-index: 90; padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom) - env(safe-area-inset-bottom)); background-color: var(--color-card); border-top: 1px solid var(--color-border); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; box-shadow: 0 -5px 20px -5px rgba(0,0,0,0.2); transition: transform 0.3s ease; transform: translateY(200%); }
+#mobile-my-schedule-container:not(.empty) .mobile-schedule-footer { transform: translateY(0); }
+.mobile-schedule-footer > .view-conflicts-btn, .mobile-schedule-footer > .total-credits-summary { flex-grow: 1; flex-basis: 0; justify-content: center; text-align: center; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 700; }
+.mobile-section-details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; opacity: 0; visibility: hidden; transition: all .3s ease; will-change: opacity; }
+.mobile-section-details-overlay.open { opacity: 1; visibility: visible; }
+.details-panel { position: absolute; bottom: 0; left: 0; right: 0; background-color: var(--color-card); border-top: 1px solid var(--color-border); border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); padding-top: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,0.3); transform: translateY(100%); transition: transform .3s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform; }
+.mobile-section-details-overlay.open .details-panel { transform: translateY(0); }
+.details-panel .conflict-banner { padding: .75rem 1rem; margin-bottom: 1.25rem; background-color: rgba(var(--rgb-warning), 0.1); color: var(--color-warning); border: 1px solid rgba(var(--rgb-warning), 0.2); border-radius: var(--radius-md); display: flex; align-items: center; gap: .75rem; font-size: .9rem; font-weight: 600; }
+.details-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
+.details-header h4 { margin: 0; font-family: var(--font-title); font-size: 1.2rem; display: flex; align-items: center; gap: .75rem; }
+.details-header .color-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+.details-close-btn { font-size: 1.6rem; color: var(--color-text-muted); cursor: pointer; transition: transform .2s; }
+.details-close-btn:hover { transform: scale(1.1); color: var(--color-text); }
+.details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem 1rem; margin-bottom: 1.5rem; }
+.detail-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.detail-item span { color: var(--color-text-muted); font-size: 0.8rem; }
+.detail-item strong { color: var(--color-text-dark); font-weight: 600; font-size: 1rem; }
+.detail-item[data-full-width="true"] { grid-column: 1 / -1; }
+.details-actions-container { display: flex; gap: 0.5rem; align-items: center; }
+.details-action-btn { width: 100%; padding: 0.9rem 1.5rem; border: none; border-radius: var(--radius-md); font-family: var(--font-body); font-size: 1rem; font-weight: 700; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: .5rem; transition: .2s; flex-grow: 1; }
+.details-nav-btn { flex-shrink: 0; width: 48px; height: 48px; border-radius: var(--radius-md); border: 1px solid var(--color-border); background-color: transparent; color: var(--color-text-muted); font-size: 1.8rem; cursor: pointer; transition: all .2s; display: flex; align-items: center; justify-content: center; }
+.details-nav-btn:not(:disabled):hover { background-color: rgba(var(--rgb-primary), 0.1); color: var(--color-primary); }
+.details-nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.details-action-btn.add { background-color: var(--color-primary); }
+.details-action-btn.add:hover { background-color: var(--color-primary-dark); }
+.details-action-btn.remove { background-color: var(--color-danger); }
+.view-conflicts-btn { background: rgba(var(--rgb-warning), 0.1); color: var(--color-warning); border: 1px solid rgba(var(--rgb-warning), 0.2); border-radius: var(--radius-md); cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; transition: all .2s; padding: 0.8rem 1.8rem; font-weight: 700; font-size: 1.3rem; }
+.view-conflicts-btn:hover { background: rgba(var(--rgb-warning), 0.2); }
+.my-schedule-card { backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.06); }
+.card-header-inline { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap;}
+.card-header-actions { display: flex; gap: 0.5rem; align-items: center; }
+.total-credits-pill { padding: 0.35rem 1rem; border-radius: 999px; background: rgba(var(--rgb-primary), 0.15); border: 1px solid rgba(var(--rgb-primary), 0.2); font-size: 0.9rem; color: var(--color-primary); flex-shrink: 0; }
+.total-credits-pill span { font-weight: 700; font-family: var(--font-title); }
+.my-schedule-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.my-schedule-table thead th { background: rgba(255,255,255,0.03); padding: 0.8rem; text-align: center; font-family: var(--font-title); color: var(--color-text-muted); border-bottom: 2px solid var(--color-border); }
+.my-schedule-table tbody td { padding: 1.25rem 1rem; border-bottom: 1px solid var(--color-border); vertical-align: middle; text-align: center;}
+.my-schedule-table .course-cell .course-code { font-size: 1rem; font-weight: 600;}
+.my-schedule-table .section-cell .section-number { font-size: 1rem; font-weight: 600; }
+.hours-value { font-size: 1.2rem; font-weight: 700; color: var(--color-primary); }
+.mobile-exam-item { background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.01)); border: 1px solid rgba(var(--rgb-primary), 0.2); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 0.5rem; box-shadow: 0 8px 25px -10px rgba(0,0,0,0.3); margin-bottom: 0.75rem; }
+.mobile-exam-item .mobile-schedule-header { border-bottom: none; padding-bottom: 0; }
+.mobile-exam-date { color: var(--color-primary); font-weight: 700; font-size: 0.9rem; margin-top: 0.5rem; display: block; }
+@media (max-width: 1023px) {
+body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
+.page-wrapper { display: none; }
+.mobile-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; display: flex; flex-direction: column; }
+.mobile-header { display: flex; justify-content: space-between; align-items: center; padding: 0 1.25rem; height: 65px; background-color: var(--color-card); border-bottom: 1px solid var(--color-border); z-index: 100; backdrop-filter: blur(16px); box-shadow: 0 5px 20px -5px rgba(0,0,0,0.2); flex-direction: row-reverse; flex-shrink: 0; }
+.mobile-header-content { flex: 1; display: flex; align-items: center; min-width: 0; justify-content: flex-end; }
+#mobile-header-title { margin: 0; font-size: 1.25rem; font-family: var(--font-title); color: var(--color-text-dark); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; width: 100%;}
+#mobile-search-container { flex: 1; display: none; align-items: center; position: relative; width: 100%;}
+#mobile-search-input { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid var(--color-border); padding: 0.5rem 1rem 0.5rem 2.2rem; border-radius: var(--radius-md); color: var(--color-text); font-family: var(--font-body); font-size: 0.9rem; transition: var(--transition); outline: none; }
+#mobile-search-input:focus { border-color: var(--color-primary); background: rgba(var(--rgb-primary), 0.05); }
+#mobile-close-search { position: absolute; left: 0.7rem; top: 50%; transform: translateY(-50%); font-size: 1.2rem; color: var(--color-text-muted); cursor: pointer; }
+#mobile-action-buttons { display: flex; align-items: center; gap: 0.5rem; margin-right: 1rem; }
+#mobile-action-buttons .icon-btn-ghost { background: none; border: none; color: var(--color-primary); font-size: 1.6rem; padding: 0.5rem; cursor: pointer; transition: transform .2s ease; display: flex; align-items: center; justify-content: center; }
+#mobile-action-buttons .icon-btn-ghost:hover { transform: scale(1.1); }
+.mobile-view-content { display: none; flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; padding-top: 0; padding-bottom: 85px; -webkit-overflow-scrolling: touch; }
+.mobile-view-content.active { display: flex; flex-direction: column; }
+.light .mobile-header, .light .mobile-nav { box-shadow: 0 5px 20px -5px rgba(0,0,0,0.05); }
+.light #mobile-search-input { background: rgba(0,0,0,0.05); }
+#mobile-calendar-view .main-content { padding: 0; }
+#mobile-calendar-view .schedule-tabs-container { margin-top: 0.5rem; margin-left: 1rem; margin-right: 1rem;}
+#mobile-courses-view { padding-left: 1rem; padding-right: 1rem; }
+.schedule-tabs-container .demo-badge { margin-right: auto; margin-left: 0.5rem;}
+#mobile-calendar-view .card { padding: 0; overflow: hidden; flex-grow: 1; height: auto; }
+.mobile-calendar-scroll-wrapper { overflow-x: auto; height: 100%; -webkit-overflow-scrolling: touch; direction: ltr; }
+.mobile-calendar-scroll-wrapper::-webkit-scrollbar { height: 4px; }
+.mobile-calendar-scroll-wrapper::-webkit-scrollbar-track { background: transparent; }
+.mobile-calendar-scroll-wrapper::-webkit-scrollbar-thumb { background: rgba(var(--rgb-primary), 0.5); border-radius: 4px; }
+#mobile-calendar { min-width: 850px; direction: rtl; }
+#mobile-courses-view .sidebar { height: 100%; border-left: none; display: flex; flex-direction: column; }
+#mobile-courses-view .sidebar-header, #mobile-courses-view .sidebar-tabs { display: none; }
+#mobile-courses-view .tab-content { padding: 0; }
+#mobile-courses-view .sidebar-content-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+#mobile-courses-list { overflow-y: auto; flex: 1; padding-bottom: 100px !important; }
+.my-schedule-container .card { display: none; }
+#mobile-my-schedule-container { display: flex; flex-direction: column; width: 100%; height: 100%; }
+.light .mobile-schedule-footer { background: rgba(255,255,255,0.7); border-color: transparent;}
+.mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: 75px; background-color: var(--color-card); border-top: 1px solid var(--color-border); backdrop-filter: blur(16px); z-index: 100; box-shadow: 0 -5px 20px -5px rgba(0,0,0,0.2); padding-bottom: env(safe-area-inset-bottom); will-change: transform; flex-shrink: 0; }
+.mobile-nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; background: none; border: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: color 0.2s ease; }
+.mobile-nav-btn i { font-size: 1.6rem; }
+.mobile-nav-btn.active { color: var(--color-primary); }
+.mobile-nav-btn span { transition: all 0.2s ease; padding: 0.2rem 0.6rem; border-radius: 99px; }
+.mobile-nav-btn.active span { color: white; background-color: var(--color-primary); }
+.sidebar { width: 100%; height: 100%; border-left: none; }
+.main-content { padding: 0; height: 100%; }
+.my-schedule-container { display: flex; }
+.my-schedule-section { padding: 1rem; }
+.fc .fc-toolbar { padding: 0 1rem 1rem; font-size: 0.9em; }
+}
+@keyframes sectionFadeUp { from { opacity: 0; transform: translateY(8px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+.course-item.open .section-btn { animation: sectionFadeUp 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+.course-item .section-btn { opacity: 0; transform: translateY(8px) scale(0.98); }
+.sidebar { background: radial-gradient(circle at 50% 0%, rgba(var(--rgb-primary), 0.08), transparent 40%), var(--color-card); }
+.course-item { background: linear-gradient(145deg, rgba(255, 255, 255, 0.02), rgba(255, 255, 255, 0)); border: 1px solid var(--color-border); box-shadow: inset 0 1px 1px rgba(255,255,255,0.03); border-radius: var(--radius-md); transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.course-item:hover { transform: translateY(-5px); border-color: rgba(var(--rgb-primary), 0.5); box-shadow: 0 10px 25px -5px rgba(var(--rgb-primary), 0.15), 0 8px 10px -6px rgba(0,0,0,0.3); }
+.light .course-item { box-shadow: inset 0 1px 1px rgba(0,0,0,0.03); }
+.light .course-item:hover { box-shadow: 0 10px 25px -5px rgba(var(--rgb-primary), 0.1), 0 8px 10px -6px rgba(0,0,0,0.1); }
+.course-item-header { transition: background-color 0.3s ease, border-color 0.3s ease; border-bottom: 1px solid transparent; }
+.course-item.open .course-item-header { background-color: rgba(var(--rgb-primary), 0.05); border-bottom-color: rgba(var(--rgb-primary), 0.3); }
+.my-schedule-table .schedule-row { opacity: 0; transform: translateY(6px); animation: rowIn 0.35s ease-out forwards; }
+.my-schedule-table .schedule-row:nth-child(1) { animation-delay: 0.05s; }
+.my-schedule-table .schedule-row:nth-child(2) { animation-delay: 0.1s; }
+.my-schedule-table .schedule-row:nth-child(3) { animation-delay: 0.15s; }
+.my-schedule-table .schedule-row:nth-child(4) { animation-delay: 0.2s; }
+.my-schedule-table .schedule-row:nth-child(5) { animation-delay: 0.25s; }
+.my-schedule-table .schedule-row.has-conflict { background-color: rgba(var(--rgb-danger), 0.1); box-shadow: inset 4px 0 0 0 var(--color-danger); }
+@keyframes shimmer { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+.section-btn.selected { color: white; border-color: transparent; background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-primary) 50%, #a855f7 100%); background-size: 200% 200%; animation: shimmer 4s ease infinite; box-shadow: 0 2px 20px rgba(var(--rgb-primary), 0.4); transform: scale(1.05); }
+.schedule-tab.active { color: white; background: linear-gradient(135deg, var(--color-primary-dark), var(--color-primary)); background-size: 200% 200%; animation: shimmer 5s ease infinite; }
+@media (min-width: 2000px) {
+.page-wrapper {
+max-width: 1900px;
+margin: 0 auto;
+border-left: 1px solid var(--color-border);
+border-right: 1px solid var(--color-border);
+position: relative;
+z-index: 10;
+box-shadow: 0 0 100px rgba(0,0,0,0.5);
+}
+.main-header {
+width: 100%;
+margin: -2rem 0 0;
+border-radius: 0;
+}
+}
+.fetch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+.fetch-field-group { display: flex; flex-direction: column; gap: 0.5rem; }
+.fetch-field-group label { color: var(--color-text-muted); font-size: 0.9rem; }
+.fetch-select { width: 100%; padding: 0.8rem; background: rgba(0,0,0,0.2); border: 1px solid var(--color-border); border-radius: var(--radius-md); color: var(--color-text); outline: none; transition: var(--transition); font-family: var(--font-body); }
+.fetch-select:focus { border-color: var(--color-primary); background: rgba(var(--rgb-primary), 0.05); }
+.fetch-select:disabled { opacity: 0.5; cursor: not-allowed; }
+.light .fetch-select { background: rgba(0,0,0,0.05); }
+</style>
 </head>
 <body>
-    <div class="cosmic-bg-container">
-        <div class="nebula-glow"></div>
-        <canvas id="starfield-canvas"></canvas>
-    </div>
+<div class="cosmic-bg-container"><div class="nebula-glow"></div><canvas id="starfield-canvas"></canvas></div>
+<div id="install-overlay"><div id="install-section-container"></div></div>
 
-    <div id="root"></div>
+<div class="page-wrapper">
+<main class="main-content custom-scrollbar">
+<header class="main-header">
+<div id="main-header-title-wrapper"><h1><i class="ri-calendar-event-line"></i> QU Schedule</h1></div>
+<div class="header-actions">
+<button id="fetch-gate-btn"><i class="ri-download-cloud-line"></i> جلب من البوابة</button>
+<button id="download-img-btn"><i class="ri-camera-3-line"></i> حفظ صورة</button>
+<button id="settings-btn"><i class="ri-settings-3-line"></i> إعدادات</button>
+<button id="clear-calendar-btn"><i class="ri-delete-bin-6-line"></i> مسح الجدول الحالي</button>
+</div>
+</header>
+<div class="schedule-tabs-container" id="schedule-tabs-container"></div>
+<div class="calendar-wrapper card">
+<div id='calendar'></div>
+</div>
+<div class="my-schedule-container" id="my-schedule-container"></div>
+</main>
+<aside class="sidebar">
+<header class="sidebar-header">
+<div class="sidebar-title-row">
+<h2><i class="ri-stack-line"></i> المقررات</h2>
+<button id="desktop-search-toggle"><i class="ri-search-2-line"></i></button>
+</div>
+<div class="sidebar-search-container" id="desktop-search-container">
+<i class="ri-search-2-line search-icon"></i>
+<input type="text" class="search-input" id="desktop-search-input" placeholder="بحث باسم المقرر، الدكتور، أو الشعبة...">
+</div>
+</header>
+<div class="sidebar-content-wrapper">
+<div class="sidebar-tabs"><button class="tab-btn active" data-tab="courses-tab"><i class="ri-layout-grid-line"></i> المقررات المتاحة</button><button class="tab-btn" data-tab="exams-tab"><i class="ri-file-list-3-line"></i> الاختبارات النهائية</button></div>
+<div id="courses-tab" class="tab-content active custom-scrollbar"><div id="desktop-courses-list"><div class="no-data" id="no-data-message"><i class="ri-time-line"></i><h4>في انتظار البيانات...</h4><p>اسحب الأداة من شريط الإشارات المرجعية وضعها في صفحة المقررات المطروحة لتظهر هنا.</p></div></div></div>
+<div id="exams-tab" class="tab-content custom-scrollbar">
+<div class="tab-header-actions" style="display:flex;gap:0.5rem;">
+<button id="exam-schedule-toggle-btn" class="toggle-date-btn" style="flex:1;"><i class="ri-time-line"></i> <span>3 فترات</span></button>
+<button class="toggle-date-btn" id="desktop-date-toggle" style="flex:1;"><i class="ri-calendar-todo-fill"></i> تبديل إلى التواريخ</button>
+</div>
+<div id="desktop-exams-list"></div>
+</div>
+<div id="quick-visibility-wrapper" style="padding: 10px 15px; border-top: 1px solid var(--color-border);">
+<div style="display:flex; gap:0.5rem; margin-bottom: 10px;">
+<button id="expand-collapse-btn" class="data-btn" style="flex:0 0 auto; padding:0 0.8rem;" title="توسيع/طي الكل">
+<i class="ri-stack-line"></i>
+</button>
+<button id="quick-visibility-toggle-btn" class="data-btn" style="flex:1; justify-content: center;">
+<i class="ri-eye-line"></i> تحديد المقررات الظاهرة
+</button>
+<button id="quick-visibility-swap-btn" class="data-btn" style="flex:0 0 auto; padding:0 0.8rem;" title="تبديل الاسم/الرمز">
+<i class="ri-text"></i>
+</button>
+</div>
+<div id="quick-visibility-content" class="course-visibility-grid custom-scrollbar" style="display:none; max-height: 200px; overflow-y: auto; padding-bottom: 5px;"></div>
+</div>
+</div>
+<footer class="sidebar-footer" id="sidebar-footer"><a href="https://t.me/mutlaq1" target="_blank" rel="noopener noreferrer" class="designer-credit"><i class="ri-telegram-line"></i> MUTLAQ1</a></footer>
+</aside>
+</div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useMemo, useRef } = React;
-        
-        const questionsDB = [
-            { source: "462", q: "إذا أسلمت المرأة ولم يسلم زوجها الكتابي، ففي هذه الحالة:", options: ["أ) يفرق بينهما في الحال", "ب) يفرق بينهما إذا انقضت عدتها", "ج) يبقى الزواج ولا يفرق بينها وبين زوجها الكتابي", "د) جميع ما ذكر غير صحيح"], ans: 1 },
-            { source: "462", q: "مما يُستدل به على مشروعية زكاة الفطر قوله تعالى:", options: ["أ) قَدْ أَفْلَحَ مَن تَزَكَّىٰ", "ب) قَدْ أَفْلَحَ مَن زَكَّاهَا", "ج) وَأَقِيمُوا الصَّلَاةَ وَآتُوا الزَّكَاةَ", "د) وَأَنفِقُوا مِن مَّا رَزَقْنَاكُم"], ans: 0 },
-            { source: "462", q: "نظرية العقد الاجتماعي، هي فكرة مادية تقوم في حقيقتها على تبادل المصالح حال التعايش بين الناس؛ لكنها أيضاً:", options: ["أ) تقوي هي ومثيلاتها على التأليف بين قلوب أفراد المجتمع", "ب) تستطيع بث المحبة بين أفراد المجتمع", "ج) تعمل على زرع التسامح في المجتمع", "د) لا تزيد على كونها محاولة للتوفيق بين الرغائب، والملائمة بين المصالح"], ans: 3 },
-            { source: "462", q: "في قول النبي ﷺ «المسلم أخو المسلم، لا يظلمه، ولا يُسلمه...» من ستر مسلماً ستره الله يوم القيامة:", options: ["أ) ترغيب في العناية بقضايا المجتمع وحاجات أفراده", "ب) حث لأفراد المجتمع على محبة الآخرين", "ج) تنظيم للعلاقة بين أفراد المجتمع المسلم", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "الأصل في حكم الإيلاء في الشرع أنه:", options: ["أ) مباح", "ب) مكروه", "ج) حرام", "د) واجب"], ans: 0 },
-            { source: "462", q: "روى أبو هريرة أن رسول الله ﷺ قال: «والذي نفسي بيده لقد هممت أن آمر بحطب فيحتطب...» هذا الوعيد كان بسبب:", options: ["أ) ترك الصلاة تكاسلاً", "ب) ترك الصلاة جحوداً ونكراناً", "ج) التخلف عن الاجتماع لها (صلاة الجماعة)", "د) أ + ب إجابتان صحيحتان"], ans: 2 },
-            { source: "462", q: "من الأسباب التي شُرعت تقوية للروابط الاجتماعية، تشريع بعض الصلوات، مثل:", options: ["أ) صلاة الجنازة", "ب) صلاة الاستسقاء", "ج) صلاة كسوف الشمس", "د) صلاة خسوف القمر"], ans: 0 },
-            { source: "462", q: "تعتد المرأة بالأشهر إذا كانت:", options: ["أ) يائسة كالكبيرة في السن", "ب) صغيرة لا تحيض", "ج) توفي عنها زوجها ولم تكن حاملاً", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "إن المجتمع الإسلامي كغيره من المجتمعات لابد له من أسس يبنى عليها، لكنه تميز عن غيره بأكبر أساس هو:", options: ["أ) الأخوة", "ب) العقيدة", "ج) اللغة", "د) الجنس"], ans: 1 },
-            { source: "462", q: "من الأهداف والغايات التي شُرعت الزكاة لها:", options: ["أ) تطهير نفس الغني من الشح والبخل", "ب) إقامة المصالح العامة للمسلمين", "ج) تطهير نفس الفقير من الحسد", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "لم يقتصر الإسلام في تشريع التكافل الاجتماعي على الزكاة والنفقات الواجبة، بل دعا للصدقات التطوعية مثل:", options: ["أ) النذور", "ب) الأضاحي", "ج) الكفارات", "د) جميع ما ذكر غير صحيح"], ans: 3 },
-            { source: "462", q: "كانت المرأة عندهم عندما تتزوج تدخل في عصمة زوجها وتصير في حكم ابنته وممتلكاته:", options: ["أ) اليونان", "ب) الرومان", "ج) الهنود", "د) العرب في الجاهلية"], ans: 1 },
-            { source: "462", q: "من شروط النكاح: تعيين الزوجين. فلا يكفي أن يقول زوجتك ابنتي وله عدة بنات، ويحصل التعيين بـ:", options: ["أ) الإشارة إلى المتزوج", "ب) تسميته باسمه", "ج) وصفه بما يتميز به", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "في قوله تعالى: ﴿يَا أَيُّهَا النَّاسُ اتَّقُوا رَبَّكُمُ الَّذِي خَلَقَكُم مِّن نَّفْسٍ وَاحِدَةٍ...﴾ أقر الإسلام:", options: ["أ) إنسانية المرأة وكرامتها", "ب) أنها مخلوقة من جنس الرجل", "ج) أنها إنسانة مثله تماماً في الخلقة وأصل الكرامة", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "من الحقوق المالية التي أعطاها الإسلام للمرأة بعد أن كانت محرومة منها:", options: ["أ) المشاورة", "ب) المتعة", "ج) الحضانة", "د) أن تتصرف فيما تملك وفق حدود الشرع"], ans: 3 },
-            { source: "462", q: "من الأمور التي لا يؤاخذ بها من يعدد الزوجات إذا لم يعدل بينهن في:", options: ["أ) المسكن", "ب) النفقة والكسوة", "ج) المعاشرة", "د) الميل القلبي (الحب)"], ans: 3 },
-            { source: "462", q: "من أبرز العوامل التي شرعها الإسلام حفاظاً على الأسرة المسلمة من الانحراف:", options: ["أ) الاستئذان لدخول البيت", "ب) تحقيق السكن النفسي", "ج) جعل الأسرة الطريق الوحيد للإنجاب", "د) إعداد الأسرة للتدريب على المسؤوليات"], ans: 0 },
-            { source: "462", q: "يحرم على الرجل أن يجمع بين الأختين؛ لأجل القرابة بين المرأتين إذا كانتا:", options: ["أ) شقيقتين من أبوين", "ب) أختين من جهة الأب فقط", "ج) أختين من الرضاع", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "462", q: "هناك بعض الحالات التي يجوز للرجل أن يخطب فيها على خطبة غيره، منها:", options: ["أ) إذا عدل الخاطب عن خطبته", "ب) إذا لم يأذن الخاطب الأول", "ج) إذا سكتت المرأة", "د) ب + ج"], ans: 0 },
-            { source: "462", q: "روى جابر عن النبي ﷺ: «إذا خطب أحدكم المرأة فإن استطاع أن ينظر إلى ما يدعوه إلى نكاحها فليفعل». حكم النظر:", options: ["أ) حرام", "ب) جائز (مباح)", "ج) مكروه", "د) جميع ما ذكر غير صحيح"], ans: 1 },
-            { source: "462", q: "كانت المرأة في الحضارة الهندية القديمة:", options: ["أ) تباع وتشترى", "ب) قاصرة غير مكلفة", "ج) معدومة الأهلية كالصغير والمجنون", "د) أحد أملاك الزوج"], ans: 1 },
-            { source: "462", q: "إذا نكح الرجل المرأة بشيء من المال مدة معينة ينتهي النكاح بانتهائها (نكاح المتعة) فهو:", options: ["أ) باطل باتفاق علماء المسلمين", "ب) جائز باتفاق", "ج) مكروه", "د) مندوب"], ans: 0 },
-            { source: "462", q: "من مقاصد النكاح:", options: ["أ) قرار النساء في البيوت", "ب) تحقيق الستر للرجل والمراة (الإعفاف)", "ج) تحريم الخلوة", "د) الغيرة على المحارم"], ans: 1 },
-            { source: "462", q: "من عقد على امرأة، وطلقها قبل الدخول، ثم أراد بعد ذلك أن يتزوج ابنتها، فإن هذا الزواج حكمه:", options: ["أ) حرام", "ب) جائز", "ج) مكروه", "د) مستحب"], ans: 0 },
-            { source: "462", q: "يُعد حق (الإرث) حقاً من:", options: ["أ) الحقوق المشتركة بين الزوجين", "ب) من حقوق الزوجة المادية", "ج) حقوق الأولاد", "د) جميع ما ذكر صحيح"], ans: 0 },
-            { source: "462", q: "الطلاق البدعي: طلاق مخالف للسنة التي أمر الله بها، ومن صوره:", options: ["أ) طلقة واحدة", "ب) ثلاث مرات تباعاً في مجلس واحد", "ج) في طهر لم يمسها فيه", "د) أ + ج"], ans: 1 },
-            { source: "462", q: "إذا وقع الطلاق من الزوج بأحد ألفاظ الكناية (مثل: الحقي بأهلك)، فحكم الطلاق أنه:", options: ["أ) يقع إذا نواه الزوج", "ب) يقع ولو لم ينوه", "ج) لا يقع أبداً", "د) جميع ما ذكر صحيح"], ans: 0 },
-            { source: "462", q: "دل قوله تعالى: ﴿وَبُعُولَتُهُنَّ أَحَقُّ بِرَدِّهِنَّ فِي ذَٰلِكَ إِنْ أَرَادُوا إِصْلَاحًا﴾ على مشروعية:", options: ["أ) الرجعة", "ب) الخلع", "ج) العدة", "د) الإيلاء"], ans: 0 },
-            { source: "462", q: "يستدل على مشروعية الخلع بقوله تعالى:", options: ["أ) فَإِنْ خِفْتُمْ أَلَّا يُقِيمَا حُدُودَ اللَّهِ فَلَا جُنَاحَ عَلَيْهِمَا فِيمَا افْتَدَتْ بِهِ", "ب) وَلَا يَحِلُّ لَكُمْ أَن تَأْخُذُوا مِمَّا آتَيْتُمُوهُنَّ شَيْئًا", "ج) فَإِن طَلَّقَهَا فَلَا تَحِلُّ لَهُ مِن بَعْدُ", "د) فَإِن طَلَّقَهَا فَلَا جُنَاحَ عَلَيْهِمَا أَن يَتَرَاجَعَا"], ans: 0 },
-            { source: "462", q: "عدد ما يملك الرجل إيقاعه على زوجته من التطليقات:", options: ["أ) تطليقة واحدة", "ب) تطليقتان", "ج) ثلاث تطليقات", "د) أربع تطليقات"], ans: 2 },
-            { source: "461", q: "إن الله تعالى أودع في الإنسان نزعتين متباينتين في الظاهر لكنهما متكاملتان، هما:", options: ["أ) العامة والخاصة", "ب) الفردية والاجتماعية", "ج) حب المال والراحة", "د) حب الوالد والولد"], ans: 1 },
-            { source: "461", q: "قال تعالى: ﴿وَضَرَبَ اللَّهُ مَثَلًا قَرْيَةً كَانَتْ آمِنَةً مُّطْمَئِنَّةً...﴾ الآية تدل على تلازم واضح بين:", options: ["أ) الأمن والخوف", "ب) الإيمان والخشية", "ج) الأمن والإيمان، والكفر والخوف", "د) الأمن والإيمان، والكفر والنفاق"], ans: 2 },
-            { source: "461", q: "قال تعالى: ﴿وَعِبَادُ الرَّحْمَٰنِ الَّذِينَ يَمْشُونَ عَلَى الْأَرْضِ هَوْنًا...﴾ دلت الآية على صفة من صفات المجتمع المسلم وهي أنه مجتمع:", options: ["أ) متسامح", "ب) متراحم", "ج) متناصح", "د) تسوده المساواة"], ans: 0 },
-            { source: "461", q: "حرص الإسلام على تشريع واجبات مالية تكافلية، منها:", options: ["أ) النذور والكفارات", "ب) صدقة التطوع", "ج) الوصايا", "د) الوقف"], ans: 0 },
-            { source: "461", q: "جاء في حديث أسماء بنت أبي بكر: قدمت أمي وهي مشركة فاستفتيت رسول الله ﷺ... قال:", options: ["أ) صلي أمك إن أسلمت", "ب) صلي أمك إن هاجرت", "ج) صلي أمك", "د) لا تصليها"], ans: 2 },
-            { source: "461", q: "تُعد الشهادة على عقد النكاح:", options: ["أ) ركناً من أركان النكاح", "ب) شرطاً غير لازم", "ج) شرطاً من شروط النكاح", "د) أمراً مستحباً"], ans: 2 },
-            { source: "461", q: "هو (وقف النسل الإنساني عن النمو والزيادة وذلك بالحيلولة دون وقوع الحمل) يقصد به:", options: ["أ) تحديد النسل", "ب) تنظيم النسل", "ج) الإجهاض العفوي", "د) الإجهاض الاختياري"], ans: 0 },
-            { source: "461", q: "قال ابن العربي في قوله تعالى: ﴿حَافِظَاتٌ لِّلْغَيْبِ﴾ معنى الحفظ هنا:", options: ["أ) تحفظ مال زوجها", "ب) تحفظ غيبة زوجها", "ج) تحفظ سر زوجها", "د) تحفظ بيت زوجها"], ans: 1 },
-            { source: "461", q: "التزام الحقيقة دائماً قولاً وفعلاً وظاهراً وباطناً، يُسمى:", options: ["أ) الحق", "ب) الوفاء بالعهد", "ج) العلم", "د) الصدق"], ans: 3 },
-            { source: "461", q: "مما يدل على حفظ الإسلام لإنسانية المرأة وكرامتها أنه قَبِلَ شهادتها وحدها دون الرجل في:", options: ["أ) الرضاع", "ب) الدين", "ج) الحدود", "د) البيوع"], ans: 0 },
-            { source: "461", q: "من النساء المحرمات حرمة مؤبدة: المحرمات بالمصاهرة، وعددهن:", options: ["أ) ثلاث نساء", "ب) أربع نساء", "ج) سبع نساء", "د) تسع نساء"], ans: 1 },
-            { source: "461", q: "من أخطر أنواع الانحراف لدى الشباب:", options: ["أ) الانحراف الفكري", "ب) الانحراف الأخلاقي", "ج) الانحراف الاجتماعي", "د) الانحراف السلوكي"], ans: 0 },
-            { source: "461", q: "عرف الجرجاني الحياء بأنه انقباض النفس من شيء، وهو نوعان:", options: ["أ) واجب ومستحب", "ب) نفساني وإيماني", "ج) ظاهر وباطن", "د) قول وفعل"], ans: 1 },
-            { source: "461", q: "من الأنكحة الفاسدة الباطلة (نكاح الشغار)، سُمي بذلك لـ:", options: ["أ) خلوه من النفقة", "ب) خلوه من المهر", "ج) خلوه من المبيت", "د) خلوه من المسكن"], ans: 1 },
-            { source: "461", q: "في مسألة التحسين والتقبيح يحتكم المجتمع إلى قاعدة ظاهرة وهي أن:", options: ["أ) المشاورة", "ب) المتعة", "ج) الحسن ما حسنه الشرع والقبيح ما قبحه الشرع", "د) الحسن ما حسنه العقل"], ans: 2 },
-            { source: "461", q: "من الحقوق غير المادية التي تجب للزوجة على زوجها:", options: ["أ) القيام على أمر البيت", "ب) الطاعة بالمعروف", "ج) تعليمها أمور دينها", "د) النفقة"], ans: 2 },
-            { source: "461", q: "صنف بعض الباحثين المعاصرين الأخلاق تصنيفاً معرفياً، مثل:", options: ["أ) الجد في العمل", "ب) ضبط النفس", "ج) عيادة المريض", "د) إفشاء السلام"], ans: 1 },
-            { source: "461", q: "قال تعالى: ﴿يَا أَيُّهَا الَّذِينَ آمَنُوا لَا تَدْخُلُوا بُيُوتًا غَيْرَ بُيُوتِكُمْ حَتَّىٰ تَسْتَأْنِسُوا...﴾ يقصد بالاستئناس:", options: ["أ) الاستقبال", "ب) البشاشة", "ج) الاستئذان", "د) الإطالة في الزيارة"], ans: 2 },
-            { source: "461", q: "قال تعالى: ﴿وَآتُوا النِّسَاءَ صَدُقَاتِهِنَّ نِحْلَةً﴾ دلت الآية على حق من حقوق الزوجة:", options: ["أ) النفقة", "ب) المهر", "ج) المبيت", "د) حسن العشرة"], ans: 1 },
-            { source: "461", q: "الفرق بين الهدية والرشوة هو:", options: ["أ) الرشوة ما أخذت طلباً والهدية ما طلبت شرعاً", "ب) الرشوة تُعطى بشرط والهدية بلا شرط", "ج) الرشوة ما أخذت غصباً", "د) جميع ما سبق"], ans: 1 },
-            { source: "461", q: "من المخاطر المترتبة على جريمة القذف:", options: ["أ) التشكيك في نسب الأولاد", "ب) الحرمان من الزواج", "ج) وجوب الفراق", "د) حماية الأعراض"], ans: 0 },
-            { source: "461", q: "شرع الله أحكاماً وآداباً تُعد عوامل إيجابية للحفاظ على الأسرة المسلمة من الانحراف:", options: ["أ) الغيرة على المحارم", "ب) تشريع عقوبة الزنا", "ج) غض البصر", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "461", q: "قوله تعالى: ﴿فَلَمْ تُحَاجُّونَ فِيمَا لَيْسَ لَكُم بِهِ عِلْمٌ﴾ تدل على أحد لوازم الجدل:", options: ["أ) الإيمان العميق بما يدعو له", "ب) العلم بقضية الحوار ومعرفتها", "ج) الحرص على الوصول للحق", "د) إحسان الظن بالآخر"], ans: 1 },
-            { source: "461", q: "الذين كانوا قديماً يشككون في إنسانية المرأة وليس لها عندهم حق في التملك:", options: ["أ) الرومان", "ب) اليونان", "ج) النصارى", "د) العرب في الجاهلية"], ans: 2 },
-            { source: "461", q: "لم يكن لتعدد الزوجات عندهم حد معين، ولا للطلاق عدد محدود... هم:", options: ["أ) النصارى", "ب) اليهود", "ج) الهنود", "د) العرب في الجاهلية"], ans: 3 },
-            { source: "461", q: "قوله تعالى: ﴿أَكَّالُونَ لِلسُّحْتِ﴾ معنى السحت هنا:", options: ["أ) السرقة", "ب) الغلول", "ج) الرشوة", "د) أكل مال اليتيم"], ans: 2 },
-            { source: "461", q: "سمّاه علماء الاجتماع بأنه (ضرورة الوعي بشعور الآخرين وانتهاج سلوك يتأثر بهذا الوعي):", options: ["أ) الوعي الاجتماعي", "ب) الروابط الاجتماعية", "ج) الضبط الاجتماعي", "د) العدالة الاجتماعية"], ans: 0 },
-            { source: "461", q: "ذهب القرافي إلى أن تناوله غالباً تغيب معه الحواس كالبصر والسمع والشم، وهو:", options: ["أ) التبغ", "ب) المخدرات", "ج) الدخان", "د) القات"], ans: 1 },
-            { source: "461", q: "من الحقوق المشتركة بين الزوجين:", options: ["أ) حسن العشرة", "ب) النفقة", "ج) الطاعة بالمعروف", "د) القيام على أمر البيت"], ans: 0 },
-            { source: "461", q: "لمشروعية العدة حكم متعددة، منها:", options: ["أ) معالجة حالات النشوز", "ب) تعظيم عقد النكاح", "ج) مراعاة حال الزوج", "د) شعور الزوجة بالاستقرار"], ans: 1 },
-            { source: "452", q: "من الأسس التي يقوم عليها بناء المجتمع المسلم هي:", options: ["أ) اللغة", "ب) الضبط الاجتماعي", "ج) الاقتصاد", "د) التعليم"], ans: 1 },
-            { source: "452", q: "يُستدل بقوله تعالى: ﴿فَمَنِ اضْطُرَّ غَيْرَ بَاغٍ وَلَا عَادٍ فَلَا إِثْمَ عَلَيْهِ ۚ إِنَّ اللَّهَ غَفُورٌ رَّحِيمٌ﴾ على إحدى سمات المجتمع الإسلامي:", options: ["أ) المساواة", "ب) الجدية", "ج) التناصح", "د) السماحة"], ans: 3 },
-            { source: "452", q: "يرى بعض الباحثين أن الروابط الاجتماعية تنقسم إلى قسمين هما:", options: ["أ) روابط فطرية ومكتسبة", "ب) روابط سلوكية وانفعالية", "ج) روابط إنسانية وعملية", "د) روابط لغوية وعرقية"], ans: 0 },
-            { source: "452", q: "تُعد أبرز الوسائل التي تعين على تقوية الروابط الاجتماعية بين أبناء المجتمع الواحد:", options: ["أ) المعاملات", "ب) الأخلاق", "ج) العبادات", "د) الحوار"], ans: 2 },
-            { source: "452", q: "عرفه الجرجاني بأنه: انقباض النفس من شيء:", options: ["أ) الحلم", "ب) الحياء", "ج) الصبر", "د) الوفاء"], ans: 1 },
-            { source: "452", q: "صنف بعض الباحثين المعاصرين الأخلاق تصنيفاً معرفياً منها:", options: ["أ) الأخلاق الفطرية", "ب) الأخلاق الفردية", "ج) الأخلاق الفاسدة", "د) السلوك الأخلاقي"], ans: 1 },
-            { source: "452", q: "هي التلطف بالإنسان للحد من ضرره:", options: ["أ) المداراة", "ب) المداهنة", "ج) المحاباة", "د) المصارحة"], ans: 0 },
-            { source: "452", q: "ذهب كثير من العلماء إلى أن فعل المباح ينقلب إلى واجب في إحدى الحالات التالية:", options: ["أ) القيام بصلة أقارب أحد الوالدين", "ب) دفع الضرر عن الجيران", "ج) إذا وجد مساكين ومعوزين", "د) إذا أمر به أحد الوالدين أو كلاهما"], ans: 3 },
-            { source: "452", q: "من الواجبات المالية التكافلية في الإسلام:", options: ["أ) النذور", "ب) النفقة على الزوجة", "ج) الوصايا", "د) القروض الحسنة"], ans: 0 },
-            { source: "452", q: "من لوازم الجدل ومتطلبات الحوار والمناظرة: التزام الهدوء والسكينة والبعد عن الانفعال. الدليل:", options: ["أ) أَتَأْمُرُونَ النَّاسَ بِالْبِرِّ", "ب) ادْعُ إِلَىٰ سَبِيلِ رَبِّكَ بِالْحِكْمَةِ وَالْمَوْعِظَةِ الْحَسَنَةِ", "ج) وَمَا أُرِيدُ أَنْ أُخَالِفَكُمْ", "د) فَلِمَ تُحَاجُّونَ فِيمَا لَيْسَ لَكُم بِهِ عِلْمٌ"], ans: 1 },
-            { source: "452", q: "يأتي قوله تعالى: ﴿سَمَّاعُونَ لِلْكَذِبِ أَكَّالُونَ لِلسُّحْتِ﴾ في معرض الحديث عن تحريم:", options: ["أ) السرقة", "ب) الاختلاس", "ج) الرشوة", "د) الغرر"], ans: 2 },
-            { source: "452", q: "ما يعطى من غير طلب أو شرط للأقرباء والأصدقاء وغيرهم بقصد إظهار المودة والألفة:", options: ["أ) هدية", "ب) عطية", "ج) صدقة", "د) هبة"], ans: 0 },
-            { source: "452", q: "الطلاق البائن بينونة صغرى هو الذي يملك الزوج إعادة زوجته:", options: ["أ) بعد زواجها من زوج آخر", "ب) يستطيع إعادتها دون قيد", "ج) برضاها وعقد ومهر جديدين", "د) لا يستطيع إعادتها إطلاقاً"], ans: 2 },
-            { source: "452", q: "من أبرز عوامل حماية الأسرة من الانزلاق في حمأة الرذيلة:", options: ["أ) الحرية المطلقة", "ب) قرار النساء في البيوت", "ج) تهيئة المسكن المناسب", "د) تلبية رغبات الأسرة"], ans: 1 },
-            { source: "452", q: "لا يمنع الإسلام من الابتكار والتجديد والانفتاح على العلوم... يدل على ذلك:", options: ["أ) أَتَأْمُرُونَ النَّاسَ بِالْبِرِّ", "ب) وَتَعَاوَنُوا عَلَى الْبِرِّ", "ج) وَسَخَّرَ لَكُم مَّا فِي السَّمَاوَاتِ", "د) الحكمة ضالة المؤمن، فحيث وجدها فهو أحق بها"], ans: 3 },
-            { source: "452", q: "يشير قوله تعالى: ﴿فَإِنْ أَرَادَا فِصَالًا عَن تَرَاضٍ مِّنْهُمَا وَتَشَاوُرٍ فَلَا جُنَاحَ عَلَيْهِمَا﴾ إلى حق من حقوق المرأة:", options: ["أ) المساواة مع الرجل", "ب) حقها في التصرف بمالها", "ج) حقها في المشاورة وإبداء الرأي", "د) جعل المرأة أهل للتكليف"], ans: 2 },
-            { source: "452", q: "في قوله تعالى: ﴿ذَٰلِكُمْ أَطْهَرُ لِقُلُوبِكُمْ وَقُلُوبِهِنَّ﴾ دليل على مقصد من مقاصد:", options: ["أ) الخطبة", "ب) الحجاب", "ج) الخلوة", "د) الاستئذان"], ans: 1 },
-            { source: "452", q: "يأتي قوله تعالى: ﴿وَآتُوا النِّسَاءَ صَدُقَاتِهِنَّ نِحْلَةً﴾ في سياق الحديث عن حق:", options: ["أ) النفقة", "ب) الغيرة عليها", "ج) المهر", "د) تعليمها أمور دينها"], ans: 2 },
-            { source: "452", q: "من المحرمات بالمصاهرة (القرابة بالزواج) من النساء وهن:", options: ["أ) بنات النساء (الربائب)", "ب) أمهات النساء", "ج) زوجات الأب", "د) زوجات الابن"], ans: 0 },
-            { source: "452", q: "قال ابن العربي في قوله تعالى: ﴿فَالصَّالِحَاتُ قَانِتَاتٌ حَافِظَاتٌ لِّلْغَيْبِ﴾، معنى حافظات للغيب:", options: ["أ) محافظات على الصلوات", "ب) من تحفظ زوجها في غيبته", "ج) حافظات للقرآن", "د) عالمات بأمور دينهن"], ans: 1 },
-            { source: "452", q: "أن ينكح الرجل المرأة بشيء من المال مدة معينة ينتهي النكاح بانتهائها من غير طلاق، يسمى:", options: ["أ) نكاح الشغار", "ب) نكاح المتعة", "ج) نكاح التحليل", "د) نكاح الاستبضاع"], ans: 1 },
-            { source: "452", q: "يُعد أخطر أنواع الانحراف لدى الشباب:", options: ["أ) الانحراف الفكري", "ب) الانحراف السلوكي", "ج) الانحراف الأخلاقي", "د) الانحراف الاجتماعي"], ans: 0 },
-            { source: "452", q: "من الأضرار الاجتماعية للمخدرات والمسكرات:", options: ["أ) ذهاب بركة الأموال", "ب) ضعف جسم الإنسان", "ج) توقع العداوة والبغضاء بين أفراد الأسرة", "د) ضمور المخ"], ans: 2 },
-            { source: "452", q: "قال تعالى: ﴿فَلَا تَعْضُلُوهُنَّ أَن يَنكِحْنَ أَزْوَاجَهُنَّ﴾ معنى العضل:", options: ["أ) منع المرأة من التزوج بكفئها إذا طلبت ذلك", "ب) إلزام المرأة باللحاق بزوجها", "ج) حرمان المرأة من زوجها وأولادها", "د) إجبار المرأة على الخلع"], ans: 0 },
-            { source: "452", q: "من الحقوق المشتركة بين الزوجين:", options: ["أ) الطاعة بالمعروف", "ب) حرمة المصاهرة", "ج) القيام على أمر البيت", "د) الغيرة"], ans: 1 },
-            { source: "452", q: "المحرمات من النساء على التأبيد ثلاثة أصناف: منها:", options: ["أ) المحرمات بسبب الجمع", "ب) المحرمات لاختلاف الدين", "ج) المحرمات بالرضاع", "د) المحرمة بسبب الإحرام"], ans: 2 },
-            { source: "452", q: "fراق الزوج لزوجته بعوض بألفاظ مخصوصة هو:", options: ["أ) طلاق", "ب) خلع", "ج) إيلاء", "د) ظهار"], ans: 1 },
-            { source: "452", q: "دل قوله تعالى: ﴿وَأَنكِحُوا الْأَيَامَىٰ مِنكُمْ﴾ على:", options: ["أ) تعيين الزوجين", "ب) وجوب الإشهاد", "ج) موافقة الولي", "د) رضا الزوجين"], ans: 2 },
-            { source: "452", q: "من المخاطر المترتبة على جريمة القذف:", options: ["أ) الحرمان من الزواج", "ب) وجوب الفراق", "ج) حماية الأعراض", "د) تفكك الأسر وانهيارها"], ans: 3 },
-            { source: "452", q: "النزعة التي تجعل الإنسان يحب الخير لنفسه ويدفع الشر عنها، تسمى:", options: ["أ) النزعة الفردية", "ب) النزعة الإنسانية", "ج) النزعة الاجتماعية", "د) النزعة النفسية"], ans: 0 },
-            { source: "451", q: "اعتناق بعض الشباب لأفكار غير سوية تهدم معالم الدين... يعد انحرافاً:", options: ["أ) فكرياً", "ب) سلوكياً", "ج) اجتماعياً", "د) أخلاقياً"], ans: 0 },
-            { source: "451", q: "إن المجتمع الإسلامي كغيره من المجتمعات لابد له من أسس... أكبر أساس هو:", options: ["أ) الأخوة", "ب) العقيدة", "ج) اللغة", "د) الجنس"], ans: 1 },
-            { source: "451", q: "كانوا في الجاهلية يؤلون من نسائهم كيف شاؤوا... جاء الإسلام بتحريم الإيلاء المطلق وحدده بمدة لا تزيد على:", options: ["أ) ثلاثة أشهر", "ب) ثلاثة قروء", "ج) أربعة أشهر وعشراً", "د) أربعة أشهر"], ans: 3 },
-            { source: "451", q: "احتاج الإنسان في أي عصر للعيش في وفاق... وقد حرص النبي ﷺ على تحقيق هذا في المدينة من خلال:", options: ["أ) بناء المسجد", "ب) تكوين تجمع خاص", "ج) المؤاخاة بين المهاجرين والأنصار", "د) أ + ب"], ans: 2 },
-            { source: "451", q: "من الحقوق غير المادية الخالصة التي تجب للمرأة على زوجها:", options: ["أ) تعليمها أمور دينها", "ب) حرمة المصاهرة", "ج) الإرث", "د) حسن العشرة"], ans: 0 },
-            { source: "451", q: "إذا أسلم الزوج غير المسلم المتزوج بامرأة كتابية، فإنه:", options: ["أ) يفرق بينهما", "ب) يبقى الزواج كما هو لعدم وجود المانع", "ج) يفرق إذا لم يكن أولاد", "د) لا شيء مما سبق"], ans: 1 },
-            { source: "451", q: "من سمات المجتمع المسلم أنه مجتمع متسامح... ومن مظاهر ذلك:", options: ["أ) الإحسان للوالدين الكافرين", "ب) إباحة الزواج من الكتابيات", "ج) جواز المعاملات الدنيوية", "د) جميع ما سبق ذكره صحيح"], ans: 3 },
-            { source: "451", q: "يحرم على الرجل أن يخطب على خطبة أخيه... لكن يجوز في حالات منها:", options: ["أ) إذا عدل الخاطب", "ب) إذا لم تسكن المرأة للخاطب", "ج) إذا أذن الخاطب لغيره", "د) جميع ما سبق ذكره صحيح"], ans: 3 },
-            { source: "451", q: "ينعقد النكاح بلفظ (الإنكاح أو التزويج) بصيغة الماضي مثل:", options: ["أ) زوجتك أو أنكحتك", "ب) تزوج أو أنكح", "ج) أزوجك أو أنكحك", "د) جميع ما سبق"], ans: 0 },
-            { source: "451", q: "حرص الإسلام على تحقيق التكافل الاجتماعي المالي... مثل:", options: ["أ) الوصايا", "ب) الصدقة التطوعية", "ج) دية القتل الخطأ على العاقلة", "د) القروض الحسنة"], ans: 2 },
-            { source: "451", q: "يستدل بقوله تعالى: ﴿فَإِنْ خِفْتُمْ أَلَّا يُقِيمَا حُدُودَ اللَّهِ فَلَا جُنَاحَ عَلَيْهِمَا فِيمَا افْتَدَتْ بِهِ﴾ على مشروعية:", options: ["أ) اللعان", "ب) الخلع", "ج) الطلاق", "د) العدة"], ans: 1 },
-            { source: "451", q: "من الأضرار الاجتماعية الخطيرة المترتبة على تعاطي المخدرات:", options: ["أ) كثرة الحوادث المؤلمة", "ب) الصد عن ذكر الله", "ج) ذهاب بركة الأموال", "د) كثرة نفقات العلاج"], ans: 0 },
-            { source: "451", q: "شرع الله أحكاماً وآداباً تعد عوامل إيجابية للحفاظ على الأسرة... منها:", options: ["أ) قرار النساء في البيوت", "ب) تحريم الخلوة", "ج) تشريع عقوبة الزنا", "د) جميع ما سبق صحيح"], ans: 3 },
-            { source: "451", q: "من الأخلاق الأسرية التي دعا إليها الإسلام تقوية للروابط:", options: ["أ) الإحسان للزوجة", "ب) إفشاء السلام", "ج) الوفاء بالعهد", "د) عيادة المريض"], ans: 0 },
-            { source: "451", q: "مما يؤكد أثر المرأة... أن النبي ﷺ كان يخص النساء بحديث يعظهن في خطب صلاة:", options: ["أ) الجمعة", "ب) العيدين", "ج) الاستسقاء", "د) الكسوف"], ans: 1 },
-            { source: "451", q: "من الحقوق التي أعطاها الإسلام للمرأة... حق المشاورة، كما شرع لها:", options: ["أ) إبداء رأيها في الزواج", "ب) اشتراط الطلاق بيدها", "ج) حق المخالعة", "د) جميع ما ذكر صحيح"], ans: 3 },
-            { source: "451", q: "من الحالات التي يجب فيها الطلاق:", options: ["أ) زوجة سليطة اللسان", "ب) إذا ترتب ضرر بالزواج", "ج) طلاق الحكمين في الشقاق إذا رأيا ذلك", "د) زوجة مؤذية"], ans: 2 },
-            { source: "451", q: "إذا طلق الزوج المسلم زوجته الكتابية أو توفي عنها، فإن حكم العدة في حقها:", options: ["أ) مستحباً", "ب) واجباً", "ج) مباحاً", "د) مكروهاً"], ans: 1 },
-            { source: "451", q: "من الأخطار والأضرار المترتبة على فعل جريمة اللواط:", options: ["أ) مقت الله ولعنته", "ب) ضعف الجسم", "ج) ابتزاز الأموال", "د) وقوع العداوة"], ans: 0 },
-            { source: "451", q: "الأرحام هم أقارب الإنسان... ودعانا الإسلام إلى صلتهم، وحكم ذلك:", options: ["أ) مستحب", "ب) سنة مؤكدة", "ج) واجب", "د) لا شيء مما ذكر"], ans: 2 },
-            { source: "451", q: "كانت المرأة عندهم عندما تتزوج تدخل في عصمة زوجها وتصير في حكم ابنته وممتلكاته:", options: ["أ) اليونان", "ب) الرومان", "ج) الهنود", "د) العرب في الجاهلية"], ans: 1 },
-            { source: "451", q: "لما كان أساس قيام الأسرة هو الزواج، نقاه الإسلام من الصور الجاهلية مثل نكاح:", options: ["أ) التحليل", "ب) الخدن", "ج) المسيار", "د) أ + ج"], ans: 1 },
-            { source: "451", q: "كان التعدد بين الزوجات موجوداً قبل الإسلام... وعمل به بعض الأنبياء كـ:", options: ["أ) يحيى", "ب) عيسى", "ج) يونس", "د) يعقوب"], ans: 3 },
-            { source: "451", q: "حديث «أتعجبون من غيرة سعد...» المقصود هو:", options: ["أ) سعد بن الربيع", "ب) سعد بن معاذ", "ج) سعد بن عبادة", "د) سعد بن أبي وقاص"], ans: 2 },
-            { source: "451", q: "دل ما روي «لا نكاح إلا بولي وشاهدي عدل» على أن الشهادة في العقد:", options: ["أ) شرط لازم لا يعتبر العقد صحيحاً بدونها", "ب) شرط غير لازم", "ج) شرط لازم لكن يعتبر صحيحاً", "د) كل ما سبق خطأ"], ans: 0 },
-            { source: "451", q: "دعا الإسلام إلى الأخلاق الفاضلة... ومن هذه صفة تُكسبك المحبة وبها يتعاشر أهل الجنة:", options: ["أ) الصدق", "ب) الحياء", "ج) البشاشة وطالقة الوجه", "د) المداراة"], ans: 2 },
-            { source: "451", q: "لقد تنبه المعنيون... لأهمية الضبط الاجتماعي... نظرية العقد الاجتماعي للعالم:", options: ["أ) ابن رشد", "ب) روسو", "ج) ابن سينا", "د) سميث"], ans: 1 },
-            { source: "451", q: "من الحقوق التي تجب للأولاد على والديهم قبل أن يولدوا:", options: ["أ) اختيار الاسم", "ب) الحضانة", "ج) النفقة", "د) الجنين في الحياة"], ans: 3 },
-            { source: "451", q: "من الشروط الفاسدة المفسدة لعقد الزواج (نكاح لمدة معينة) يسمى:", options: ["أ) المسيار", "ب) التحليل", "ج) المتعة", "د) الاستبضاع"], ans: 2 },
-            { source: "451", q: "حكم جماع الرجل زوجته التي ظاهر منها قبل الكفارة:", options: ["أ) حرام", "ب) مكروه", "ج) مستحب", "د) جائز"], ans: 0 }
-        ];
+<div class="mobile-wrapper">
+<header class="mobile-header">
+<div id="mobile-action-buttons">
+<button class="icon-btn-ghost" id="mobile-dynamic-action-btn"></button>
+<button class="icon-btn-ghost" id="mobile-settings-btn"><i class="ri-settings-3-line"></i></button>
+</div>
+<div class="mobile-header-content">
+<h1 id="mobile-header-title"></h1>
+<div id="mobile-search-container">
+<input type="text" id="mobile-search-input" placeholder="بحث...">
+<i class="ri-close-line" id="mobile-close-search"></i>
+</div>
+</div>
+</header>
 
-        const sourceLinks = {
-            "462": "https://t.me/ExamsQU/4/1836",
-            "461": "https://t.me/ExamsQU/4/1652",
-            "452": "https://t.me/ExamsQU/4/1403",
-            "451": "https://t.me/ExamsQU/4/1308"
-        };
+<div id="mobile-calendar-view" class="mobile-view-content active">
+<main class="main-content">
+<div class="schedule-tabs-container" id="mobile-schedule-tabs-container"></div>
+<div class="calendar-wrapper card">
+<div class="mobile-calendar-scroll-wrapper"><div id='mobile-calendar'></div></div>
+</div>
+</main>
+</div>
+<div id="mobile-courses-view" class="mobile-view-content">
+<aside class="sidebar">
+<header class="sidebar-header"><h2><i class="ri-stack-line"></i> المقررات</h2></header>
+<div class="sidebar-content-wrapper">
+<div id="mobile-courses-list" class="custom-scrollbar" style="padding:1rem;"></div>
+</div>
+</aside>
+</div>
+<div id="mobile-my-schedule-view" class="mobile-view-content">
+<div class="my-schedule-container" id="mobile-my-schedule-container"></div>
+</div>
+<div id="mobile-my-exams-view" class="mobile-view-content">
+<div class="mobile-exams-header-controls" style="padding: 1rem; display: flex; gap: 0.5rem;">
+<button id="mobile-my-exams-period-toggle" class="toggle-date-btn" style="flex:1;">
+<i class="ri-time-line"></i> <span>3 فترات</span>
+</button>
+<button id="mobile-my-exams-date-toggle" class="toggle-date-btn" style="flex:1;">
+<i class="ri-calendar-todo-fill"></i> <span>عرض التواريخ</span>
+</button>
+</div>
+<div id="mobile-my-exams-list" class="custom-scrollbar" style="padding: 0 1rem 1rem;">
+</div>
+</div>
 
-        const useAnimatedNumber = (target, duration = 500) => {
-            const [currentNumber, setCurrentNumber] = useState(target);
-            const frameRef = useRef();
-            const startNumberRef = useRef(target);
-            const startTimeRef = useRef();
-            useEffect(() => {
-                const startNumber = startNumberRef.current;
-                startTimeRef.current = performance.now();
-                const animate = (currentTime) => {
-                    const elapsedTime = currentTime - startTimeRef.current;
-                    const progress = Math.min(elapsedTime / duration, 1);
-                    const easeOutProgress = 1 - Math.pow(1 - progress, 3);
-                    const newNumber = startNumber + (target - startNumber) * easeOutProgress;
-                    setCurrentNumber(newNumber);
-                    if (progress < 1) { frameRef.current = requestAnimationFrame(animate); } 
-                    else { startNumberRef.current = target; }
-                };
-                frameRef.current = requestAnimationFrame(animate);
-                return () => cancelAnimationFrame(frameRef.current);
-            }, [target, duration]);
-            return currentNumber;
-        };
+<nav class="mobile-nav">
+<button class="mobile-nav-btn active" data-view="mobile-calendar-view"><i class="ri-calendar-line"></i><span>الجدول</span></button>
+<button class="mobile-nav-btn" data-view="mobile-courses-view"><i class="ri-stack-line"></i><span>المقررات</span></button>
+<button class="mobile-nav-btn" data-view="mobile-my-schedule-view"><i class="ri-list-check-2"></i><span>جدولي</span></button>
+<button class="mobile-nav-btn" data-view="mobile-my-exams-view"><i class="ri-file-list-3-line"></i><span>اختباراتي</span></button>
+</nav>
+</div>
 
-        const DonutChart = ({ percentage }) => {
-            const animatedPercentage = useAnimatedNumber(percentage);
-            const circumference = 2 * Math.PI * 45;
-            const offset = circumference - (animatedPercentage / 100) * circumference;
-            return (
-                <div className="chart-container">
-                    <svg className="donut-chart" viewBox="0 0 100 100"><circle className="donut-chart-bg" cx="50" cy="50" r="45" /><circle className="donut-chart-fg" cx="50" cy="50" r="45" strokeDasharray={circumference} strokeDashoffset={Math.max(0, offset)} /></svg>
-                    <div className="chart-info">
-                        <span>{animatedPercentage.toFixed(0)}%</span>
-                        <p>النتيجة</p>
-                    </div>
-                </div>
-            );
-        };
+<div class="modal-overlay" id="modal-overlay"></div>
+<div class="settings-modal" id="settings-modal"></div>
+<div class="settings-modal" id="fetch-modal"></div>
+<div class="mobile-section-details-overlay" id="mobile-section-details-overlay">
+<div class="details-panel" id="details-panel"></div>
+</div>
 
-        const SvgIcon = ({ d, ...props }) => (
-            <svg stroke="currentColor" fill="currentColor" strokeWidth="0" viewBox="0 0 24 24" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg" {...props}><path d={d}></path></svg>
-        );
-        const Icons = {
-            Moon: props => <SvgIcon d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" {...props} />,
-            Sun: props => <SvgIcon d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" fill="none" strokeWidth="2" stroke="currentColor" {...props} />,
-            ArrowUp: props => <SvgIcon d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z" {...props} />,
-            Link: props => <SvgIcon d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" fill="none" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props} />
-        };
+<script>
+function initStarfield() {
+const canvas = document.getElementById('starfield-canvas');
+if (!canvas) return;
+const ctx = canvas.getContext('2d');
+let w, h;
+function setSize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+setSize();
+window.addEventListener('resize', setSize);
+const stars = [], shootingStars = [], numStars = 250, numShootingStars = 3;
+class Star {
+constructor() { this.reset(); }
+reset() { this.x = Math.random() * w; this.y = Math.random() * h; this.size = Math.random() * 1.5 + 0.5; this.opacity = Math.random() * 0.5 + 0.2; this.speedX = (Math.random() - 0.5) * 0.1; this.speedY = (Math.random() - 0.5) * 0.1; }
+draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; ctx.fill(); }
+update() { this.x += this.speedX; this.y += this.speedY; if (this.x < 0 || this.x > w || this.y < 0 || this.y > h) this.reset(); }
+}
+class ShootingStar {
+constructor() { this.reset(); }
+reset() { this.x = Math.random() * w; this.y = 0; this.len = Math.random() * 80 + 10; this.speed = Math.random() * 8 + 6; this.size = Math.random() * 1 + 0.5; this.waitTime = new Date().getTime() + Math.random() * 3000 + 500; this.active = false; }
+update() { if (this.active) { this.x -= this.speed; this.y += this.speed; if (this.x < -this.len || this.y > h + this.len) this.reset(); } else if (this.waitTime < new Date().getTime()) { this.active = true; } }
+draw() { if (this.active) { const grad = ctx.createLinearGradient(this.x, this.y, this.x + this.len, this.y - this.len); grad.addColorStop(0, "rgba(255, 255, 255, 0.8)"); grad.addColorStop(1, "rgba(255, 255, 255, 0)"); ctx.strokeStyle = grad; ctx.lineWidth = this.size; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x - this.len, this.y + this.len); ctx.stroke(); } }
+}
+for (let i = 0; i < numStars; i++) stars.push(new Star());
+for (let i = 0; i < numShootingStars; i++) shootingStars.push(new ShootingStar());
+function animate() { ctx.clearRect(0, 0, w, h); stars.forEach(s => { s.update(); s.draw(); }); shootingStars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+animate();
+}
 
-        function App() {
-            const [currentFilter, setCurrentFilter] = useState('all');
-            const [filteredQuestions, setFilteredQuestions] = useState([]);
-            const [score, setScore] = useState(0);
-            const [answered, setAnswered] = useState({});
-            const [colorMode, setColorMode] = useState('dark');
-            const [showScrollBtn, setShowScrollBtn] = useState(false);
+document.addEventListener('DOMContentLoaded', () => {
+initStarfield();
+const mainContent = document.querySelector('.main-content');
+if(mainContent) { mainContent.addEventListener('scroll', () => { mainContent.setAttribute('scrollTop', mainContent.scrollTop); }); }
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) && window.innerWidth < 1024;
+if (isMobile) { document.body.classList.add('mobile-view'); } else { document.body.classList.add('desktop-view'); }
+const Toast = Swal.mixin({ toast: true, position: isMobile ? 'bottom' : 'bottom-end', showConfirmButton: false, timer: 3500, timerProgressBar: true, didOpen: (toast) => { toast.addEventListener('mouseenter', Swal.stopTimer); toast.addEventListener('mouseleave', Swal.resumeTimer); } });
 
-            useEffect(() => {
-                const list = currentFilter === 'all' 
-                    ? questionsDB 
-                    : questionsDB.filter(q => q.source === currentFilter);
-                setFilteredQuestions(list);
-                resetQuiz();
-            }, [currentFilter]);
+const QU_ScheduleApp = {
+state: {
+calendar: null,
+allCoursesData: [],
+groupedCourses: {},
+linkedCourseGroups: {},
+schedules: [],
+activeScheduleIndex: 0,
+hiddenCourseCodes: new Set(),
+customColors: {},
+isDemoMode: false,
+searchTerm: '',
+showExamDates: false,
+isVisibilityNamesMode: false,
+areAllExpanded: false,
+userSettings: { theme: 'dark', accentColor: '#8b5cf6', showWeekends: false, minTime: '08:00:00', maxTime: '22:00:00', hiddenCourseCodes: [], hideClosedCourses: true, examScheduleMode: '3' },
+gateData: { values: {}, options: null, tree: [], colleges: [], departments: [], selCollege: '', selDept: '' }
+},
+constants: {
+PRESET_COLORS: { purple: '#8b5cf6', blue: '#3b82f6', pink: '#ec4899', green: '#22c55e', orange: '#f97316', red: '#ef4444' },
+COLOR_PALETTE: ['#8b5cf6', '#3b82f6', '#ec4899', '#22c55e', '#f97316', '#ef4444', '#06b6d4', '#d946ef'],
+DAY_MAPPING: { 'الأحد': 0, 'الاثنين': 1, 'الثلاثاء': 2, 'الأربعاء': 3, 'الخميس': 4, 'الجمعة': 5, 'السبت': 6 },
+STORAGE_KEYS: { SETTINGS: 'quScheduleSettings_v20', COURSES: 'quScheduleCourses_v20', SCHEDULES: 'quScheduleSchedules_v20', COLORS: 'quScheduleColors_v20' },
+EXAM_DATA: {
+'3': { 
+"1": "الأحد 21/12/1447 (08:00 - 10:00)", "2": "الأحد 21/12/1447 (10:30 - 12:30)", "3": "الأحد 21/12/1447 (13:00 - 15:00)",
+"4": "الاثنين 22/12/1447 (08:00 - 10:00)", "5": "الاثنين 22/12/1447 (10:30 - 12:30)", "6": "الاثنين 22/12/1447 (13:00 - 15:00)",
+"7": "الثلاثاء 23/12/1447 (08:00 - 10:00)", "8": "الثلاثاء 23/12/1447 (10:30 - 12:30)", "9": "الثلاثاء 23/12/1447 (13:00 - 15:00)",
+"10": "الأربعاء 24/12/1447 (08:00 - 10:00)", "11": "الأربعاء 24/12/1447 (10:30 - 12:30)", "12": "الأربعاء 24/12/1447 (13:00 - 15:00)",
+"13": "الخميس 25/12/1447 (08:00 - 10:00)", "14": "الخميس 25/12/1447 (10:30 - 12:30)", "15": "الخميس 25/12/1447 (13:00 - 15:00)",
+"16": "الأحد 28/12/1447 (08:00 - 10:00)", "17": "الأحد 28/12/1447 (10:30 - 12:30)", "18": "الأحد 28/12/1447 (13:00 - 15:00)",
+"19": "الاثنين 29/12/1447 (08:00 - 10:00)", "20": "الاثنين 29/12/1447 (10:30 - 12:30)", "21": "الاثنين 29/12/1447 (13:00 - 15:00)",
+"22": "الثلاثاء 1/1/1447 (08:00 - 10:00)", "23": "الثلاثاء 1/1/1447 (10:30 - 12:30)", "24": "الثلاثاء 1/1/1447 (13:00 - 15:00)",
+"25": "الأربعاء 2/1/1447 (08:00 - 10:00)", "26": "الأربعاء 2/1/1447 (10:30 - 12:30)", "27": "الأربعاء 2/1/1447 (13:00 - 15:00)",
+"28": "الخميس 3/1/1447 (08:00 - 10:00)", "29": "الخميس 3/1/1447 (10:30 - 12:30)", "30": "الخميس 3/1/1447 (13:00 - 15:00)",
+"55": "الثلاثاء 16/12/1447 (08:00 - 10:00)", "56": "الثلاثاء 16/12/1447 (10:30 - 12:30)",
+"57": "الأربعاء 17/12/1447 (08:00 - 10:00)", "58": "الأربعاء 17/12/1447 (10:30 - 12:30)",
+"60": "الخميس 18/12/1447 (08:00 - 10:00)", "61": "الخميس 18/12/1447 (10:30 - 12:30)"
+},
+'2': {
+"1": "الأحد 21/12/1447 (08:00 - 10:00)", "2": "الأحد 21/12/1447 (10:30 - 12:30)",
+"4": "الاثنين 22/12/1447 (08:00 - 10:00)", "5": "الاثنين 22/12/1447 (10:30 - 12:30)",
+"7": "الثلاثاء 23/12/1447 (08:00 - 10:00)", "8": "الثلاثاء 23/12/1447 (10:30 - 12:30)",
+"10": "الأربعاء 24/12/1447 (08:00 - 10:00)", "11": "الأربعاء 24/12/1447 (10:30 - 12:30)",
+"13": "الخميس 25/12/1447 (08:00 - 10:00)", "14": "الخميس 25/12/1447 (10:30 - 12:30)",
+"16": "الأحد 28/12/1447 (08:00 - 10:00)", "17": "الأحد 28/12/1447 (10:30 - 12:30)",
+"19": "الاثنين 29/12/1447 (08:00 - 10:00)", "20": "الاثنين 29/12/1447 (10:30 - 12:30)",
+"22": "الثلاثاء 1/1/1447 (08:00 - 10:00)", "23": "الثلاثاء 1/1/1447 (10:30 - 12:30)",
+"25": "الأربعاء 2/1/1447 (08:00 - 10:00)", "27": "الأربعاء 2/1/1447 (10:30 - 12:30)", 
+"28": "الخميس 3/1/1447 (08:00 - 10:00)", "30": "الخميس 3/1/1447 (10:30 - 12:30)",
+"55": "الثلاثاء 16/12/1447 (08:00 - 10:00)", "56": "الثلاثاء 16/12/1447 (10:30 - 12:30)",
+"57": "الأربعاء 17/12/1447 (08:00 - 10:00)", "58": "الأربعاء 17/12/1447 (10:30 - 12:30)",
+"60": "الخميس 18/12/1447 (08:00 - 10:00)", "61": "الخميس 18/12/1447 (10:30 - 12:30)"
+}
+}
+},
+dom: {},
 
-            useEffect(() => {
-                document.body.className = colorMode === 'light' ? 'light-mode' : '';
-            }, [colorMode]);
+init() {
+this._populateDOMElements();
+this._setupEventListeners();
+this._loadSettings();
+this._loadCustomColors();
+this._initializeCalendar();
+this._loadDataFromStorage();
+this._listenForDataFromOpener();
+this._updateBookmarkletCode();
+this._buildFetchModal();
+},
 
-            useEffect(() => {
-                const handleScroll = () => {
-                    if (window.scrollY > 300) {
-                        setShowScrollBtn(true);
-                    } else {
-                        setShowScrollBtn(false);
-                    }
-                };
-                window.addEventListener('scroll', handleScroll);
-                return () => window.removeEventListener('scroll', handleScroll);
-            }, []);
+_loadDataFromStorage() {
+const storedCourses = localStorage.getItem(this.constants.STORAGE_KEYS.COURSES);
+if (storedCourses) {
+try {
+const courses = JSON.parse(storedCourses);
+if (!Array.isArray(courses)) throw new Error("Stored data is not a valid array.");
+this.state.isDemoMode = false;
+this._processAndDisplayData(courses);
+this._loadSchedules();
+this.updateFullUI();
+} catch (e) {
+localStorage.removeItem(this.constants.STORAGE_KEYS.COURSES);
+this.dom.installOverlay.style.display = 'flex';
+this.dom.installOverlay.classList.add('visible');
+}
+} else {
+this.dom.installOverlay.style.display = 'flex';
+this.dom.installOverlay.classList.add('visible');
+}
+},
+_listenForDataFromOpener() {
+window.addEventListener('message', (event) => {
+if (event.data && event.data.type === 'universityCoursesData') {
+this.state.isDemoMode = false;
+const courses = event.data.data;
+localStorage.setItem(this.constants.STORAGE_KEYS.COURSES, JSON.stringify(courses));
+this.state.schedules = []; 
+this._addSchedule(null, true);
+this.state.activeScheduleIndex = 0;
+this._saveSchedules();
+this._processAndDisplayData(courses);
+this.updateFullUI();
+}
+}, false);
+if (window.opener) { window.opener.postMessage('request_schedule_data', '*'); }
+},
+_processAndDisplayData(courses) {
+this.dom.installOverlay.style.display = 'none';
+this.dom.installOverlay.classList.remove('visible');
+this.state.allCoursesData = courses.map((section, index) => ({
+...section, uniqueId: `${section.code}-${section.section}-${index}`, timeSlots: this._parseTimeEntries(section.time)
+}));
+const coursesByName = {};
+this.state.groupedCourses = this.state.allCoursesData.reduce((acc, course) => {
+if (!acc[course.code]) { acc[course.code] = { name: course.name, code: course.code, sections: [] }; if(!coursesByName[course.name]) coursesByName[course.name] = []; coursesByName[course.name].push(course.code); }
+acc[course.code].sections.push(course);
+return acc;
+}, {});
+this.state.linkedCourseGroups = {};
+for (const name in coursesByName) { if (coursesByName[name].length > 1) { this.state.linkedCourseGroups[name] = [...new Set(coursesByName[name])]; } }
+let colorIndex = 0;
+Object.values(this.state.groupedCourses).forEach(group => { group.color = this.state.customColors[group.code] || this.constants.COLOR_PALETTE[colorIndex++ % this.constants.COLOR_PALETTE.length]; });
+document.getElementById('no-data-message').style.display = 'none';
+this._renderCoursesList();
+this._renderQuickVisibilityList();
+this._buildSettingsModal();
+this._toggleDemoBadge();
+},
+_loadSchedules() {
+const stored = localStorage.getItem(this.constants.STORAGE_KEYS.SCHEDULES);
+if (stored && !this.state.isDemoMode) {
+try {
+const parsed = JSON.parse(stored);
+if (parsed && Array.isArray(parsed.schedules) && parsed.schedules.length > 0) {
+this.state.schedules = parsed.schedules.map(s => ({ name: s.name || 'جدول', sections: new Set(s.sections), linkedSections: new Map((s.linkedSections || []).map(([key, value]) => [key, new Set(value)])) }));
+this.state.activeScheduleIndex = Math.min(parsed.activeScheduleIndex, this.state.schedules.length - 1);
+} else { throw new Error("No valid schedules found"); }
+} catch (e) {
+localStorage.removeItem(this.constants.STORAGE_KEYS.SCHEDULES);
+this.state.schedules = [];
+this._addSchedule(null, true);
+}
+}
+if (this.state.schedules.length === 0) { this._addSchedule(null, true); }
+},
+_saveSchedules() {
+if (this.state.isDemoMode) return;
+const serializableSchedules = { activeScheduleIndex: this.state.activeScheduleIndex, schedules: this.state.schedules.map(s => ({ name: s.name, sections: Array.from(s.sections), linkedSections: Array.from(s.linkedSections.entries()).map(([key, value]) => [key, Array.from(value)]) })) };
+localStorage.setItem(this.constants.STORAGE_KEYS.SCHEDULES, JSON.stringify(serializableSchedules));
+},
+_loadCustomColors() {
+const stored = localStorage.getItem(this.constants.STORAGE_KEYS.COLORS);
+if (stored && !this.state.isDemoMode) { try { this.state.customColors = JSON.parse(stored); } catch (e) { localStorage.removeItem(this.constants.STORAGE_KEYS.COLORS); } }
+},
+_saveCustomColors() { if (this.state.isDemoMode) return; localStorage.setItem(this.constants.STORAGE_KEYS.COLORS, JSON.stringify(this.state.customColors)); },
+updateFullUI() { this._renderScheduleTabs(); this.updateCalendarAndConflicts(); if (isMobile) { this._updateMobileHeader(); } },
+updateCalendarAndConflicts() {
+if (!this.state.calendar) return;
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+const selectedSections = activeSchedule ? activeSchedule.sections : new Set();
+this.state.calendar.removeAllEvents();
+document.querySelectorAll('.section-btn').forEach(btn => { btn.classList.toggle('selected', selectedSections.has(btn.dataset.uniqueId)); });
+const selectedCourseDetails = Array.from(selectedSections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+const conflictMap = this._calculateConflicts(selectedCourseDetails);
+selectedCourseDetails.forEach(section => {
+const group = this.state.groupedCourses[section.code];
+if (group && !this.state.hiddenCourseCodes.has(section.code)) { this.state.calendar.addEventSource(this._createLectureEventsForSection(section, false, group.color)); }
+});
+this._renderFinalExams(selectedCourseDetails);
+this._renderMyScheduleSummary(selectedCourseDetails, conflictMap);
+this._updateAvailableSectionsUI(selectedCourseDetails);
+this._saveSchedules();
+},
+_renderScheduleTabs() {
+[this.dom.scheduleTabsContainer, this.dom.mobileScheduleTabsContainer].filter(Boolean).forEach(container => {
+container.innerHTML = '';
+const fragment = document.createDocumentFragment();
+this.state.schedules.forEach((schedule, index) => {
+const tab = document.createElement('button');
+tab.className = `schedule-tab ${index === this.state.activeScheduleIndex ? 'active' : ''}`;
+tab.dataset.index = index;
+tab.innerHTML = `<span class="schedule-tab-name" contenteditable="false">${schedule.name}</span><i class="ri-close-line delete-schedule-btn"></i>`;
+const nameSpan = tab.querySelector('.schedule-tab-name');
+tab.addEventListener('click', (e) => { if (e.target.classList.contains('delete-schedule-btn')) return; this._switchSchedule(index); });
+tab.addEventListener('dblclick', () => { if (tab.classList.contains('active')) { nameSpan.contentEditable = true; nameSpan.focus(); document.execCommand('selectAll', false, null); } });
+nameSpan.addEventListener('blur', () => { nameSpan.contentEditable = false; this._renameSchedule(index, nameSpan.textContent); });
+nameSpan.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); nameSpan.blur(); } });
+tab.querySelector('.delete-schedule-btn').addEventListener('click', (e) => { e.stopPropagation(); this._deleteSchedule(index); });
+fragment.appendChild(tab);
+});
+if (this.state.isDemoMode) { const demoBadge = document.createElement('div'); demoBadge.className = 'demo-badge'; demoBadge.textContent = 'وضع المعاينة'; fragment.appendChild(demoBadge); }
+const addButton = document.createElement('button'); addButton.id = 'add-schedule-btn'; addButton.innerHTML = '<i class="ri-add-line"></i>'; addButton.title = 'إضافة جدول جديد'; addButton.addEventListener('click', () => this._addSchedule());
+fragment.appendChild(addButton);
+container.appendChild(fragment);
+});
+},
+_createCoursesListHTML() {
+const selectedSections = this.state.schedules[this.state.activeScheduleIndex]?.sections || new Set();
+let visibleCourses = Object.values(this.state.groupedCourses).filter(g => !this.state.hiddenCourseCodes.has(g.code));
+const term = this.state.searchTerm.toLowerCase();
+if (term) {
+const searchTerms = term.split(/[\s,]+/).filter(Boolean);
+visibleCourses = visibleCourses.filter(group => {
+return searchTerms.some(searchTerm => {
+const nameMatch = group.name.toLowerCase().includes(searchTerm);
+const codeMatch = group.code.toLowerCase().includes(searchTerm);
+const sectionMatch = group.sections.some(s => s.section.toLowerCase().includes(searchTerm) || s.instructor.toLowerCase().includes(searchTerm));
+return nameMatch || codeMatch || sectionMatch;
+});
+});
+}
+if (Object.keys(this.state.groupedCourses).length > 0 && visibleCourses.length === 0) return term ? `<div class="no-data"><i class="ri-search-2-line"></i><h4>لا توجد نتائج</h4><p>جرب كلمات بحث مختلفة.</p></div>` : `<div class="no-data"><i class="ri-eye-off-line"></i><h4>لا توجد مقررات ظاهرة</h4><p>يمكنك إظهار المقررات من الإعدادات.</p></div>`;
+if(visibleCourses.length === 0) return '';
+return visibleCourses.sort((a, b) => a.code.localeCompare(b.code)).map((group, i) => {
+const sectionsToDisplay = this.state.userSettings.hideClosedCourses ? group.sections.filter(section => !section.status.includes('مغلقة')) : group.sections;
+if (sectionsToDisplay.length === 0) return '';
+const sectionsHTML = sectionsToDisplay.map(section => {
+const isNoTime = section.time === 'غير محدد';
+const isOpen = section.status.includes('مفتوحة');
+const statusIndicatorHTML = !this.state.userSettings.hideClosedCourses ? `<span class="section-status-dot ${isOpen ? 'open' : 'closed'}"></span>` : ``;
+return `<div class="section-btn ${selectedSections.has(section.uniqueId) ? 'selected' : ''} ${isNoTime ? 'no-time' : ''}" data-unique-id="${section.uniqueId}" style="${isNoTime ? '--item-color:' + group.color : ''}">
+${statusIndicatorHTML}<div class="section-btn-number">${section.section}</div><div class="section-type">${section.type || ''}</div></div>`;
+}).join('');
+return `<div class="course-item" style="animation-delay: ${i * 30}ms"><div class="course-item-header"><span class="color-dot" style="background-color: ${group.color}; box-shadow: 0 0 10px 1px ${group.color};"></span><div class="course-info"><h3>${group.name} (${group.code})</h3><p>${sectionsToDisplay.length} شعب متاحة</p></div><i class="ri-arrow-down-s-line toggle-icon"></i></div><div class="sections-wrapper"><div class="sections-grid">${sectionsHTML}</div></div></div>`;
+}).join('');
+},
+_renderCoursesList() {
+const html = this._createCoursesListHTML();
+if (this.dom.desktopCoursesList) this.dom.desktopCoursesList.innerHTML = html || '';
+if (this.dom.mobileCoursesList) this.dom.mobileCoursesList.innerHTML = html || `<div class="no-data"><i class="ri-time-line"></i><h4>في انتظار البيانات...</h4><p>استخدم الأداة لتحميل بيانات المواد.</p></div>`;;
+},
+_renderQuickVisibilityList() {
+if (!this.dom.quickVisibilityContent) return;
+let courseVisibilityHTML = Object.values(this.state.groupedCourses).sort((a,b)=>a.code.localeCompare(b.code)).map(g=>{ const isHidden = this.state.hiddenCourseCodes.has(g.code); const label = this.state.isVisibilityNamesMode ? g.name : g.code; return`<button class="course-visibility-btn ${isHidden?'hidden':'visible'}" data-course-code="${g.code}" style="--item-color:${g.color};--item-color-rgb:${this._hexToRgb(g.color)};"><span class="color-dot"></span>${label}</button>`; }).join('');
+if (!courseVisibilityHTML) courseVisibilityHTML = '<p style="color:var(--color-text-muted);font-size:0.9rem;">لم يتم تحميل بيانات المقررات بعد.</p>';
+this.dom.quickVisibilityContent.innerHTML = courseVisibilityHTML;
+},
+_renderMyScheduleSummary(selectedCourses, conflictMap) {
+const desktopContainer = this.dom.myScheduleContainer;
+const mobileContainer = this.dom.mobileMyScheduleContainer;
+if (desktopContainer) {
+desktopContainer.style.display = 'flex';
+if (selectedCourses.length === 0) desktopContainer.innerHTML = `<div class="no-data" style="width:100%"><i class="ri-calendar-check-line"></i><h4>جدولك فارغ</h4><p>اختر بعض المقررات لإنشاء جدولك.</p></div>`;
+else {
+desktopContainer.innerHTML = this._createMyScheduleHTML(selectedCourses, conflictMap);
+const desktopConflictBtn = desktopContainer.querySelector('#desktop-view-conflicts-btn');
+if (desktopConflictBtn) desktopConflictBtn.addEventListener('click', () => this._handleViewAllConflicts(conflictMap));
+const copyBtn = desktopContainer.querySelector('#desktop-copy-crn-btn');
+if (copyBtn) copyBtn.addEventListener('click', () => this._handleCopyCRNs(selectedCourses));
+}
+}
+if (mobileContainer) {
+mobileContainer.classList.toggle('empty', selectedCourses.length === 0);
+if (selectedCourses.length === 0) mobileContainer.innerHTML = `<div class="no-data" style="padding-top: 5rem;"><i class="ri-calendar-check-line"></i><h4>جدولك فارغ</h4><p>اختر بعض المقررات لإنشاء جدولك.</p></div>`;
+else {
+mobileContainer.innerHTML = this._createMobileScheduleHTML(selectedCourses, conflictMap);
+const mobileConflictBtn = mobileContainer.querySelector('#mobile-view-conflicts-btn');
+if (mobileConflictBtn) mobileConflictBtn.addEventListener('click', () => this._handleViewAllConflicts(conflictMap));
+}
+}
+},
+_handleCopyCRNs(selectedCourses) {
+if (selectedCourses.length === 0) return;
+const crns = selectedCourses.map(c => c.section).join('\n');
+navigator.clipboard.writeText(crns).then(() => this._showToast('success', 'تم نسخ أرقام الشعب!')).catch(() => this._showToast('error', 'فشل النسخ'));
+},
+_createMyScheduleHTML(selectedCourses, conflictMap) {
+let totalCredits = 0; const uniqueCourseCodes = new Set();
+selectedCourses.forEach(c => { if (!uniqueCourseCodes.has(c.code)) { totalCredits += parseInt(c.hours, 10) || 0; uniqueCourseCodes.add(c.code); } });
+const tableRowsHTML = selectedCourses.sort((a, b) => a.code.localeCompare(b.code)).map(course => {
+const isConflicted = conflictMap.has(course.uniqueId);
+return `<tr class="schedule-row ${isConflicted ? 'has-conflict' : ''}"><td><div>${course.code}</div><div>${course.name}</div></td><td><div>${course.section}</div><div>${course.type}</div></td><td>${course.instructor}</td><td>${course.time.replace(/<br>/g, ' ')}</td><td>${course.examPeriodId || "لا يوجد"}</td><td>${course.location}</td><td><div class="hours-value">${course.hours}</div></td></tr>`;
+}).join('');
+const conflictButtonHTML = conflictMap.size > 0 ? `<button class="view-conflicts-btn" id="desktop-view-conflicts-btn"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
+return `<div class="card my-schedule-card"><div class="my-schedule-section"><div class="card-header-inline"><div class="card-header-actions"><h3><i class="ri-calendar-check-line"></i> جدولـي</h3><button class="copy-crn-btn" id="desktop-copy-crn-btn" title="نسخ أرقام الشعب"><i class="ri-file-copy-line"></i> نسخ الشعب</button></div><div class="total-credits-pill">إجمالي الساعات: <span>${totalCredits}</span></div></div><div class="my-schedule-table-wrapper"><table class="my-schedule-table"><thead><tr><th>المقرر</th><th>الشعبة</th><th>المحاضر</th><th>المواعيد</th><th>فترة الاختبار</th><th>المكان</th><th>الساعات</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div><div class="my-schedule-footer">${conflictButtonHTML}</div></div></div>`;
+},
+_createMobileScheduleHTML(selectedCourses, conflictMap) {
+let totalCredits = 0; const uniqueCourseCodes = new Set();
+selectedCourses.forEach(c => { if (!uniqueCourseCodes.has(c.code)) { totalCredits += parseInt(c.hours, 10) || 0; uniqueCourseCodes.add(c.code); } });
+const itemsHTML = selectedCourses.sort((a, b) => a.code.localeCompare(b.code)).map((course, i) => {
+const isConflicted = conflictMap.has(course.uniqueId);
+return `<div class="mobile-schedule-item" style="animation-delay:${i*30}ms;"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${course.name}</h3><span>${course.code} - شعبة ${course.section}</span></div>${isConflicted ? `<i class="ri-alert-fill mobile-conflict-icon"></i>` : ''}</div><div class="mobile-schedule-details"><div class="mobile-detail-row"><i class="ri-time-line"></i> <strong>المواعيد:</strong> ${course.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div class="mobile-detail-row"><i class="ri-user-line"></i> <strong>المحاضر:</strong> ${course.instructor || 'غير محدد'}</div></div></div>`;
+}).join('');
 
-            const resetQuiz = () => {
-                setScore(0);
-                setAnswered({});
-                window.scrollTo({ top: 0, behavior: "smooth" });
-            };
+const conflictButtonHTML = conflictMap.size > 0 ? `<button class="view-conflicts-btn" id="mobile-view-conflicts-btn"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
+return `<div id="mobile-my-schedule-list">${itemsHTML}</div><div class="mobile-schedule-footer">${conflictButtonHTML}<div class="total-credits-summary">إجمالي الساعات: <span>${totalCredits}</span></div></div>`;
+},
+_renderFinalExams(selectedCourses) {
+const uniqueExams = [...new Map(selectedCourses.filter(e => e.examPeriodId).map(e => [e.examPeriodId, e])).values()];
+const toggleBtnDesktop = this.dom.desktopDateToggle;
+const toggleBtnMobile = this.dom.mobileMyExamsDateToggle;
+[toggleBtnDesktop, toggleBtnMobile].forEach(btn => { if(btn) btn.classList.toggle('active', this.state.showExamDates); });
 
-            const handleAnswer = (qIndex, selectedOptIndex, correctOptIndex) => {
-                if (answered[qIndex]) return;
-                const isCorrect = selectedOptIndex === correctOptIndex;
-                if (isCorrect) setScore(prev => prev + 1);
-                setAnswered(prev => ({
-                    ...prev,
-                    [qIndex]: { selected: selectedOptIndex, correct: isCorrect }
-                }));
-            };
+const examMapping = this.constants.EXAM_DATA[this.state.userSettings.examScheduleMode];
 
-            const toggleMode = () => setColorMode(prev => prev === 'dark' ? 'light' : 'dark');
-            const scorePercentage = filteredQuestions.length > 0 ? (score / filteredQuestions.length) * 100 : 0;
-            const scrollToTop = () => {
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            };
+let footerHtml = '';
+if(this.state.showExamDates && uniqueExams.length > 0) {
+footerHtml = '<div style="text-align:center; margin-top:1rem; animation:fadeInUp 0.3s both;"><a href="https://t.me/Qassim_U/4414294" target="_blank" class="faisal-link">اجتهاد فيصل</a></div>';
+}
 
-            return (
-                <div className="app">
-                    <div className="container">
-                        <header className="header">
-                            <button className="settings-toggle" onClick={toggleMode}>
-                                {colorMode === 'dark' ? <Icons.Sun /> : <Icons.Moon />}
-                            </button>
-                            <h1 className="title">تجميعات سلم 102</h1>
-                            <p className="subtitle">نماذج نهائية (462, 461, 452, 451)</p>
-                        </header>
+if (this.dom.desktopExamsList) {
+if (uniqueExams.length === 0) {
+this.dom.desktopExamsList.innerHTML = `<div class="no-data" style="height: auto; padding-top: 2rem;"><i class="ri-file-text-line"></i><h4>لا توجد اختبارات</h4><p>لم يتم تحديد اختبارات نهائية للمقررات المختارة.</p></div>`;
+} else {
+const html = uniqueExams.sort((a, b) => parseInt(a.examPeriodId, 10) - parseInt(b.examPeriodId, 10)).map(exam => {
+let examText = `فترة الاختبار: ${exam.examPeriodId}`;
+if (this.state.showExamDates) {
+const dateInfo = examMapping[exam.examPeriodId];
+examText = dateInfo ? `<span style="color:var(--color-primary); font-weight:700">${dateInfo}</span>` : `<span style="opacity:0.6">فترة: ${exam.examPeriodId} (غير مدرجة)</span>`;
+}
+return `<div class="course-item"><div class="course-item-header" style="cursor:default;"><div class="course-info"><h3>${exam.name} (${exam.code})</h3><p><strong>${examText}</strong></p></div></div></div>`;
+}).join('');
+this.dom.desktopExamsList.innerHTML = html + footerHtml;
+}
+}
 
-                        <div className="card">
-                            <div className="score-section">
-                                <DonutChart percentage={scorePercentage} />
-                                <div style={{textAlign: 'center', color: 'var(--color-text-muted)'}}>
-                                    تمت الإجابة: <span style={{color: 'var(--color-primary)', fontWeight:'bold'}}>{score}</span> / {filteredQuestions.length}
-                                </div>
-                            </div>
-                            
-                            <div className="filter-controls">
-                                {['all', '462', '461', '452', '451'].map(filter => (
-                                    <button 
-                                        key={filter}
-                                        className={`filter-btn ${currentFilter === filter ? 'active' : ''}`}
-                                        onClick={() => setCurrentFilter(filter)}
-                                    >
-                                        {filter === 'all' ? 'الكل' : `نموذج ${filter}`}
-                                    </button>
-                                ))}
-                            </div>
-                            
-                            {currentFilter !== 'all' && sourceLinks[currentFilter] && (
-                                <div className="source-link-container">
-                                    <a href={sourceLinks[currentFilter]} target="_blank" rel="noopener noreferrer" className="source-external-btn">
-                                        <span>📄 فتح ملف التجميعات ({currentFilter})</span>
-                                        <Icons.Link size={14} />
-                                    </a>
-                                </div>
-                            )}
+if (this.dom.mobileMyExamsList) {
+if (uniqueExams.length === 0) {
+this.dom.mobileMyExamsList.innerHTML = `<div class="no-data" style="height: auto; padding-top: 5rem;"><i class="ri-file-text-line"></i><h4>لا توجد اختبارات</h4><p>لم يتم تحديد اختبارات نهائية للمقررات المختارة.</p></div>`;
+} else {
+const html = uniqueExams.sort((a, b) => parseInt(a.examPeriodId, 10) - parseInt(b.examPeriodId, 10)).map(exam => {
+let examText = `فترة الاختبار: ${exam.examPeriodId}`;
+if (this.state.showExamDates) {
+const dateInfo = examMapping[exam.examPeriodId];
+examText = dateInfo ? dateInfo : `فترة: ${exam.examPeriodId}`;
+}
+return `<div class="mobile-schedule-item mobile-exam-item"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${exam.name} (${exam.code})</h3><span class="mobile-exam-date">${examText}</span></div></div></div>`;
+}).join('');
+this.dom.mobileMyExamsList.innerHTML = html + footerHtml;
+}
+}
+},
+_updateAvailableSectionsUI(selectedCourses) {
+const activeSections = this.state.schedules[this.state.activeScheduleIndex]?.sections || new Set();
+this.state.allCoursesData.forEach(section => {
+const btns = document.querySelectorAll(`.section-btn[data-unique-id='${section.uniqueId}']`);
+btns.forEach(btn => {
+if (btn) { btn.classList.remove('conflicted'); if (!activeSections.has(section.uniqueId)) { btn.classList.toggle('conflicted', this._isSectionConflicted(section, selectedCourses)); } }
+});
+});
+},
+_populateDOMElements() {
+const ids = ['my-schedule-container', 'calendar', 'clear-calendar-btn', 'settings-btn', 'settings-modal', 'modal-overlay', 'install-section-container', 'install-overlay', 'no-data-message', 'schedule-tabs-container', 'desktop-courses-list', 'desktop-exams-list', 'main-header-title-wrapper', 'mobile-schedule-tabs-container', 'mobile-my-schedule-container', 'mobile-header-title', 'mobile-settings-btn', 'mobile-courses-list', 'mobile-my-exams-list', 'mobile-calendar', 'mobile-section-details-overlay', 'details-panel', 'download-img-btn', 'desktop-search-input', 'mobile-search-input', 'desktop-date-toggle', 'mobile-my-exams-date-toggle', 'mobile-my-exams-period-toggle', 'mobile-dynamic-action-btn', 'mobile-search-container', 'mobile-close-search', 'desktop-search-toggle', 'desktop-search-container', 'exam-schedule-toggle-btn', 'quick-visibility-wrapper', 'quick-visibility-toggle-btn', 'quick-visibility-content', 'quick-visibility-swap-btn', 'expand-collapse-btn', 'fetch-gate-btn', 'fetch-modal'];
+ids.forEach(id => { this.dom[id.replace(/-(\w)/g, (_, c) => c.toUpperCase())] = document.getElementById(id); });
+this.dom.mobileDownloadImgBtn = null; 
+if (isMobile) { this.dom.tabButtons = document.querySelectorAll('#mobile-courses-view .tab-btn'); this.dom.tabContents = document.querySelectorAll('#mobile-courses-view .tab-content'); this.dom.mobileNavButtons = document.querySelectorAll('.mobile-nav-btn'); this.dom.mobileViewContents = document.querySelectorAll('.mobile-view-content'); } 
+else { this.dom.tabButtons = document.querySelectorAll('.page-wrapper .sidebar .tab-btn'); this.dom.tabContents = document.querySelectorAll('.page-wrapper .sidebar .tab-content'); }
+},
+_calculateConflicts(selectedCourses) {
+const conflictMap = new Map();
+for (let i = 0; i < selectedCourses.length; i++) {
+for (let j = i + 1; j < selectedCourses.length; j++) {
+const cA = selectedCourses[i], cB = selectedCourses[j]; const msgA = conflictMap.get(cA.uniqueId) || [], msgB = conflictMap.get(cB.uniqueId) || [];
+if (cA.timeSlots.some(sA => cB.timeSlots.some(sB => sA.day === sB.day && sA.start < sB.end && sA.end > sB.start))) { msgA.push(`تعارض وقت محاضرة مع ${cB.name} (${cB.code})`); msgB.push(`تعارض وقت محاضرة مع ${cA.name} (${cA.code})`); }
+if (cA.code !== cB.code && cA.examPeriodId && cB.examPeriodId && cA.examPeriodId === cB.examPeriodId) { msgA.push(`تعارض اختبار نهائي مع ${cB.name} (${cB.code})`); msgB.push(`تعارض اختبار نهائي مع ${cA.name} (${cA.code})`); }
+if (msgA.length > 0) conflictMap.set(cA.uniqueId, msgA); if (msgB.length > 0) conflictMap.set(cB.uniqueId, msgB);
+}
+}
+return conflictMap;
+},
+_isSectionConflicted(section, selectedCourses) {
+return selectedCourses.some(sel => { if(sel.uniqueId === section.uniqueId) return false; const lectureConflict = section.timeSlots.some(sA => sel.timeSlots.some(sB => sA.day === sB.day && sA.start < sB.end && sA.end > sB.start)); const examConflict = section.code !== sel.code && section.examPeriodId && sel.examPeriodId && section.examPeriodId === sel.examPeriodId; return lectureConflict || examConflict; });
+},
+_createLectureEventsForSection(section, isPreview, color) {
+const sourceId = isPreview ? 'preview-source' : undefined;
+return { id: sourceId, events: section.timeSlots.map(slot => ({ title: `${section.name}`, daysOfWeek: [slot.day], startTime: slot.start, endTime: slot.end, backgroundColor: isPreview ? 'transparent' : color, borderColor: isPreview ? color : this._adjustColorBrightness(color, -20), classNames: isPreview ? ['preview-event'] : [], extendedProps: { ...section }, display: 'block' })) };
+},
+_parseTimeEntries(timeString) {
+if (!timeString || typeof timeString !== 'string' || timeString === 'غير محدد') return [];
+return timeString.split('<br>').map(entry => {
+const parts = entry.match(/([\u0621-\u064A\s]+):\s*(\d{1,2}:\d{2})\s*(ص|م)\s*-\s*(\d{1,2}:\d{2})\s*(ص|م)/); if (!parts) return null;
+const days = parts[1].trim().split(/\s+/); const start = this._convertTo24Hour(parts[2], parts[3]); const end = this._convertTo24Hour(parts[4], parts[5]);
+return days.map(day => this.constants.DAY_MAPPING[day] !== undefined ? { day: this.constants.DAY_MAPPING[day], start, end } : null);
+}).flat().filter(Boolean);
+},
+_convertTo24Hour(time, period) { let[h,m] = time.split(':'); h = parseInt(h, 10); if (period.includes('م') && h !== 12) h += 12; if (period.includes('ص') && h === 12) h = 0; return `${String(h).padStart(2, '0')}:${m}:00`; },
+_setupEventListeners() {
+this.dom.clearCalendarBtn?.addEventListener('click', () => this._handleClearCalendar());
+this.dom.settingsBtn?.addEventListener('click', () => this._toggleSettingsModal(true));
+this.dom.mobileSettingsBtn?.addEventListener('click', () => this._toggleSettingsModal(true));
+this.dom.downloadImgBtn?.addEventListener('click', () => this._handleDownloadImage(false));
+this.dom.fetchGateBtn?.addEventListener('click', () => this._initGateFetcher());
 
-                            {filteredQuestions.length > 0 && <button className="reset-btn" onClick={resetQuiz} style={{width:'100%', marginBottom: '1.5rem'}}>إعادة الاختبار</button>}
+this.dom.modalOverlay.addEventListener('click', () => {
+    this._toggleSettingsModal(false);
+    this.dom.fetchModal.classList.remove('open');
+});
+this.dom.tabButtons.forEach(button => button.addEventListener('click', () => this._handleTabClick(button)));
 
-                            <div>
-                                {filteredQuestions.map((item, index) => {
-                                    const status = answered[index];
-                                    return (
-                                        <div key={index} className="question-card">
-                                            <div className="question-header">
-                                                <a 
-                                                    href={sourceLinks[item.source]} 
-                                                    target="_blank" 
-                                                    rel="noopener noreferrer"
-                                                    className="tag-badge"
-                                                    title="فتح الملف الأصلي"
-                                                >
-                                                    {item.source} <Icons.Link size={12}/>
-                                                </a>
-                                                <span>{index + 1}. {item.q}</span>
-                                            </div>
-                                            <div className="options-list">
-                                                {item.options.map((opt, optIndex) => {
-                                                    let btnClass = 'option-btn';
-                                                    if (status) {
-                                                        if (optIndex === item.ans) btnClass += ' correct';
-                                                        else if (status.selected === optIndex && !status.correct) btnClass += ' wrong';
-                                                    }
-                                                    return (
-                                                        <button 
-                                                            key={optIndex}
-                                                            className={btnClass}
-                                                            onClick={() => handleAnswer(index, optIndex, item.ans)}
-                                                            disabled={!!status}
-                                                        >
-                                                            {opt}
-                                                        </button>
-                                                    )
-                                                })}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </div>
-                        </div>
+[this.dom.desktopCoursesList, this.dom.mobileCoursesList].forEach(list => { if(list) { list.addEventListener('click', e => this._handleCourseListClick(e)); list.addEventListener('mouseover', e => this._handleSectionHover(e, true)); list.addEventListener('mouseout', e => this._handleSectionHover(e, false)); } });
+if(isMobile) { this.dom.mobileNavButtons.forEach(btn => btn.addEventListener('click', () => this._handleMobileNav(btn))); this.dom.mobileSectionDetailsOverlay.addEventListener('click', (e) => { if(e.target === this.dom.mobileSectionDetailsOverlay) { this._hideMobileSectionDetails(); } }); }
 
-                        <button className={`scroll-top-btn ${showScrollBtn ? 'visible' : ''}`} onClick={scrollToTop} aria-label="إلى الأعلى">
-                            <Icons.ArrowUp />
-                        </button>
+[this.dom.desktopSearchInput, this.dom.mobileSearchInput].forEach(input => { if (input) { input.addEventListener('input', (e) => { this.state.searchTerm = e.target.value; this._renderCoursesList(); }); } });
+if(this.dom.mobileCloseSearch) { this.dom.mobileCloseSearch.addEventListener('click', () => { this.dom.mobileSearchContainer.style.display = 'none'; this.dom.mobileHeaderTitle.style.display = 'block'; this.dom.mobileSearchInput.value = ''; this.state.searchTerm = ''; this._renderCoursesList(); }); }
 
-                    </div>
-                </div>
-            );
-        }
-        
-        const root = ReactDOM.createRoot(document.getElementById("root"));
-        root.render(<App />);
-    </script>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const initCosmicEffects = () => {
-            const canvas = document.getElementById('starfield-canvas'); if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let layers = [], shootingStars = [];
+if (this.dom.desktopSearchToggle) {
+this.dom.desktopSearchToggle.addEventListener('click', () => {
+const container = this.dom.desktopSearchContainer;
+container.classList.toggle('active');
+this.dom.desktopSearchToggle.classList.toggle('active');
+if (container.classList.contains('active')) {
+setTimeout(() => this.dom.desktopSearchInput.focus(), 100);
+} else {
+this.dom.desktopSearchInput.value = '';
+this.state.searchTerm = '';
+this._renderCoursesList();
+}
+});
+}
 
-            function resizeCanvas() { 
-                canvas.width = window.innerWidth; 
-                canvas.height = window.innerHeight; 
-            }
-            
-            class Star { 
-                constructor(layerConfig) {
-                    this.config = layerConfig;
-                    this.reset();
-                }
-                reset() {
-                    this.x = Math.random() * canvas.width;
-                    this.y = Math.random() * canvas.height;
-                    this.radius = Math.random() * this.config.maxSize + this.config.minSize;
-                    this.alpha = 0;
-                    this.alphaChange = Math.random() * 0.02 + 0.005;
-                    this.maxAlpha = Math.random() * 0.7 + 0.1;
-                    this.vx = (Math.random() - 0.5) * this.config.speed;
-                    this.vy = (Math.random() - 0.5) * this.config.speed;
-                }
-                draw() {
-                    if (Math.random() > 0.99) {
-                         this.alpha += this.alphaChange; 
-                        if (this.alpha >= this.maxAlpha || this.alpha <= 0) this.alphaChange *= -1; 
-                    } else {
-                         if (this.alpha < this.maxAlpha) this.alpha += 0.01;
-                    }
+const updateExamMode = (mode) => {
+this.state.userSettings.examScheduleMode = mode;
+const textSpan = this.dom.examScheduleToggleBtn?.querySelector('span');
+if(textSpan) textSpan.textContent = mode === '3' ? '3 فترات' : 'فترتين';
 
-                    ctx.globalAlpha = this.alpha;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-                    ctx.fillStyle = `hsl(220, 80%, 95%)`;
-                    ctx.fill();
-                    ctx.globalAlpha = 1;
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy; 
-                    if (this.x > canvas.width + this.radius) this.x = -this.radius;
-                    if (this.x < -this.radius) this.x = canvas.width + this.radius;
-                    if (this.y > canvas.height + this.radius) this.y = -this.radius;
-                    if (this.y < -this.radius) this.y = canvas.height + this.radius;
-                    this.draw();
-                }
-            }
+const mobileTextSpan = this.dom.mobileMyExamsPeriodToggle?.querySelector('span');
+if(mobileTextSpan) mobileTextSpan.textContent = mode === '3' ? '3 فترات' : 'فترتين';
 
-            class ShootingStar { constructor() { this.reset(); } reset() { this.x = Math.random() * canvas.width; this.y = 0; this.len = Math.random() * 80 + 10; this.speed = Math.random() * 10 + 6; this.size = Math.random() * 1 + 0.1; this.waitTime = new Date().getTime() + Math.random() * 3000 + 500; this.active = false; } update() { if (this.active) { this.x -= this.speed; this.y += this.speed; if (this.x < 0 || this.y >= canvas.height) this.reset(); } else if (this.waitTime < new Date().getTime()) this.active = true; } draw() { if (this.active) { ctx.strokeStyle = `hsla(220, 100%, 80%, ${Math.random() * 0.5 + 0.5})`; ctx.lineWidth = this.size; ctx.beginPath(); ctx.moveTo(this.x, this.y); ctx.lineTo(this.x + this.len, this.y - this.len); ctx.stroke(); } } }
-            
-            function initStars() { 
-                layers = [];
-                shootingStars = [];
-                const layerConfigs = [
-                    { speed: 0.05, maxSize: 0.8, minSize: 0.2, count: Math.floor(canvas.width / 8) },
-                    { speed: 0.1, maxSize: 1.2, minSize: 0.3, count: Math.floor(canvas.width / 15) }, 
-                    { speed: 0.15, maxSize: 1.5, minSize: 0.5, count: Math.floor(canvas.width / 35) } 
-                ];
-                layerConfigs.forEach(config => {
-                    let stars = [];
-                    for(let i=0; i<config.count; i++) { stars.push(new Star(config)); }
-                    layers.push(stars);
-                });
-                for (let i = 0; i < 3; i++) { shootingStars.push(new ShootingStar()); } 
-            }
+this._saveSettings(); 
+const selectedSections = this.state.schedules[this.state.activeScheduleIndex]?.sections || new Set();
+const selectedCourseDetails = Array.from(selectedSections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+this._renderFinalExams(selectedCourseDetails);
+};
 
-            function animate() { 
-                requestAnimationFrame(animate); 
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                layers.forEach(starLayer => { starLayer.forEach(star => star.update()); });
-                shootingStars.forEach(s => { s.update(); s.draw(); });
-            }
+if (this.dom.examScheduleToggleBtn) {
+this.dom.examScheduleToggleBtn.addEventListener('click', () => {
+const currentMode = this.state.userSettings.examScheduleMode;
+const newMode = currentMode === '3' ? '2' : '3';
+updateExamMode(newMode);
+});
+}
+if (this.dom.mobileMyExamsPeriodToggle) {
+this.dom.mobileMyExamsPeriodToggle.addEventListener('click', () => {
+const currentMode = this.state.userSettings.examScheduleMode;
+const newMode = currentMode === '3' ? '2' : '3';
+updateExamMode(newMode);
+});
+}
 
-            window.addEventListener('resize', () => { resizeCanvas(); initStars(); });
-            resizeCanvas(); 
-            initStars(); 
-            animate();
-        };
-        initCosmicEffects();
-    });
-    </script>
+const toggleDates = () => {
+this.state.showExamDates = !this.state.showExamDates; 
+const selectedSections = this.state.schedules[this.state.activeScheduleIndex]?.sections || new Set(); 
+const selectedCourseDetails = Array.from(selectedSections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean); 
+this._renderFinalExams(selectedCourseDetails);
+};
+
+[this.dom.desktopDateToggle, this.dom.mobileMyExamsDateToggle].forEach(btn => { 
+if (btn) btn.addEventListener('click', toggleDates);
+});
+
+if (this.dom.quickVisibilityToggleBtn) {
+this.dom.quickVisibilityToggleBtn.addEventListener('click', () => {
+const content = this.dom.quickVisibilityContent;
+content.style.display = content.style.display === 'none' ? 'grid' : 'none';
+});
+}
+if (this.dom.quickVisibilitySwapBtn) {
+this.dom.quickVisibilitySwapBtn.addEventListener('click', () => {
+this.state.isVisibilityNamesMode = !this.state.isVisibilityNamesMode;
+this._renderQuickVisibilityList();
+});
+}
+if (this.dom.quickVisibilityContent) {
+this.dom.quickVisibilityContent.addEventListener('click', e => this._handleVisibilityToggle(e));
+}
+
+if (this.dom.expandCollapseBtn) {
+this.dom.expandCollapseBtn.addEventListener('click', () => {
+this.state.areAllExpanded = !this.state.areAllExpanded;
+const courseItems = document.querySelectorAll('.course-item');
+const btnIcon = this.dom.expandCollapseBtn.querySelector('i');
+courseItems.forEach(item => {
+if (this.state.areAllExpanded) {
+item.classList.add('open');
+const sections = item.querySelectorAll('.section-btn');
+sections.forEach(s => s.style.animationDelay = '0ms');
+} else {
+item.classList.remove('open');
+}
+});
+if (this.state.areAllExpanded) {
+btnIcon.className = 'ri-stack-fill';
+} else {
+btnIcon.className = 'ri-stack-line';
+}
+});
+}
+},
+_handleDownloadImage(isMobileContext) {
+const btn = isMobileContext ? this.dom.mobileDynamicActionBtn : this.dom.downloadImgBtn;
+if (typeof html2canvas === 'undefined') { this._showToast('error', 'خطأ في تحميل أدوات التصوير.'); return; }
+const originalHTML = btn.innerHTML; btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i>';
+const captureOptions = { backgroundColor: document.body.classList.contains('light') ? '#f4f4f5' : '#0a0a0a', scale: 2, useCORS: true };
+const onCaptureComplete = (canvas) => { const link = document.createElement('a'); link.download = `QU_Schedule_${this.state.schedules[this.state.activeScheduleIndex].name}.png`; link.href = canvas.toDataURL(); link.click(); btn.innerHTML = originalHTML; this._showToast('success', 'تم حفظ الصورة بنجاح'); };
+const onCaptureError = (e) => { console.error("html2canvas error:", e); btn.innerHTML = originalHTML; this._showToast('error', 'فشل حفظ الصورة.'); };
+if(isMobileContext) { const calendarContent = document.getElementById('mobile-calendar'); if (!calendarContent) { onCaptureError("Mobile calendar element not found."); return; } html2canvas(calendarContent, { ...captureOptions, width: calendarContent.scrollWidth, height: calendarContent.scrollHeight }).then(onCaptureComplete).catch(onCaptureError); } 
+else { const calendarEl = document.querySelector('.calendar-wrapper.card'); if (!calendarEl) { onCaptureError("Desktop calendar element not found."); return; } html2canvas(calendarEl, captureOptions).then(onCaptureComplete).catch(onCaptureError); }
+},
+_handleSectionHover(event, isHovering) {
+if (isMobile) return;
+const sectionBtn = event.target.closest('.section-btn');
+if (!sectionBtn) return;
+if (isHovering) { const section = this.state.allCoursesData.find(c => c.uniqueId === sectionBtn.dataset.uniqueId); if (section) this._showPreviewEvent(section); } 
+else { this._removePreviewEvent(); }
+},
+_showPreviewEvent(section) {
+this._removePreviewEvent();
+const group = this.state.groupedCourses[section.code]; if (!group) return;
+this.state.calendar.addEventSource(this._createLectureEventsForSection(section, true, group.color));
+},
+_removePreviewEvent() { const existingSource = this.state.calendar.getEventSourceById('preview-source'); if (existingSource) existingSource.remove(); },
+_handleCourseListClick(e) {
+const sectionBtn = e.target.closest('.section-btn'); const header = e.target.closest('.course-item-header');
+if (sectionBtn) {
+const uniqueId = sectionBtn.dataset.uniqueId;
+const section = this.state.allCoursesData.find(c => c.uniqueId === uniqueId);
+if (!section) return;
+const group = this.state.groupedCourses[section.code]; const activeSchedule = this.state.schedules[this.state.activeScheduleIndex]; if (!activeSchedule) return;
+if (isMobile) { this._showMobileSectionDetails(section, group); } else { if (activeSchedule.sections.has(uniqueId)) { this._removeSectionAndUnlink(uniqueId, activeSchedule); } else { this._addSectionAndLink(uniqueId, activeSchedule); } this.updateCalendarAndConflicts(); }
+} else if (header) {
+const courseItem = header.parentElement; const isOpening = !courseItem.classList.contains('open'); courseItem.classList.toggle('open');
+if (isOpening) { const sections = courseItem.querySelectorAll('.section-btn'); sections.forEach((section, index) => { section.style.animationDelay = `${index * 25}ms`; }); }
+}
+},
+_addSectionAndLink(sectionId, schedule) {
+const section = this.state.allCoursesData.find(s => s.uniqueId === sectionId);
+if (!section) return false;
+const tempSelectedDetails = Array.from(schedule.sections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+if(this._isSectionConflicted(section, tempSelectedDetails)) { if(isMobile){ this._showToast('warning', 'تنبيه: الشعبة المضافة متعارضة.'); } }
+schedule.sections.add(sectionId);
+const linkedGroup = this.state.linkedCourseGroups[section.name];
+if (linkedGroup) {
+const otherCourseCodes = linkedGroup.filter(code => code !== section.code);
+for (const otherCode of otherCourseCodes) {
+const correspondingSection = this.state.groupedCourses[otherCode]?.sections.find(s => s.section === section.section);
+if (!correspondingSection || schedule.sections.has(correspondingSection.uniqueId)) continue;
+if (this.state.userSettings.hideClosedCourses && correspondingSection.status.includes('مغلقة')) { this._showToast('info', `الشعبة المرتبطة ${correspondingSection.code}-${correspondingSection.section} مغلقة.`); continue; }
+schedule.sections.add(correspondingSection.uniqueId);
+if(!schedule.linkedSections.has(sectionId)) schedule.linkedSections.set(sectionId, new Set());
+schedule.linkedSections.get(sectionId).add(correspondingSection.uniqueId);
+this._showToast('success', `تمت إضافة شعبة مرتبطة: ${correspondingSection.code}-${correspondingSection.section}`);
+}
+}
+return true; 
+},
+_removeSectionAndUnlink(sectionId, schedule) {
+schedule.sections.delete(sectionId);
+if (schedule.linkedSections.has(sectionId)) { const linkedIds = schedule.linkedSections.get(sectionId); linkedIds.forEach(id => schedule.sections.delete(id)); schedule.linkedSections.delete(sectionId); if(linkedIds.size > 0) this._showToast('info', 'تمت إزالة الشعب المرتبطة.'); }
+for (const [triggerId, linkedIds] of schedule.linkedSections.entries()) { if (linkedIds.has(sectionId)) { schedule.sections.delete(triggerId); linkedIds.forEach(id => schedule.sections.delete(id)); schedule.linkedSections.delete(triggerId); this._showToast('info', 'تمت إزالة المجموعة المرتبطة.'); break; } }
+return true;
+},
+_handleClearCalendar() {
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+if (!activeSchedule || activeSchedule.sections.size === 0) { this._showToast('info', 'الجدول الحالي فارغ بالفعل'); return; }
+Swal.fire({ title: 'هل أنت متأكد؟', text: `سيتم مسح جميع المواد المختارة من "${activeSchedule.name}".`, icon: 'warning', showCancelButton: true, confirmButtonText: 'نعم، امسح الجدول!', cancelButtonText: 'إلغاء', }).then((result) => { if (result.isConfirmed) { activeSchedule.sections.clear(); activeSchedule.linkedSections.clear(); this.updateCalendarAndConflicts(); this._showToast('success', 'تم مسح الجدول بنجاح'); } });
+},
+_showToast(type, message) { Toast.fire({ icon: type, title: message }); },
+_handleTabClick(button) {
+const parentSidebar = button.closest('.sidebar');
+parentSidebar.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active')); button.classList.add('active');
+parentSidebar.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active')); document.getElementById(button.dataset.tab).classList.add('active');
+if (button.dataset.tab === 'courses-tab') {
+this.dom.quickVisibilityWrapper.style.display = 'block';
+} else {
+this.dom.quickVisibilityWrapper.style.display = 'none';
+}
+},
+_handleMobileNav(button) {
+const view = button.dataset.view;
+this.dom.mobileNavButtons.forEach(btn => btn.classList.remove('active')); button.classList.add('active');
+this.dom.mobileViewContents.forEach(content => { content.style.display = 'none'; content.classList.remove('active'); });
+const targetView = document.getElementById(view); if(targetView) { targetView.style.display = 'flex'; targetView.classList.add('active'); }
+this._updateMobileHeader(); if (view === 'mobile-calendar-view') { setTimeout(() => { if(this.state.calendar) this.state.calendar.updateSize() }, 50); }
+},
+_updateBookmarkletCode() {
+const code = `javascript:!function(){var e=document.createElement('script');e.src='https://mutlaq001.github.io/schedule/extractor.js?v='+Date.now(),document.head.appendChild(e)}();`;
+const container = this.dom.installSectionContainer;
+const demoBtn = `<button class="data-btn" id="demo-mode-btn"><i class="ri-eye-line"></i> ألقِ نظرة</button>`;
+const helpBtnStyle = `text-decoration: none;`;
+if (isMobile) { container.innerHTML = `<div id="install-header"><i class="ri-smartphone-line"></i><h2>التثبيت على الجوال</h2></div><div id="install-section-mobile"><ol><li data-step="1">اضغط على زر "نسخ الكود" بالأسفل.</li><li data-step="2">اذهب لصفحة "المقررات المطروحة" في موقع الجامعة.</li><li data-step="3">الصق الكود في شريط العنوان ثم اضغط "اذهب".</li></ol><div class="install-actions"><button id="copy-code-btn"><i class="ri-clipboard-line"></i> نسخ الكود</button><div class="or-divider">أو</div><div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">${demoBtn}<a href="https://t.me/zalam_0/66" target="_blank" class="data-btn" style="${helpBtnStyle}"><i class="ri-question-line"></i> شرح</a></div></div><div class="js-warning">قد يحذف المتصفح <code>javascript:</code> تأكد من إعادتها يدوياً.</div></div>`; const copyBtn = container.querySelector('#copy-code-btn'); copyBtn.addEventListener('click', (e) => { e.preventDefault(); navigator.clipboard.writeText(code).then(() => { this._showToast('success', 'تم نسخ الكود بنجاح!'); }); }); } 
+else { container.innerHTML = `<div id="install-header"><i class="ri-drag-move-2-line"></i><h2>التثبيت على الكمبيوتر</h2></div><p>اسحب هذا الزر إلى شريط الإشارات المرجعية في متصفحك، ثم اضغط عليه وأنت في صفحة المقررات المطروحة.</p><div class="install-actions"><a class="bookmarklet-button" href="${code}" onclick="Swal.fire({title:'خطأ!', text:'لا تضغط على الزر، بل قم بسحبه إلى شريط الإشارات المرجعية.', icon:'error'}); return false;"><i class="ri-magic-line"></i> QU Schedule</a><div class="or-divider">أو</div><div style="display:flex; gap:0.5rem; flex-wrap:wrap; justify-content:center;">${demoBtn}<button class="data-btn" id="tablet-mode-btn"><i class="ri-tablet-line"></i> للأوحيات</button><a href="https://t.me/Qassim_QU/202" target="_blank" class="data-btn" style="${helpBtnStyle}"><i class="ri-question-line"></i> شرح</a></div></div>`; container.querySelector('#tablet-mode-btn')?.addEventListener('click', () => { navigator.clipboard.writeText(code).then(() => { this._showToast('success', 'تم نسخ كود الأوحيات بنجاح!'); }); }); }
+document.getElementById('demo-mode-btn')?.addEventListener('click', () => this._startDemoMode());
+},
+_initializeCalendar() {
+if (this.state.calendar) this.state.calendar.destroy();
+const calendarEl = document.getElementById(isMobile ? 'mobile-calendar' : 'calendar');
+const calendarOptions = { initialView: 'timeGridWeek', locale: 'ar', headerToolbar: false, allDaySlot: false, events: [], dir: 'rtl', dayHeaderFormat: { weekday: isMobile ? 'short' : 'long' }, slotMinTime: this.state.userSettings.minTime, slotMaxTime: this.state.userSettings.maxTime, hiddenDays: this.state.userSettings.showWeekends ? [] : [5, 6], nowIndicator: false, height: isMobile ? 'auto' : '100%', dayCellDidMount: (arg) => { if (arg.isToday) arg.el.style.backgroundColor = 'transparent'; }, eventContent: (arg) => { const props = arg.event.extendedProps; const wrapper = document.createElement('div'); wrapper.style.cssText = 'display: flex; flex-direction: column; height: 100%; overflow: hidden; font-size: 0.8rem; line-height: 1.4;'; wrapper.innerHTML = `<b style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-title); font-weight: 400;">${arg.event.title.split('(')[0].trim()}</b><small>${props.section} - ${props.instructor}</small><small style="margin-top: auto;"><i class="ri-map-pin-line"></i> ${props.location}</small>`; return { domNodes: [wrapper] }; }, windowResize: () => { if(this.state.calendar) this.state.calendar.updateSize(); } };
+this.state.calendar = new FullCalendar.Calendar(calendarEl, calendarOptions);
+this.state.calendar.render();
+},
+_addSchedule(name, isDefault = false) {
+let scheduleName = name;
+if (!name) { const scheduleNumber = this.state.schedules.length + 1; scheduleName = `جدول ${scheduleNumber}`; }
+this.state.schedules.push({ name: scheduleName, sections: new Set(), linkedSections: new Map() });
+if(!isDefault){ this.state.activeScheduleIndex = this.state.schedules.length - 1; this.updateFullUI(); }
+},
+_switchSchedule(index) {
+if (index !== this.state.activeScheduleIndex && index >= 0 && index < this.state.schedules.length) { this.state.activeScheduleIndex = index; this.updateFullUI(); }
+},
+_deleteSchedule(index) {
+if(this.state.schedules.length <= 1){ this._showToast('error', 'لا يمكن حذف الجدول الوحيد.'); return; }
+const scheduleName = this.state.schedules[index].name;
+Swal.fire({ title: `حذف "${scheduleName}"؟`, text: "لا يمكن التراجع عن هذا الإجراء.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'نعم، احذفه!', cancelButtonText: 'إلغاء' }).then((result) => { if (result.isConfirmed) { this.state.schedules.splice(index, 1); if (this.state.activeScheduleIndex >= index) { this.state.activeScheduleIndex = Math.max(0, this.state.activeScheduleIndex - 1); } this.updateFullUI(); this._showToast('success', 'تم حذف الجدول'); } });
+},
+_renameSchedule(index, newName) {
+const trimmedName = newName.trim();
+if (trimmedName && this.state.schedules[index]) { this.state.schedules[index].name = trimmedName; this._saveSchedules(); if (isMobile) this._updateMobileHeader(); } else { this._renderScheduleTabs(); }
+},
+_updateMobileHeader() {
+const activeNavBtn = document.querySelector('.mobile-nav-btn.active'); if (!activeNavBtn) return;
+const currentView = activeNavBtn.dataset.view;
+const titleEl = this.dom.mobileHeaderTitle;
+const actionBtn = this.dom.mobileDynamicActionBtn;
+const searchContainer = this.dom.mobileSearchContainer;
+
+searchContainer.style.display = 'none';
+titleEl.style.display = 'block';
+
+if (currentView === 'mobile-calendar-view') {
+titleEl.textContent = this.state.schedules[this.state.activeScheduleIndex]?.name || 'الجدول';
+actionBtn.innerHTML = '<i class="ri-camera-3-line"></i>';
+actionBtn.style.display = 'flex';
+actionBtn.onclick = () => this._handleDownloadImage(true);
+} else if (currentView === 'mobile-courses-view') {
+titleEl.textContent = 'المقررات';
+actionBtn.innerHTML = '<i class="ri-search-2-line"></i>';
+actionBtn.style.display = 'flex';
+actionBtn.onclick = () => {
+titleEl.style.display = 'none';
+searchContainer.style.display = 'flex';
+this.dom.mobileSearchInput.focus();
+};
+} else if (currentView === 'mobile-my-schedule-view') {
+titleEl.textContent = this.state.schedules[this.state.activeScheduleIndex]?.name || 'جدولي';
+actionBtn.innerHTML = '<i class="ri-file-copy-line"></i>';
+actionBtn.style.display = 'flex';
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+const selectedSections = activeSchedule ? activeSchedule.sections : new Set();
+const selectedCourseDetails = Array.from(selectedSections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+actionBtn.onclick = () => this._handleCopyCRNs(selectedCourseDetails);
+} else if (currentView === 'mobile-my-exams-view') {
+titleEl.textContent = 'اختباراتي';
+actionBtn.style.display = 'none';
+}
+},
+_adjustColorBrightness(hex, p) { if (!hex || hex.length < 7) return '#7f7f7f'; let r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16); p /= 100; r = Math.round(Math.min(255, Math.max(0, r * (1 + p)))); g = Math.round(Math.min(255, Math.max(0, g * (1 + p)))); b = Math.round(Math.min(255, Math.max(0, b * (1 + p)))); return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`; },
+_hexToRgb(hex) { let result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex); return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : '139, 92, 246'; },
+_hexToHue(H) { if (!H) return 257; let r = 0, g = 0, b = 0; if (H.length == 7) { r = parseInt("0x" + H.substring(1,3)); g = parseInt("0x" + H.substring(3,5)); b = parseInt("0x" + H.substring(5,7)); } r /= 255; g /= 255; b /= 255; let cmin = Math.min(r, g, b), cmax = Math.max(r, g, b), delta = cmax - cmin, h = 0; if (delta == 0) h = 0; else if (cmax == r) h = ((g - b) / delta) % 6; else if (cmax == g) h = (b - r) / delta + 2; else h = (r - g) / delta + 4; h = Math.round(h * 60); if (h < 0) h += 360; return h; },
+_showMobileSectionDetails(section, group, shouldUpdatePanel = true) {
+const panel = this.dom.detailsPanel; const activeSchedule = this.state.schedules[this.state.activeScheduleIndex]; const isSelected = activeSchedule.sections.has(section.uniqueId);
+const tempSelectedDetails = Array.from(activeSchedule.sections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+const isConflicted = !isSelected && this._isSectionConflicted(section, tempSelectedDetails);
+const conflictBanner = isConflicted ? `<div class="conflict-banner"><i class="ri-alert-fill"></i> شعبة متعارضة مع جدولك الحالي</div>` : '';
+const courseSections = group.sections.filter(s => !this.state.userSettings.hideClosedCourses || !s.status.includes('مغلقة')).sort((a, b) => a.section.localeCompare(b.section, undefined, {numeric: true}));
+const currentIndex = courseSections.findIndex(s => s.uniqueId === section.uniqueId);
+const actionBtnText = isSelected ? "إزالة من الجدول" : "إضافة للجدول";
+const actionBtnClass = isSelected ? "remove" : "add";
+const actionBtnIcon = isSelected ? "ri-delete-bin-line" : "ri-add-line";
+if (shouldUpdatePanel) {
+panel.innerHTML = `${conflictBanner}<div class="details-header"><h4><span class="color-dot" style="background-color: ${group.color};"></span>${section.name} (${section.code})</h4><i class="ri-close-line details-close-btn"></i></div><div class="details-grid"><div class="detail-item"><span>الشعبة</span><strong>${section.section}</strong></div><div class="detail-item"><span>الحالة</span><strong><span class="status-badge status-${section.status.includes('مفتوحة') ? 'open' : 'closed'}">${section.status}</span></strong></div><div class="detail-item" data-full-width="true"><span>المحاضر</span><strong>${section.instructor || 'غير محدد'}</strong></div><div class="detail-item" data-full-width="true"><span>المواعيد</span><strong>${section.time.replace(/<br>/g, ' / ') || 'غير محدد'}</strong></div><div class="detail-item"><span>المكان</span><strong>${section.location || 'غير محدد'}</strong></div><div class="detail-item"><span>الاختبار النهائي</span><strong>${section.examPeriodId || 'لا يوجد'}</strong></div></div><div class="details-actions-container"><button class="details-nav-btn" id="details-prev-btn" ${currentIndex === 0 ? 'disabled' : ''}><i class="ri-arrow-right-s-line"></i></button><button class="details-action-btn ${actionBtnClass}" id="details-action-btn"><i class="${actionBtnIcon}"></i> ${actionBtnText}</button><button class="details-nav-btn" id="details-next-btn" ${currentIndex === courseSections.length - 1 ? 'disabled' : ''}><i class="ri-arrow-left-s-line"></i></button></div>`;
+} else {
+const btn = panel.querySelector('#details-action-btn'); btn.className = `details-action-btn ${actionBtnClass}`; btn.innerHTML = `<i class="${actionBtnIcon}"></i> ${actionBtnText}`;
+const oldBanner = panel.querySelector('.conflict-banner'); if(oldBanner) oldBanner.remove(); if(conflictBanner) panel.insertAdjacentHTML('afterbegin', conflictBanner);
+}
+panel.querySelector('.details-close-btn').onclick = () => this._hideMobileSectionDetails();
+panel.querySelector('#details-action-btn').onclick = () => {
+let success = false;
+if (activeSchedule.sections.has(section.uniqueId)) { success = this._removeSectionAndUnlink(section.uniqueId, activeSchedule); } 
+else { success = this._addSectionAndLink(section.uniqueId, activeSchedule); }
+if (success) { this.updateCalendarAndConflicts(); this._showMobileSectionDetails(section, group, false); }
+};
+const prevBtn = panel.querySelector('#details-prev-btn'); if (prevBtn) { prevBtn.disabled = currentIndex <= 0; prevBtn.onclick = () => { if(currentIndex > 0) this._showMobileSectionDetails(courseSections[currentIndex - 1], group, true)}; }
+const nextBtn = panel.querySelector('#details-next-btn'); if (nextBtn) { nextBtn.disabled = currentIndex >= courseSections.length - 1; nextBtn.onclick = () => { if(currentIndex < courseSections.length - 1) this._showMobileSectionDetails(courseSections[currentIndex + 1], group, true)}; }
+if(shouldUpdatePanel) { this.dom.mobileSectionDetailsOverlay.classList.add('open'); }
+},
+_hideMobileSectionDetails() { this.dom.mobileSectionDetailsOverlay.classList.remove('open'); },
+_getPluralizedSectionString(count) { if (count === 1) return "شعبة واحدة"; if (count === 2) return "شعبتين"; if (count >= 3 && count <= 10) return `${count} شعب`; return `${count} شعبة`; },
+_handleViewAllConflicts(conflictMap) {
+const allConflictingIds = new Set(conflictMap.keys());
+const conflictingSections = Array.from(allConflictingIds).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+const visited = new Set(); const conflictGroups = [];
+conflictingSections.forEach(section => {
+if (!visited.has(section.uniqueId)) {
+const group = new Set([section]); visited.add(section.uniqueId); const queue = [section];
+while(queue.length > 0) {
+const current = queue.shift();
+conflictingSections.forEach(other => { if(!visited.has(other.uniqueId)) { if (this._isSectionConflicted(current, [other])) { visited.add(other.uniqueId); group.add(other); queue.push(other); } } });
+}
+if(group.size > 1) conflictGroups.push(Array.from(group));
+}
+});
+const modalHTML = conflictGroups.map((group, groupIndex) => {
+let isExam = false, isTime = false;
+group.forEach(s => {
+const msgs = conflictMap.get(s.uniqueId) || [];
+if(msgs.some(m => m.includes('وقت'))) isTime = true;
+if(msgs.some(m => m.includes('اختبار'))) isExam = true;
+});
+const typeStr = (isTime && isExam) ? '(وقت واختبار)' : (isExam ? '(اختبار)' : '(وقت)');
+const groupItemsHTML = group.sort((a,b) => a.code.localeCompare(b.code)).map((section, itemIndex) => {
+const detailsId = `details-${groupIndex}-${itemIndex}`;
+return `<div class="conflict-item"><div class="conflict-item-flex"><label class="conflict-item-main-label"><input type="radio" name="conflict-group-${groupIndex}" value="${section.uniqueId}" ${itemIndex === 0 ? 'checked' : ''}><div class="custom-radio"></div><div class="conflict-item-info"><h4>${section.name}</h4><span>${section.code} - شعبة ${section.section}</span></div></label><button type="button" class="conflict-details-btn" data-details-id="${detailsId}">تفاصيل</button></div><div class="conflict-extra-details" id="${detailsId}"><div><strong>المحاضر:</strong> ${section.instructor || 'غير محدد'}</div><div><strong>المواعيد:</strong> ${section.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div><strong>المكان:</strong> ${section.location || 'غير محدد'}</div></div></div>`;
+}).join('');
+return `<div class="conflict-group-container">
+<div class="conflict-group-title">
+<span>مجموعة التعارض ${groupIndex + 1}</span>
+<span style="font-size:0.85em; opacity:0.8; font-weight:normal">${typeStr}</span>
+</div>${groupItemsHTML}</div>`;
+}).join('');
+Swal.fire({
+title: 'حل جميع التعارضات', html: `<div id="conflict-modal-content" class="custom-scrollbar">${modalHTML || '<p>لا توجد مجموعات تعارض واضحة.</p>'}</div>`, icon: 'warning', confirmButtonText: 'حفظ التغييرات', showCancelButton: true, cancelButtonText: 'إلغاء', customClass: { popup: 'swal2-popup wide-swal' },
+didOpen: (popup) => { popup.querySelectorAll('.conflict-details-btn').forEach(btn => { btn.addEventListener('click', (e) => { e.preventDefault(); const detailsEl = document.getElementById(btn.dataset.detailsId); if (detailsEl) detailsEl.classList.toggle('visible'); }); }); },
+preConfirm: () => {
+const sectionsToRemove = new Set();
+conflictGroups.forEach((group, groupIndex) => { const selectedRadio = Swal.getPopup().querySelector(`input[name="conflict-group-${groupIndex}"]:checked`); if(selectedRadio){ const selectedId = selectedRadio.value; group.forEach(section => { if (section.uniqueId !== selectedId) { sectionsToRemove.add(section.uniqueId); } }); } });
+return Array.from(sectionsToRemove);
+}
+}).then((result) => {
+if (result.isConfirmed && Array.isArray(result.value)) {
+const sectionsToRemove = result.value;
+if (sectionsToRemove.length > 0) {
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+sectionsToRemove.forEach(id => this._removeSectionAndUnlink(id, activeSchedule));
+this.updateFullUI();
+const pluralizedString = this._getPluralizedSectionString(sectionsToRemove.length);
+this._showToast('success', `تم حل التعارضات وإزالة ${pluralizedString}.`);
+} else { this._showToast('info', 'لم يتم إجراء أي تغييرات.'); }
+}
+});
+},
+_loadSettings() {
+const saved = localStorage.getItem(this.constants.STORAGE_KEYS.SETTINGS);
+if (saved) {
+try {
+this.state.userSettings = { ...this.state.userSettings, ...JSON.parse(saved) };
+this.state.hiddenCourseCodes = new Set(this.state.userSettings.hiddenCourseCodes || []);
+} catch (e) { localStorage.removeItem(this.constants.STORAGE_KEYS.SETTINGS); }
+}
+if(!this.state.userSettings.examScheduleMode) { this.state.userSettings.examScheduleMode = '3'; }
+this._applySettings();
+},
+_saveSettings() { if (this.state.isDemoMode) return; this.state.userSettings.hiddenCourseCodes = Array.from(this.state.hiddenCourseCodes); localStorage.setItem(this.constants.STORAGE_KEYS.SETTINGS, JSON.stringify(this.state.userSettings)); },
+_buildSettingsModal() {
+const modal = this.dom.settingsModal;
+let courseColorsHTML = Object.values(this.state.groupedCourses).sort((a,b)=>a.code.localeCompare(b.code)).map(g=>`<div class="settings-item"><div class="settings-item-label"><span style="color:${g.color};font-weight:600;">${g.name} (${g.code})</span></div><label class="color-picker-label" style="background-color:${g.color};"><input type="color" class="color-picker-input" data-course-code="${g.code}" value="${g.color}"></label></div>`).join('');
+if (!courseColorsHTML) courseColorsHTML = '<p style="color:var(--color-text-muted);font-size:0.9rem;">لم يتم تحميل بيانات المقررات بعد.</p>';
+let courseVisibilityHTML = Object.values(this.state.groupedCourses).sort((a,b)=>a.code.localeCompare(b.code)).map(g=>{ const isHidden = this.state.hiddenCourseCodes.has(g.code); const label = this.state.isVisibilityNamesMode ? g.name : g.code; return`<button class="course-visibility-btn ${isHidden?'hidden':'visible'}" data-course-code="${g.code}" style="--item-color:${g.color};--item-color-rgb:${this._hexToRgb(g.color)};"><span class="color-dot"></span>${label}</button>`; }).join('');
+if (!courseVisibilityHTML) courseVisibilityHTML = '<p style="color:var(--color-text-muted);font-size:0.9rem;">لم يتم تحميل بيانات المقررات بعد.</p>';
+modal.innerHTML = `<div class="modal-header"><h3><i class="ri-settings-3-line"></i> الإعدادات</h3><i class="ri-close-line modal-close-btn"></i></div><div class="modal-content custom-scrollbar"><div class="settings-group"><h4 class="settings-group-title"><i class="ri-palette-line"></i>المظهر</h4><div class="settings-item"><div class="settings-item-label"><span>الوضع</span></div><div class="mode-toggle"></div></div><div class="settings-item"><div class="settings-item-label"><span>اللون الأساسي</span></div><div class="theme-picker" id="accent-color-picker"></div></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-filter-3-line"></i>ترشيح المقررات</h4><div class="settings-item"><div class="settings-item-label"><span>إخفاء الشعب المغلقة</span><small>لإزالة الشعب غير المتاحة من القائمة</small></div><label class="toggle-switch"><input type="checkbox" id="hide-closed-toggle"><span class="slider"></span></label></div><div class="settings-group-title" style="margin-top:2rem; justify-content: space-between;"><div style="display:flex; align-items:center; gap:0.75rem;"><i class="ri-eye-off-line"></i>التحكم في ظهور المقررات</div><button id="modal-visibility-swap-btn" class="data-btn" style="padding:0.2rem 0.6rem; font-size: 0.9rem;" title="تبديل الاسم/الرمز"><i class="ri-text"></i></button></div><div id="course-visibility-list" class="course-visibility-grid">${courseVisibilityHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-paint-brush-line"></i>ألوان المقررات</h4><div id="course-colors-list">${courseColorsHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-calendar-2-line"></i>عرض التقويم</h4><div class="settings-item"><div class="settings-item-label"><span>إظهار عطلة نهاية الأسبوع</span><small>لعرض يومي الجمعة والسبت</small></div><label class="toggle-switch"><input type="checkbox" id="show-weekend-toggle"><span class="slider"></span></label></div><div class="settings-item"><div class="settings-item-label"><span>نطاق الساعات</span></div><div class="time-range-selects"><div id="min-time-select-container"></div><div id="max-time-select-container"></div></div></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-database-2-line"></i>إدارة البيانات</h4><div class="settings-item"><div class="settings-item-label"><span>تصدير واستيراد</span><small>احفظ جدولك الحالي كملف، أو قم باستيراد جدول محفوظ.</small></div><div class="data-actions-group"><button class="data-btn" id="export-btn"><i class="ri-download-cloud-2-line"></i>تصدير</button><button class="data-btn" id="import-btn"><i class="ri-upload-cloud-2-line"></i>استيراد</button><input type="file" id="import-file-input" accept=".json" style="display:none;"></div></div><div class="settings-item"><div class="settings-item-label"><span>إعادة تعيين التطبيق</span><small>سيؤدي هذا إلى مسح جميع بيانات التطبيق نهائياً.</small></div><button class="data-btn danger" id="reset-app-btn"><i class="ri-restart-line"></i>إعادة تعيين</button></div></div><div style="text-align: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); margin-top: .5rem;"><a href="https://t.me/mutlaq1" target="_blank" rel="noopener noreferrer" class="designer-credit"><i class="ri-telegram-line"></i> MUTLAQ1</a></div></div>`;
+this._attachModalEventListeners();
+this._populateTimeSelects();
+this._applySettings();
+},
+_buildFetchModal() {
+this.dom.fetchModal.innerHTML = `<div class="modal-header"><h3><i class="ri-download-cloud-line"></i> جلب من البوابة</h3><i class="ri-close-line modal-close-btn" onclick="document.getElementById('fetch-modal').classList.remove('open'); document.getElementById('modal-overlay').classList.remove('open');"></i></div><div class="modal-content custom-scrollbar"><div class="fetch-grid" id="fetch-form-container"><div class="no-data"><i class="ri-loader-4-line ri-spin" style="font-size: 2rem;"></i><p>جاري تهيئة النظام...</p></div></div><button id="gate-fetch-btn" class="bookmarklet-button" style="width:100%; margin-top:1.5rem;" disabled>عرض الشعب المتاحة</button></div>`;
+this.dom.fetchModal.querySelector('#gate-fetch-btn').addEventListener('click', () => this._handleGateFetch());
+},
+_initGateFetcher() {
+this.dom.modalOverlay.classList.add('open');
+this.dom.fetchModal.classList.add('open');
+fetch('/api/init').then(res => res.json()).then(resp => {
+if(resp.error) throw new Error(resp.error);
+this.state.gateData = { ...this.state.gateData, options: resp.options, values: resp.values };
+this._handleGateTree(resp.tree);
+this._updateGateUI();
+}).catch(err => {
+this.dom.fetchModal.querySelector('#fetch-form-container').innerHTML = `<div class="no-data"><i class="ri-error-warning-line" style="color:var(--color-danger)"></i><p>فشل الاتصال بالبوابة</p><small>${err.message}</small></div>`;
+});
+},
+_handleGateTree(tree) {
+const cols = tree.filter(node => node.pid == 0);
+this.state.gateData.tree = tree;
+this.state.gateData.colleges = cols;
+this.state.gateData.departments = [];
+this.state.gateData.selCollege = '';
+this.state.gateData.selDept = '';
+},
+_handleGateUpdate(e) {
+const { name, value } = e.target;
+this.dom.fetchModal.querySelector('#fetch-form-container').style.opacity = '0.5';
+const newData = { ...this.state.gateData, values: { ...this.state.gateData.values, [name]: value } };
+this.state.gateData = newData;
+fetch('/api/update', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(newData.values) }).then(res => res.json()).then(resp => {
+if(resp.error) throw new Error(resp.error);
+this._handleGateTree(resp.tree);
+this._updateGateUI();
+this.dom.fetchModal.querySelector('#fetch-form-container').style.opacity = '1';
+});
+},
+_handleGateCollegeSelect(e) {
+const colId = e.target.value;
+this.state.gateData.selCollege = colId;
+this.state.gateData.departments = this.state.gateData.tree.filter(node => node.pid == colId);
+this.state.gateData.selDept = '';
+this._updateGateUI();
+},
+_updateGateUI() {
+const container = this.dom.fetchModal.querySelector('#fetch-form-container');
+const btn = this.dom.fetchModal.querySelector('#gate-fetch-btn');
+const d = this.state.gateData;
+if (!d.options) return;
+container.innerHTML = `
+<div class="fetch-field-group"><label>المقر الدراسي</label><select class="fetch-select" name="myForm:select2">${d.options.campus.map(o => `<option value="${o.val}" ${d.values['myForm:select2']===o.val?'selected':''}>${o.txt}</option>`).join('')}</select></div>
+<div class="fetch-field-group"><label>الدرجة العلمية</label><select class="fetch-select" name="myForm:select1">${d.options.degree.map(o => `<option value="${o.val}" ${d.values['myForm:select1']===o.val?'selected':''}>${o.txt}</option>`).join('')}</select></div>
+<div class="fetch-field-group"><label>الكلية</label><select class="fetch-select" id="gate-college-select"><option value="">-- اختر الكلية --</option>${d.colleges.map(c => `<option value="${c.id}" ${d.selCollege==c.id?'selected':''}>${c.name}</option>`).join('')}</select></div>
+<div class="fetch-field-group"><label>القسم / التخصص</label><select class="fetch-select" id="gate-dept-select" ${!d.departments.length?'disabled':''}><option value="">-- اختر القسم --</option>${d.departments.map(dep => `<option value="${dep.id}" ${d.selDept==dep.id?'selected':''}>${dep.name}</option>`).join('')}</select></div>`;
+container.querySelector('[name="myForm:select2"]').onchange = (e) => this._handleGateUpdate(e);
+container.querySelector('[name="myForm:select1"]').onchange = (e) => this._handleGateUpdate(e);
+container.querySelector('#gate-college-select').onchange = (e) => this._handleGateCollegeSelect(e);
+container.querySelector('#gate-dept-select').onchange = (e) => { this.state.gateData.selDept = e.target.value; this._updateGateUI(); };
+btn.disabled = !d.selDept;
+},
+_handleGateFetch() {
+const btn = this.dom.fetchModal.querySelector('#gate-fetch-btn');
+const originalText = btn.innerHTML;
+btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i> جاري السحب...'; btn.disabled = true;
+const deptNode = this.state.gateData.tree.find(n => n.id == this.state.gateData.selDept);
+const match = deptNode && deptNode.url.match(/setIndex\((\d+)\)/);
+const index = match ? match[1] : '';
+if(!index) { this._showToast('error', 'رابط القسم غير صالح'); btn.innerHTML = originalText; btn.disabled = false; return; }
+fetch('/api/schedule', { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({ ...this.state.gateData.values, index }) }).then(res => res.json()).then(resp => {
+if(resp.error) throw new Error(resp.error);
+if(resp.courses.length === 0) { this._showToast('info', 'الجدول فارغ لهذا التخصص'); } 
+else {
+const processedCourses = [];
+resp.courses.forEach(c => {
+const parts = c.name.split('-');
+const code = parts[0].trim();
+const name = parts.length > 1 ? parts.slice(1).join('-').trim() : c.name;
+c.sections.forEach(s => {
+processedCourses.push({
+code: code, name: name, section: s.crn, type: s.activity,
+status: s.status, instructor: s.instructor, time: s.time,
+location: s.room, hours: "3", examPeriodId: null
+});
+});
+});
+this.state.isDemoMode = false;
+this._processAndDisplayData(processedCourses);
+this._showToast('success', `تم جلب ${processedCourses.length} شعبة`);
+this.dom.modalOverlay.classList.remove('open');
+this.dom.fetchModal.classList.remove('open');
+}
+btn.innerHTML = originalText; btn.disabled = false;
+}).catch(err => {
+this._showToast('error', err.message);
+btn.innerHTML = originalText; btn.disabled = false;
+});
+},
+_attachModalEventListeners() {
+const modal = this.dom.settingsModal;
+modal.querySelector('.modal-close-btn').addEventListener('click', () => this._toggleSettingsModal(false));
+modal.querySelector('#course-colors-list').addEventListener('input', e => this._handleCourseColorChange(e));
+modal.querySelector('#course-visibility-list').addEventListener('click', e => this._handleVisibilityToggle(e));
+modal.querySelector('#export-btn').addEventListener('click', () => this._handleExport());
+modal.querySelector('#import-btn').addEventListener('click', () => modal.querySelector('#import-file-input').click());
+modal.querySelector('#import-file-input').addEventListener('change', e => this._handleImport(e));
+modal.querySelector('#reset-app-btn').addEventListener('click', () => this._handleReset());
+modal.querySelector('#modal-visibility-swap-btn').addEventListener('click', () => {
+this.state.isVisibilityNamesMode = !this.state.isVisibilityNamesMode;
+this._buildSettingsModal(); 
+this._renderQuickVisibilityList(); 
+});
+},
+_handleCourseColorChange(e) {
+if (e.target.matches('.color-picker-input')) {
+const code = e.target.dataset.courseCode; const color = e.target.value; this.state.customColors[code] = color;
+if (this.state.groupedCourses[code]) { this.state.groupedCourses[code].color = color; }
+this._saveCustomColors(); this.updateFullUI(); this._buildSettingsModal();
+}
+},
+_handleVisibilityToggle(e) {
+const btn = e.target.closest('.course-visibility-btn'); if (!btn) return;
+const code = btn.dataset.courseCode;
+if (this.state.hiddenCourseCodes.has(code)) { this.state.hiddenCourseCodes.delete(code); btn.classList.remove('hidden'); btn.classList.add('visible'); } 
+else { this.state.hiddenCourseCodes.add(code); btn.classList.add('hidden'); btn.classList.remove('visible'); }
+this._saveSettings(); this._renderCoursesList(); this._renderQuickVisibilityList(); this._buildSettingsModal();
+},
+_handleExport() {
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+if (!activeSchedule || activeSchedule.sections.size === 0) return Swal.fire('الجدول الحالي فارغ!', 'الرجاء اختيار بعض الشعب أولاً.', 'warning');
+if(this.state.isDemoMode) return Swal.fire('لا يمكن التصدير!', 'لا يمكنك تصدير الجدول في وضع المعاينة.', 'info');
+const dataStr = JSON.stringify({ version: 20, schedule: Array.from(activeSchedule.sections), linked: Array.from(activeSchedule.linkedSections.entries()).map(([k, v]) => [k, Array.from(v)]) });
+const blob = new Blob([dataStr], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); a.href = url; a.download = `qu_schedule_${activeSchedule.name.replace(/[^a-z0-9]/gi,'_').toLowerCase()}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+},
+_handleImport(e) {
+const file = e.target.files[0]; if (!file) return;
+if(this.state.allCoursesData.length === 0){ Swal.fire('خطأ!', 'يجب تحميل بيانات المقررات أولاً قبل استيراد جدول.', 'error'); e.target.value = ''; return; }
+if(this.state.isDemoMode) this.state.isDemoMode = false;
+const reader = new FileReader();
+reader.onload = (event) => {
+try {
+const data = JSON.parse(event.target.result);
+if (data && data.schedule && Array.isArray(data.schedule)) {
+const time = new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }); const newName = `مستورد ${time}`;
+this._addSchedule(newName, false); const newSchedule = this.state.schedules[this.state.schedules.length-1];
+data.schedule.forEach(id => { if (this.state.allCoursesData.some(c => c.uniqueId === id)) { newSchedule.sections.add(id); } });
+if(data.linked && Array.isArray(data.linked)) { newSchedule.linkedSections = new Map(data.linked.map(([k, v]) => [k, new Set(v)])); }
+this.updateFullUI(); this._toggleSettingsModal(false); this._showToast('success', 'تم استيراد الجدول بنجاح!');
+} else throw new Error('Invalid file format');
+} catch (error) { Swal.fire('خطأ!', 'ملف غير صالح أو تالف.', 'error'); }
+};
+reader.readAsText(file); e.target.value = '';
+},
+_handleReset() {
+Swal.fire({ title: 'هل أنت متأكد؟', text: "سيؤدي هذا إلى مسح جميع بيانات التطبيق، بما في ذلك جميع الجداول المحفوظة والإعدادات.", icon: 'warning', showCancelButton: true, confirmButtonColor: '#d33', confirmButtonText: 'نعم، إعادة تعيين!', cancelButtonText: 'إلغاء' }).then(r => { if (r.isConfirmed) { localStorage.clear(); location.reload(); } });
+},
+_toggleSettingsModal(show) { this.dom.modalOverlay.classList.toggle('open', show); this.dom.settingsModal.classList.toggle('open', show); },
+_applyAccentColorStyles(color) {
+const pColor = color; const pDark = this._adjustColorBrightness(pColor, -10); const pRgb = this._hexToRgb(pColor); const pHue = this._hexToHue(pColor);
+document.documentElement.style.setProperty('--color-primary', pColor); document.documentElement.style.setProperty('--color-primary-dark', pDark); document.documentElement.style.setProperty('--rgb-primary', pRgb); document.documentElement.style.setProperty('--primary-hue', String(pHue)); document.documentElement.style.setProperty('--secondary-hue', String((pHue + 40) % 360));
+},
+_applySettings() {
+document.body.className = this.state.userSettings.theme === 'light' ? 'light' : '';
+if (isMobile) { document.body.classList.add('mobile-view'); } else { document.body.classList.add('desktop-view'); }
+this._applyAccentColorStyles(this.state.userSettings.accentColor);
+const modeToggle = this.dom.settingsModal.querySelector('.mode-toggle');
+if (modeToggle) {
+modeToggle.innerHTML = `<button class="mode-btn ${this.state.userSettings.theme==='dark'?'active':''}" data-theme="dark">ظلام</button><button class="mode-btn ${this.state.userSettings.theme==='light'?'active':''}" data-theme="light">نهار</button>`;
+modeToggle.onclick = e => { if (e.target.matches('.mode-btn')) { this.state.userSettings.theme = e.target.dataset.theme; this._saveSettings(); this._applySettings(); } };
+}
+this._populateAccentColorPicker();
+const weekendToggle = this.dom.settingsModal.querySelector('#show-weekend-toggle');
+if (weekendToggle) { weekendToggle.checked = this.state.userSettings.showWeekends; weekendToggle.onchange = e => { this.state.userSettings.showWeekends = e.target.checked; this._saveSettings(); this._initializeCalendar(); this.updateCalendarAndConflicts(); }; }
+const closedToggle = this.dom.settingsModal.querySelector('#hide-closed-toggle');
+if (closedToggle) { closedToggle.checked = this.state.userSettings.hideClosedCourses; closedToggle.onchange = e => { this.state.userSettings.hideClosedCourses = e.target.checked; this._saveSettings(); this._renderCoursesList(); this.updateCalendarAndConflicts(); }; }
+
+if (this.dom.examScheduleToggleBtn) {
+const textSpan = this.dom.examScheduleToggleBtn.querySelector('span');
+if(textSpan) textSpan.textContent = this.state.userSettings.examScheduleMode === '3' ? '3 فترات' : 'فترتين';
+}
+if (this.dom.mobileMyExamsPeriodToggle) {
+const mobileTextSpan = this.dom.mobileMyExamsPeriodToggle.querySelector('span');
+if(mobileTextSpan) mobileTextSpan.textContent = this.state.userSettings.examScheduleMode === '3' ? '3 فترات' : 'فترتين';
+}
+},
+_populateAccentColorPicker() {
+const picker = this.dom.settingsModal.querySelector('#accent-color-picker'); if (!picker) return;
+picker.innerHTML = '';
+Object.values(this.constants.PRESET_COLORS).forEach(c => { const dot = document.createElement('div'); dot.className = `theme-dot ${this.state.userSettings.accentColor === c ? 'active' : ''}`; dot.style.backgroundColor = c; dot.onclick = () => { this.state.userSettings.accentColor = c; this._saveSettings(); this._applySettings(); }; picker.appendChild(dot); });
+const isCustom = !Object.values(this.constants.PRESET_COLORS).includes(this.state.userSettings.accentColor);
+const customLabel = document.createElement('label'); customLabel.className = `color-picker-label ${isCustom ? 'active' : ''}`;
+if (isCustom) { customLabel.style.backgroundColor = this.state.userSettings.accentColor; customLabel.style.backgroundImage = 'none'; } else { customLabel.style.backgroundColor = 'transparent'; const dashedCircleSVG = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='8' stroke-dasharray='15 10' stroke-linecap='round'/></svg>`; customLabel.style.backgroundImage = `url("data:image/svg+xml,${encodeURIComponent(dashedCircleSVG)}")`; }
+customLabel.innerHTML = `<input type="color" class="color-picker-input" value="${this.state.userSettings.accentColor}">`;
+const input = customLabel.querySelector('input');
+input.addEventListener('input', e => { customLabel.style.backgroundColor = e.target.value; customLabel.style.backgroundImage = 'none'; this._applyAccentColorStyles(e.target.value); });
+input.addEventListener('change', e => { this.state.userSettings.accentColor = e.target.value; this._saveSettings(); this._populateAccentColorPicker(); });
+picker.appendChild(customLabel);
+},
+_populateTimeSelects() {
+const minContainer = this.dom.settingsModal.querySelector('#min-time-select-container'); const maxContainer = this.dom.settingsModal.querySelector('#max-time-select-container');
+if (!minContainer || !maxContainer) return;
+const timeOpts = Array.from({ length: 24 }, (_, i) => ({ value: `${String(i).padStart(2,'0')}:00:00`, label: `${String(i).padStart(2,'0')}:00` }));
+this._createActionPicker(minContainer, timeOpts, this.state.userSettings.minTime, val => { this.state.userSettings.minTime = val; this._saveSettings(); this._initializeCalendar(); this.updateCalendarAndConflicts(); });
+this._createActionPicker(maxContainer, timeOpts, this.state.userSettings.maxTime, val => { this.state.userSettings.maxTime = val; this._saveSettings(); this._initializeCalendar(); this.updateCalendarAndConflicts(); });
+},
+_createActionPicker(container, opts, val, onChange) {
+container.innerHTML = ''; let isOpen = false;
+const wrapper = document.createElement('div'); wrapper.className = 'action-picker-wrapper';
+const selected = opts.find(o => o.value === val) || opts[0];
+const display = document.createElement('button'); display.type = 'button'; display.className = 'action-picker-display'; display.textContent = selected.label;
+const panel = document.createElement('div'); panel.className = 'action-picker-panel'; panel.style.display = 'none';
+opts.forEach(o => {
+const btn = document.createElement('button'); btn.type = 'button'; btn.className = `action-picker-option ${val === o.value ? 'selected' : ''}`; btn.textContent = o.label;
+btn.onclick = () => { onChange(o.value); display.textContent = o.label; panel.querySelectorAll('.selected').forEach(el => el.classList.remove('selected')); btn.classList.add('selected'); closePanel(); };
+panel.appendChild(btn);
+});
+const openPanel = () => { isOpen = true; panel.style.display = 'block'; }; const closePanel = () => { isOpen = false; panel.style.display = 'none'; };
+display.onclick = () => isOpen ? closePanel() : openPanel();
+wrapper.appendChild(display); wrapper.appendChild(panel); container.appendChild(wrapper);
+document.addEventListener('click', (e) => { if (!wrapper.contains(e.target)) closePanel(); });
+},
+_startDemoMode() {
+this.state.isDemoMode = true;
+const demoCourses = [
+{"code":"ACCT 221","name":"مبادئ المحاسبة المتوسطة","hours":"3","section":"200","type":"محاضرة","status":"مفتوحة","instructor":"سارة عبدالله","time":"الأحد: 09:30 ص - 10:45 ص<br>الثلاثاء: 09:30 ص - 10:45 ص","location":"مبنى A - قاعة 101","examPeriodId":"5"},
+{"code":"CS 101","name":"مقدمة في علوم الحاسب","hours":"3","section":"201","type":"محاضرة","status":"مفتوحة","instructor":"أحمد خالد","time":"الأحد: 08:00 ص - 09:15 ص<br>الثلاثاء: 08:00 ص - 09:15 ص","location":"مبنى C - قاعة 204","examPeriodId":"3"},
+{"code":"CS 101","name":"مقدمة في علوم الحاسب","hours":"0","section":"202","type":"عملي","status":"مفتوحة","instructor":"علي محمد","time":"الأربعاء: 10:00 ص - 11:50 ص","location":"مبنى C - معمل 1","examPeriodId":null},
+{"code":"MKT 201","name":"مبادئ التسويق","hours":"3","section":"205","type":"محاضرة","status":"مفتوحة","instructor":"فاطمة الزهراء","time":"الاثنين: 11:00 ص - 12:15 م<br>الأربعاء: 11:00 ص - 12:15 م","location":"مبنى B - قاعة 302","examPeriodId":"8"},
+{"code":"ENG 110","name":"كتابة إنجليزية","hours":"3","section":"210","type":"محاضرة","status":"مفتوحة","instructor":"John Smith","time":"الاثنين: 02:00 م - 03:15 م<br>الخميس: 02:00 م - 03:15 م","location":"مبنى اللغات - L20","examPeriodId":"5"},
+{"code":"FIN 220","name":"مبادئ التمويل","hours":"3","section":"215","type":"محاضرة","status":"مغلقة","instructor":"عبدالرحمن عمر","time":"الأحد: 01:00 م - 02:15 م<br>الثلاثاء: 01:00 م - 02:15 م","location":"مبنى B - قاعة 303","examPeriodId":"7"}
+];
+this.state.schedules = []; this.state.customColors = {};
+this._addSchedule("الجدول التجريبي", true); this._processAndDisplayData(demoCourses); this.updateFullUI(); this._showToast('info', 'مرحباً بك في وضع المعاينة!');
+},
+_toggleDemoBadge(){
+if(isMobile) { this._renderScheduleTabs(); } else {
+const wrapper = this.dom.mainHeaderTitleWrapper; if(!wrapper) return;
+let badge = wrapper.querySelector('.demo-badge');
+if(this.state.isDemoMode) { if(!badge){ badge = document.createElement('div'); badge.className = 'demo-badge'; badge.textContent = 'وضع المعاينة'; wrapper.appendChild(badge); } } 
+else { if(badge) badge.remove(); }
+}
+}
+};
+
+QU_ScheduleApp.init();
+});
+</script>
 </body>
 </html>
