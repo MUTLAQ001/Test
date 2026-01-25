@@ -34,7 +34,6 @@
         
         @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
         @keyframes pulse-border { 0% {border-color: rgba(255,255,255,0.2);} 50% {border-color: rgba(255,255,255,0.8);} 100% {border-color: rgba(255,255,255,0.2);} }
-        @keyframes sound-wave { 0% {height: 3px;} 50% {height: 15px;} 100% {height: 3px;} }
 
 		body{
             font-family:var(--font-body);
@@ -173,65 +172,37 @@
         .res-link-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
         .res-link-btn.primary { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
 
-        /* --- COSMIC AUDIO PLAYER CSS --- */
-        .cosmic-player-container {
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(255, 62, 77, 0.3);
-            border-radius: 16px;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            margin-top: 10px;
-            box-shadow: 0 0 30px rgba(0,0,0,0.3);
-        }
-        /* Glow Effect Behind */
-        .cosmic-player-container::before {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: radial-gradient(circle, rgba(255, 62, 77, 0.1) 0%, transparent 60%);
-            z-index: 0; pointer-events: none;
+        .audio-wrapper-styled {
+            width: 100%;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            padding: 5px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
 
-        .player-content { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+        .drive-player-frame {
+            border: none;
+            width: 100%;
+            height: 100px;
+            border-radius: 8px;
+            /* Invert filter makes Google's white player look dark-mode compliant */
+            filter: invert(0.92) hue-rotate(180deg) contrast(0.9);
+            mix-blend-mode: screen;
+        }
         
-        .control-btn-circle {
-            width: 55px; height: 55px; border-radius: 50%;
-            background: linear-gradient(145deg, #ff3e4d, #c41e3a);
-            border: none; color: #fff; font-size: 1.4rem;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 5px 15px rgba(255, 62, 77, 0.4);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .fallback-link {
+            font-size: 0.8rem;
+            color: #666;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            margin-top: 5px;
+            margin-bottom: 5px;
         }
-        .control-btn-circle:active { transform: scale(0.9); }
-        .control-btn-circle.playing { animation: pulse-border 2s infinite; box-shadow: 0 0 25px rgba(255, 62, 77, 0.6); }
-
-        .visualizer-area {
-            flex: 1; height: 40px; display: flex; align-items: center; justify-content: center; gap: 4px;
-            background: rgba(255,255,255,0.03); border-radius: 12px; padding: 0 15px;
-        }
-        .viz-bar {
-            width: 4px; background: #ff3e4d; border-radius: 2px;
-            height: 3px; transition: height 0.1s ease;
-        }
-        .player-active .viz-bar { animation: sound-wave 0.8s infinite ease-in-out; }
-        /* Stagger animations */
-        .viz-bar:nth-child(1) { animation-duration: 0.6s; }
-        .viz-bar:nth-child(2) { animation-duration: 0.9s; }
-        .viz-bar:nth-child(3) { animation-duration: 0.7s; }
-        .viz-bar:nth-child(4) { animation-duration: 0.5s; }
-        .viz-bar:nth-child(5) { animation-duration: 1.0s; }
-        .viz-bar:nth-child(6) { animation-duration: 0.8s; }
-        
-        .player-meta {
-            text-align: left; min-width: 70px;
-        }
-        .status-text { font-size: 0.75rem; color: #888; font-weight: bold; margin-bottom: 2px; display: block; }
-        .time-text { font-family: var(--font-nums); font-size: 0.9rem; color: #fff; font-weight: 700; }
-
-        .download-icon-btn {
-            color: #666; font-size: 1.2rem; cursor: pointer; transition: 0.3s;
-            padding: 8px; border-radius: 8px; background: rgba(255,255,255,0.05);
-        }
-        .download-icon-btn:hover { color: #fff; background: rgba(255,255,255,0.1); }
+        .fallback-link:hover { text-decoration: underline; color: var(--color-record); }
 
         .empty-state-box {
             text-align: center; padding: 60px 20px;
@@ -431,7 +402,7 @@
 	<div id="root"></div>
 
 	<script type="text/babel">
-		const { useState, useEffect, useRef, useMemo, StrictMode } = React;
+		const { useState, useEffect, useMemo, StrictMode } = React;
 
         const Icons = {
             Concept: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>,
@@ -450,10 +421,7 @@
             ChevronDown: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>,
             ChevronUp: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"></polyline></svg>,
             Video: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>,
-            Mic: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>,
-            Play: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>,
-            Pause: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="currentColor" stroke="none"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>,
-            Download: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            Mic: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
         };
 
         const fileResources = {
@@ -461,105 +429,6 @@
             'C2': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDn7UcbYTPtRpkJNVFch1yeAT37pqOezgtg554yCLiHyLM?e=pIf5yU',
             'L1': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDL-fpADYWmSaQESGlldC7WAZc9DHkFJus3G_DSoGF5J88?e=lwgE7y',
             'FDM': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgCEkYAUr-F-TLUsEgwkrnb0AeUxpPv7XtflM9LuOicGtzA?e=acJxqo'
-        };
-
-        const CosmicAudioPlayer = ({ url }) => {
-            const [isPlaying, setIsPlaying] = useState(false);
-            const [isLoading, setIsLoading] = useState(false);
-            const [error, setError] = useState(false);
-            const audioRef = useRef(null);
-
-            useEffect(() => {
-                const audio = new Audio(url);
-                audioRef.current = audio;
-
-                const handlePlay = () => setIsPlaying(true);
-                const handlePause = () => setIsPlaying(false);
-                const handleEnded = () => setIsPlaying(false);
-                const handleWaiting = () => setIsLoading(true);
-                const handlePlaying = () => setIsLoading(false);
-                const handleError = () => {
-                    setIsLoading(false);
-                    setError(true);
-                    setIsPlaying(false);
-                };
-
-                audio.addEventListener('play', handlePlay);
-                audio.addEventListener('pause', handlePause);
-                audio.addEventListener('ended', handleEnded);
-                audio.addEventListener('waiting', handleWaiting);
-                audio.addEventListener('playing', handlePlaying);
-                audio.addEventListener('error', handleError);
-
-                return () => {
-                    audio.pause();
-                    audio.removeEventListener('play', handlePlay);
-                    audio.removeEventListener('pause', handlePause);
-                    audio.removeEventListener('ended', handleEnded);
-                    audio.removeEventListener('waiting', handleWaiting);
-                    audio.removeEventListener('playing', handlePlaying);
-                    audio.removeEventListener('error', handleError);
-                };
-            }, [url]);
-
-            const togglePlay = () => {
-                if (!audioRef.current) return;
-                if (isPlaying) {
-                    audioRef.current.pause();
-                } else {
-                    const playPromise = audioRef.current.play();
-                    if (playPromise !== undefined) {
-                        playPromise.catch(e => {
-                            console.error("Autoplay prevented or load failed", e);
-                            setError(true);
-                        });
-                    }
-                }
-            };
-
-            return (
-                <div className="cosmic-player-container">
-                    <div className={`player-content ${isPlaying ? 'player-active' : ''}`}>
-                        <button 
-                            className={`control-btn-circle ${isPlaying ? 'playing' : ''}`} 
-                            onClick={togglePlay}
-                            disabled={error}
-                        >
-                            {isLoading ? (
-                                <span style={{fontSize:'0.8rem'}}>...</span>
-                            ) : error ? (
-                                <span style={{fontSize:'0.8rem'}}>!</span>
-                            ) : isPlaying ? (
-                                <Icons.Pause />
-                            ) : (
-                                <Icons.Play />
-                            )}
-                        </button>
-
-                        <div className="visualizer-area">
-                            {[...Array(6)].map((_, i) => (
-                                <div key={i} className="viz-bar" />
-                            ))}
-                        </div>
-
-                        <div className="player-meta">
-                            <span className="status-text">
-                                {error ? "فشل التشغيل" : isLoading ? "جاري التحميل.." : isPlaying ? "يتم التشغيل" : "جاهز"}
-                            </span>
-                            {!error && <div className="time-text">Audio Clip</div>}
-                            {error && (
-                                <a href={url} target="_blank" style={{color:'#ff3e4d', fontSize:'0.75rem', textDecoration:'none'}}>
-                                    فتح الرابط مباشرة ↗
-                                </a>
-                            )}
-                        </div>
-
-                        <a href={url} target="_blank" className="download-icon-btn" title="تحميل">
-                            <Icons.Download />
-                        </a>
-                    </div>
-                </div>
-            );
         };
 
         const ContentView = () => {
@@ -603,11 +472,10 @@
                 },
             ];
 
-            // Use the export=download link format which is better for direct audio src
             const recordings = [
                 {
                     title: 'C1 Concept Session',
-                    directUrl: 'https://drive.google.com/uc?export=download&id=1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
+                    id: '1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
                 }
             ];
 
@@ -655,7 +523,16 @@
                                                 <h3>{rec.title}</h3>
                                             </div>
                                         </div>
-                                        <CosmicAudioPlayer url={rec.directUrl} />
+                                        <div className="audio-wrapper-styled">
+                                            <iframe 
+                                                className="drive-player-frame"
+                                                src={`https://drive.google.com/file/d/${rec.id}/preview`} 
+                                                allow="autoplay"
+                                            ></iframe>
+                                            <a href={`https://drive.google.com/file/d/${rec.id}/view`} target="_blank" className="fallback-link">
+                                                اضغط هنا للفتح في Google Drive
+                                            </a>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
