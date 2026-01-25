@@ -175,13 +175,16 @@
         .audio-player-container {
             width: 100%;
             margin-top: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 12px;
+            overflow: hidden;
         }
-        .custom-audio {
+        
+        .drive-embed-frame {
             width: 100%;
-            height: 40px;
-            border-radius: 20px;
-            outline: none;
-            filter: invert(0.9) hue-rotate(180deg);
+            height: 60px;
+            border: none;
+            display: block;
         }
 
         .empty-state-box {
@@ -455,8 +458,7 @@
             const recordings = [
                 {
                     title: 'C1 Concept Session',
-                    sub: 'تسجيل الجلسة الأولى (Concepts)',
-                    url: 'https://docs.google.com/uc?export=download&id=1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
+                    embedUrl: 'https://drive.google.com/file/d/1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r/preview'
                 }
             ];
 
@@ -502,14 +504,14 @@
                                             </div>
                                             <div className="resource-info">
                                                 <h3>{rec.title}</h3>
-                                                <p>{rec.sub}</p>
                                             </div>
                                         </div>
                                         <div className="audio-player-container">
-                                            <audio controls className="custom-audio">
-                                                <source src={rec.url} type="audio/mp3" />
-                                                المتصفح لا يدعم تشغيل الملفات الصوتية.
-                                            </audio>
+                                            <iframe
+                                                src={rec.embedUrl}
+                                                className="drive-embed-frame"
+                                                allow="autoplay"
+                                            ></iframe>
                                         </div>
                                     </div>
                                 ))}
