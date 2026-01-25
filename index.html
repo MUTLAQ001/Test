@@ -172,7 +172,6 @@
         .res-link-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
         .res-link-btn.primary { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
 
-        /* Styles for the Native Audio Player to look "Custom" */
         .audio-wrapper-styled {
             width: 100%;
             background: rgba(0,0,0,0.2);
@@ -189,7 +188,6 @@
             height: 40px;
             border-radius: 8px;
             outline: none;
-            /* This filter inverts colors to make the white player dark */
             filter: invert(1) hue-rotate(180deg) saturate(0) brightness(1.2); 
             mix-blend-mode: screen; 
             opacity: 0.9;
@@ -476,7 +474,7 @@
             const recordings = [
                 {
                     title: 'C1 Concept Session',
-                    directUrl: 'https://docs.google.com/uc?export=download&id=1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
+                    directUrl: 'https://drive.google.com/uc?export=download&id=1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
                 }
             ];
 
@@ -526,7 +524,7 @@
                                         </div>
                                         <div className="audio-wrapper-styled">
                                             <audio controls className="custom-native-audio">
-                                                <source src={rec.directUrl} type="audio/mp3" />
+                                                <source src={rec.directUrl} type="audio/mpeg" />
                                                 المتصفح لا يدعم هذا العنصر.
                                             </audio>
                                             <a href={rec.directUrl} target="_blank" className="fallback-link">
