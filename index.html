@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<meta name="theme-color" content="#0a0a0a">
-	<title>GE 211 - 472</title>
+	<title>GE 213 - 472</title>
 	
 	<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
 	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
@@ -16,16 +16,14 @@
 
 		:root{
             --bg-dark: #050505;
-            --color-concept: #ffd700;
-            --color-lab: #00f2ff;
+            --color-concept: #ffd700; /* Yellow/Gold for Class 1 */
+            --color-lab: #00f2ff;     /* Cyan for Class 2 */
             --color-record: #ff3e4d;
             --color-holiday: #ff4757;
             --color-success: #00e676;
             --font-body: "Cairo", sans-serif;
             --font-nums: "Outfit", sans-serif;
             --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            --glass: rgba(255, 255, 255, 0.05);
-            --glass-border: rgba(255, 255, 255, 0.1);
         }
 		
         * {margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color: transparent;}
@@ -33,7 +31,18 @@
 		::-webkit-scrollbar {display: none;}
         
         @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
-        @keyframes pulse-border { 0% {border-color: rgba(255,255,255,0.2);} 50% {border-color: rgba(255,255,255,0.8);} 100% {border-color: rgba(255,255,255,0.2);} }
+        
+        @keyframes pulse-gold { 
+            0% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);} 
+            70% {box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);} 
+            100% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);} 
+        }
+
+        @keyframes pulse-cyan-calm { 
+            0% {box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.4); border-color: rgba(0, 242, 255, 0.5);} 
+            70% {box-shadow: 0 0 0 10px rgba(0, 242, 255, 0); border-color: rgba(0, 242, 255, 0.3);} 
+            100% {box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); border-color: rgba(0, 242, 255, 0.5);} 
+        }
 
 		body{
             font-family:var(--font-body);
@@ -107,39 +116,6 @@
             background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
-        .sub-nav-wrapper {
-            background: rgba(255,255,255,0.03);
-            border-radius: 14px;
-            padding: 4px;
-            position: relative;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-        .sub-nav-glider {
-            position: absolute;
-            top: 4px; bottom: 4px;
-            width: calc(33.33% - 5px);
-            background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-            border-radius: 10px;
-            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-        .sub-nav-wrapper[data-active="0"] .sub-nav-glider { border-color: rgba(255, 215, 0, 0.3); box-shadow: 0 0 20px rgba(255, 215, 0, 0.1); }
-        .sub-nav-wrapper[data-active="1"] .sub-nav-glider { border-color: rgba(0, 242, 255, 0.3); box-shadow: 0 0 20px rgba(0, 242, 255, 0.1); }
-        .sub-nav-wrapper[data-active="2"] .sub-nav-glider { border-color: rgba(255, 62, 77, 0.3); box-shadow: 0 0 20px rgba(255, 62, 77, 0.1); }
-
-        .sub-tab-item {
-            position: relative; z-index: 2; background: transparent; border: none; padding: 10px;
-            font-family: var(--font-body); font-weight: 700; color: #666; cursor: pointer;
-            transition: color 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px;
-        }
-        .sub-tab-item.active { color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
-        .sub-tab-item svg { font-size: 1.1rem; margin-bottom: -2px; }
-
         .content-area { animation: fadeIn 0.4s ease-out; }
         
         .pro-resource-card {
@@ -150,6 +126,17 @@
         }
         .pro-resource-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.15); }
 
+        .pro-resource-card.pinned-file {
+            background: linear-gradient(145deg, rgba(40, 40, 30, 0.8), rgba(20, 20, 25, 0.9));
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            animation: pulse-gold 3s infinite;
+        }
+        .pro-resource-card.pinned-file .resource-icon-box {
+            color: var(--color-concept);
+            background: rgba(255, 215, 0, 0.1);
+            border-color: rgba(255, 215, 0, 0.2);
+        }
+
         .resource-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
         .resource-icon-box { 
             width: 45px; height: 45px; border-radius: 12px; 
@@ -157,8 +144,6 @@
             background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
         }
         .type-files .resource-icon-box { color: var(--color-lab); }
-        .type-quizzes .resource-icon-box { color: var(--color-concept); }
-        .type-recordings .resource-icon-box { color: var(--color-record); }
         .resource-info h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #fff; }
         .resource-info p { margin: 3px 0 0; font-size: 0.85rem; color: #888; }
         
@@ -167,88 +152,33 @@
             flex: 1; text-align: center; padding: 12px; font-size: 0.9rem;
             background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
             color: #ccc; border-radius: 10px; text-decoration: none; transition: 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 140px;
+            display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 140px; cursor: pointer;
         }
         .res-link-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
         .res-link-btn.primary { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
 
-        .audio-wrapper-styled {
-            width: 100%;
-            background: rgba(0,0,0,0.2);
-            border-radius: 12px;
-            padding: 5px;
-            border: 1px solid rgba(255,255,255,0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .drive-player-frame {
-            border: none;
-            width: 100%;
-            height: 100px;
-            border-radius: 8px;
-            /* Invert filter makes Google's white player look dark-mode compliant */
-            filter: invert(0.92) hue-rotate(180deg) contrast(0.9);
-            mix-blend-mode: screen;
-        }
-        
-        .fallback-link {
-            font-size: 0.8rem;
-            color: #666;
-            text-decoration: none;
-            text-align: center;
-            display: block;
-            margin-top: 5px;
-            margin-bottom: 5px;
-        }
-        .fallback-link:hover { text-decoration: underline; color: var(--color-record); }
-
-        .empty-state-box {
-            text-align: center; padding: 60px 20px;
-            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
-            border: 1px dashed rgba(255,255,255,0.1); border-radius: 20px;
-            margin-top: 10px; animation: fadeIn 0.5s ease;
-        }
-        .empty-icon { font-size: 3rem; margin-bottom: 15px; opacity: 0.3; display: block; margin-left: auto; margin-right: auto;}
-        .empty-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 5px; }
-        .empty-desc { color: #666; font-size: 0.9rem; }
-
         .timeline-container { padding-bottom: 50px; }
-        
         .session-card {
             display: flex; align-items: stretch;
-            margin-bottom: 10px;
-            position: relative;
-            overflow: hidden;
-            transition: var(--transition);
-            backdrop-filter: blur(12px);
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.05);
-            background: rgba(30,30,35,0.6);
-            animation: fadeIn 0.5s ease both;
-            cursor: pointer;
-            flex-wrap: wrap;
+            margin-bottom: 10px; position: relative; overflow: hidden;
+            transition: var(--transition); backdrop-filter: blur(12px);
+            border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(30,30,35,0.6); animation: fadeIn 0.5s ease both;
+            cursor: pointer; flex-wrap: wrap;
         }
         
         .session-card.current-day {
-            border: 2px solid rgba(255,255,255,0.5);
-            box-shadow: 0 0 20px rgba(255,255,255,0.1);
-            animation: pulse-border 2s infinite;
+            border: 1px solid rgba(0, 242, 255, 0.5);
+            background: linear-gradient(145deg, rgba(0, 242, 255, 0.1), rgba(20, 20, 25, 0.9));
+            animation: pulse-cyan-calm 3s infinite;
+            z-index: 5;
         }
         
         .session-card.is-past {
-            opacity: 0.6;
-            filter: grayscale(0.9);
-            border-color: #222;
+            opacity: 0.6; filter: grayscale(0.9); border-color: #222;
         }
-        .session-card.is-past .session-topic {
-            text-decoration: line-through;
-            color: #666;
-        }
-        .session-card.is-past:hover {
-            opacity: 1; filter: grayscale(0);
-        }
+        .session-card.is-past .session-topic { text-decoration: line-through; color: #666; }
+        .session-card.is-past:hover { opacity: 0.8; }
 
         .past-badge {
             position: absolute; top: 10px; left: 10px;
@@ -257,16 +187,15 @@
             display: flex; align-items: center; gap: 4px; z-index: 2;
         }
 
-        .session-card.concept { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(145deg, rgba(255, 215, 0, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
-        .session-card.lab { border-color: rgba(0, 242, 255, 0.4); background: linear-gradient(145deg, rgba(0, 242, 255, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
+        .session-card.class1 { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(145deg, rgba(255, 215, 0, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
+        .session-card.class2 { border-color: rgba(0, 242, 255, 0.4); background: linear-gradient(145deg, rgba(0, 242, 255, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
         .session-card.holiday { border-color: rgba(255, 71, 87, 0.4); background: linear-gradient(145deg, rgba(255, 71, 87, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); pointer-events: none; }
 
         .session-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
         
         .date-box {
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 15px; min-width: 85px;
-            background: rgba(0,0,0,0.2);
+            padding: 15px; min-width: 85px; background: rgba(0,0,0,0.2);
             border-left: 1px solid rgba(255,255,255,0.05);
         }
         .date-day-name { font-size: 0.8rem; color: #aaa; margin-bottom: 2px; }
@@ -275,61 +204,21 @@
 
         .card-content { flex: 1; padding: 15px; display: flex; flex-direction: column; justify-content: center; position: relative; }
         .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        
-        .session-id { 
-            font-family: var(--font-nums); font-size: 1.3rem; font-weight: 700; 
-            display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px;
-        }
-        .session-card.concept .session-id { color: var(--color-concept); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-        .session-card.lab .session-id { color: var(--color-lab); text-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
+        .session-id { font-family: var(--font-nums); font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
+        .session-card.class1 .session-id { color: var(--color-concept); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+        .session-card.class2 .session-id { color: var(--color-lab); text-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
         
         .session-topic { font-size: 1rem; color: #eee; font-weight: 500; line-height: 1.4; transition: var(--transition); direction: ltr; text-align: right; }
         
         .due-tag {
             align-self: flex-start; margin-top: 10px; font-size: 0.8rem; padding: 5px 12px;
             border-radius: 20px; background: rgba(255, 71, 87, 0.15); color: #ff6b81; border: 1px solid rgba(255, 71, 87, 0.3);
-            display: flex; align-items: center; gap: 6px; font-weight: 600; width: fit-content;
+            display: flex; align-items: center; gap: 6px; font-weight: 600; width: fit-content; direction: ltr;
         }
 
-        .external-file-btn {
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            background: rgba(0,0,0,0.4);
-            border: 1px solid rgba(255,255,255,0.1);
-            transition: var(--transition);
-            animation: fadeIn 0.5s ease both;
-        }
-        .external-file-btn.concept { color: var(--color-concept); border-color: rgba(255, 215, 0, 0.2); }
-        .external-file-btn.lab { color: var(--color-lab); border-color: rgba(0, 242, 255, 0.2); }
-
-        .external-file-btn:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
-
-        .block-divider {
-            height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
-            margin: 25px 0; width: 70%; margin-left: auto; margin-right: auto;
-        }
-
-        .completed-block-card {
-            display: flex; align-items: center; justify-content: space-between;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px dashed rgba(255, 255, 255, 0.2);
-            padding: 15px 20px;
-            border-radius: 16px;
-            cursor: pointer;
-            margin-bottom: 25px;
-            transition: all 0.3s ease;
-        }
-        .completed-block-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.4);
-            transform: translateY(-2px);
-        }
+        .block-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 25px 0; width: 70%; margin-left: auto; margin-right: auto; }
+        .completed-block-card { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2); padding: 15px 20px; border-radius: 16px; cursor: pointer; margin-bottom: 25px; transition: all 0.3s ease; }
+        .completed-block-card:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
         .block-info { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #aaa; }
         .block-status { font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 5px; }
 
@@ -374,13 +263,6 @@
         .desc-content { color: #ddd; line-height: 1.6; font-size: 0.95rem; font-family: 'Outfit', sans-serif; direction: ltr; text-align: left; }
         .desc-content.rtl { direction: rtl; text-align: right; font-family: var(--font-body); }
         
-        .lang-switch { display: flex; background: rgba(0,0,0,0.3); border-radius: 20px; padding: 3px; border: 1px solid rgba(255,255,255,0.1); cursor: pointer; position: relative; width: 70px; height: 28px; }
-        .lang-option { flex: 1; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: bold; color: #888; z-index: 2; transition: 0.3s; }
-        .lang-active-bg { position: absolute; top: 3px; left: 3px; width: 32px; height: 20px; background: var(--color-lab); border-radius: 15px; z-index: 1; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .lang-switch.active .lang-active-bg { transform: translateX(32px); }
-        .lang-switch.active .lang-option:last-child { color: #000; }
-        .lang-switch:not(.active) .lang-option:first-child { color: #000; }
-        
         .timer-toggle-btn { width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: #fff; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; }
         .timer-toggle-btn.active { background: rgba(0, 230, 118, 0.15); border-color: #00e676; color: #00e676; box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
         .timer-toggle-btn:hover { transform: translateY(-2px); }
@@ -419,351 +301,301 @@
             Info: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>,
             User: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
             ChevronDown: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>,
-            ChevronUp: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"></polyline></svg>,
-            Video: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>,
-            Mic: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg>
+            ChevronUp: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
         };
 
         const fileResources = {
-            'C1': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgBsZMm8IgCRTqhDX_ANa2pmAckD8u73ILSfXhTbOFK5WPE?e=ZCzoK2',
-            'C2': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDn7UcbYTPtRpkJNVFch1yeAT37pqOezgtg554yCLiHyLM?e=pIf5yU',
-            'L1': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDL-fpADYWmSaQESGlldC7WAZc9DHkFJus3G_DSoGF5J88?e=lwgE7y',
-            'FDM': 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgCEkYAUr-F-TLUsEgwkrnb0AeUxpPv7XtflM9LuOicGtzA?e=acJxqo'
+            'FirstDay': 'https://lms.qu.edu.sa/webapps/login/', 
+            'Excel': 'https://lms.qu.edu.sa/webapps/login/',
+            'Project': 'https://lms.qu.edu.sa/webapps/login/',
+            'Portfolio': 'https://lms.qu.edu.sa/webapps/login/'
+        };
+
+        const generateAllSessions = () => {
+            // Spring 2026 starts approx Jan 25, 2026 (based on Week 5 being Feb 22)
+            const startDate = new Date('2026-01-25'); 
+            const holidays = [
+                { start: '2026-02-22', end: '2026-02-26', name: "إجازة (Vacation)" }
+            ];
+            
+            let list = [], curr = new Date(startDate);
+            let week = 1;
+            let sessionInWeek = 1;
+            let safety = 0;
+
+            // Generate 13 weeks
+            while(week <= 13 && safety < 150) {
+                let d = curr.getDay();
+                // Assume classes are Sunday (0) and Tuesday (2) standard schedule
+                if(d === 0 || d === 2) {
+                    let dateStr = curr.toISOString().split('T')[0];
+                    let isHol = holidays.find(h => dateStr >= h.start && dateStr <= h.end);
+                    
+                    if(isHol) {
+                        list.push({type:'holiday', date:new Date(curr), id:`HOL-${week}`, topic:isHol.name});
+                    } else {
+                        // Create ID like 1-1, 1-2, 2-1...
+                        let id = `${week}-${sessionInWeek}`;
+                        let type = sessionInWeek === 1 ? 'class1' : 'class2'; // Alternate colors
+                        list.push({ type, date:new Date(curr), id, week });
+                    }
+
+                    if(sessionInWeek === 2) {
+                         week++; 
+                         sessionInWeek = 1; 
+                    } else {
+                        sessionInWeek++;
+                    }
+                }
+                curr.setDate(curr.getDate()+1); 
+                safety++;
+            }
+            return list;
         };
 
         const ContentView = () => {
-            const [activeIdx, setActiveIdx] = useState(1); 
-
-            const tabs = [
-                { id: 'quizzes', label: 'الكويزات', icon: <Icons.Edit/> },
-                { id: 'files', label: 'الملفات', icon: <Icons.File/> },
-                { id: 'recordings', label: 'التسجيلات', icon: <Icons.Mic/> }
-            ];
-
             const files = [
-                { 
-                    title: 'First Day Material (FDM)', 
-                    type: 'folder',
-                    links: [
-                        { name: 'فتح المجلد', url: fileResources['FDM'] }
-                    ]
-                },
-                { 
-                    title: 'C1 Concept Session', 
-                    type: 'mixed',
-                    links: [
-                        { name: 'ملفات الجلسة', url: fileResources['C1'] },
-                        { name: 'تسليم ورقي (Hard Copy)', url: 'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgA3a2WpU-uXTrOKBYRswqBeAWfVih3Z_XzIqH0UBUO0Y4M?e=lnLaDi', isImportant: true }
-                    ]
-                },
-                { 
-                    title: 'C2 Concept Session', 
-                    type: 'folder',
-                    links: [
-                        { name: 'فتح المجلد', url: fileResources['C2'] }
-                    ]
-                },
-                { 
-                    title: 'L1 Lab Session', 
-                    type: 'folder',
-                    links: [
-                        { name: 'فتح المجلد', url: fileResources['L1'] }
-                    ]
-                },
-            ];
-
-            const recordings = [
                 {
-                    title: 'C1 Concept Session',
-                    id: '1w7VRYalrK7mQH8FkmlBsHBTmHXtRSe2r'
+                    title: 'First Day Material',
+                    type: 'pinned',
+                    links: [
+                        { name: 'تحميل الملف (FDM)', url: fileResources['FirstDay'], isImportant: true }
+                    ]
+                },
+                { 
+                    title: 'Excel Handouts', 
+                    type: 'folder',
+                    links: [
+                        { name: 'Excel Handout Part I', url: fileResources['Excel'] },
+                        { name: 'Excel Handout Part II', url: fileResources['Excel'] }
+                    ]
+                },
+                { 
+                    title: 'Project Documents', 
+                    type: 'folder',
+                    links: [
+                        { name: 'Project Guidelines', url: fileResources['Project'] }
+                    ]
+                },
+                { 
+                    title: 'Course Portfolio', 
+                    type: 'folder',
+                    links: [
+                        { name: 'Portfolio Checklist', url: fileResources['Portfolio'] }
+                    ]
                 }
             ];
-
-            const renderContent = () => {
-                const typeMap = {0: 'quizzes', 1: 'files', 2: 'recordings'};
-                const currentType = typeMap[activeIdx];
-
-                if (currentType === 'files') {
-                    return (
-                        <div className="content-area">
-                            {files.map((f, i) => (
-                                <div key={i} className={`pro-resource-card type-files`} style={{animationDelay: `${i * 0.1}s`}}>
-                                    <div className="resource-header">
-                                        <div className="resource-icon-box">
-                                            <Icons.Folder />
-                                        </div>
-                                        <div className="resource-info">
-                                            <h3>{f.title}</h3>
-                                        </div>
-                                    </div>
-                                    <div className="resource-links">
-                                        {f.links.map((link, idx) => (
-                                            <a key={idx} href={link.url} target="_blank" className={`res-link-btn ${link.isImportant ? 'primary' : ''}`}>
-                                                {link.isImportant ? <Icons.Star/> : <Icons.File/>} {link.name}
-                                            </a>
-                                        ))}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    );
-                }
-
-                if (currentType === 'recordings') {
-                    if (recordings.length > 0) {
-                        return (
-                            <div className="content-area">
-                                {recordings.map((rec, i) => (
-                                    <div key={i} className="pro-resource-card type-recordings" style={{animationDelay: `${i * 0.1}s`}}>
-                                        <div className="resource-header">
-                                            <div className="resource-icon-box">
-                                                <Icons.Mic />
-                                            </div>
-                                            <div className="resource-info">
-                                                <h3>{rec.title}</h3>
-                                            </div>
-                                        </div>
-                                        <div className="audio-wrapper-styled">
-                                            <iframe 
-                                                className="drive-player-frame"
-                                                src={`https://drive.google.com/file/d/${rec.id}/preview`} 
-                                                allow="autoplay"
-                                            ></iframe>
-                                            <a href={`https://drive.google.com/file/d/${rec.id}/view`} target="_blank" className="fallback-link">
-                                                اضغط هنا للفتح في Google Drive
-                                            </a>
-                                        </div>
-                                    </div>
-                                ))}
-                            </div>
-                        );
-                    }
-                }
-
-                const emptyData = {
-                    'quizzes': { icon: <Icons.Edit/>, title: 'الكويزات غير متاحة', desc: 'سيتم إضافة الكويزات التدريبية قريباً' },
-                    'recordings': { icon: <Icons.Mic/>, title: 'لا توجد تسجيلات', desc: 'لم يتم رفع أي تسجيلات صوتية لهذه المادة بعد' }
-                };
-                const info = emptyData[currentType];
-
-                return (
-                    <div className="content-area">
-                         <div className="empty-state-box">
-                            <div className="empty-icon">{info.icon}</div>
-                            <div className="empty-title">{info.title}</div>
-                            <div className="empty-desc">{info.desc}</div>
-                        </div>
-                    </div>
-                );
-            };
 
             return (
-                <div>
-                    <div className="sub-nav-wrapper" data-active={activeIdx}>
-                        <div className="sub-nav-glider" style={{ transform: `translateX(${-activeIdx * 100}%)` }}></div>
-                        {tabs.map((t, i) => (
-                            <button 
-                                key={t.id} 
-                                className={`sub-tab-item ${activeIdx === i ? 'active' : ''}`} 
-                                onClick={() => setActiveIdx(i)}
-                            >
-                                {t.icon} <span>{t.label}</span>
-                            </button>
-                        ))}
+                <div className="content-area">
+                    {files.map((f, i) => (
+                        <div key={i} className={`pro-resource-card ${f.type === 'pinned' ? 'pinned-file' : 'type-files'}`} style={{animationDelay: `${i * 0.1}s`}}>
+                            <div className="resource-header">
+                                <div className="resource-icon-box">
+                                    {f.type === 'pinned' ? <Icons.Star /> : <Icons.Folder />}
+                                </div>
+                                <div className="resource-info">
+                                    <h3 style={f.type==='pinned' ? {color:'var(--color-concept)'} : {}}>{f.title}</h3>
+                                    {f.type==='pinned' && <p style={{fontSize:'0.8rem'}}>مواد أساسية مهمة</p>}
+                                </div>
+                            </div>
+                            <div className="resource-links">
+                                {f.links.map((link, idx) => (
+                                    <a key={idx} href={link.url} target="_blank" className={`res-link-btn ${link.isImportant ? 'primary' : ''}`}>
+                                        <Icons.File/> {link.name}
+                                    </a>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
+                    <div className="empty-state-box" style={{marginTop:'20px'}}>
+                        <div className="empty-icon"><Icons.Info/></div>
+                        <div className="empty-title">LMS Access</div>
+                        <div className="empty-desc">جميع الملفات متاحة عبر نظام إدارة التعلم (Blackboard)</div>
                     </div>
-
-                    {renderContent()}
                 </div>
-            )
+            );
         };
 
         const ScheduleView = ({ openTeamSettings, teamMembers, settings }) => {
-            const startDate = new Date('2026-01-22');
-            
-            const holidays = [{ start: '2026-03-22', end: '2026-03-26', name: "إجازة عيد الفطر" }];
             
             const sessionDetails = {
-                'C2-1': { 
-                    title: {en: 'Quiz #1', ar: 'كويز 1'},
+                '1-1': {
+                    title: {en: 'Intro to GE-213', ar: 'مقدمة في GE-213'},
                     desc: {
-                        en: 'Quiz #1: First Day materials (white, orange, yellow packets) + Blue Workbook (J49-J56) - Various Levels of Learning.',
-                        ar: 'كويز 1: مواد اليوم الأول (الرزم البيضاء، البرتقالية، الصفراء) + كتاب العمل الأزرق (J49-J56).'
-                    } 
-                },
-                'C2-2': {
-                    title: {en: 'Submit C1', ar: 'تسليم C1'},
-                    desc: {
-                        en: 'Assignment C1 Due: Engineering the Profession.',
-                        ar: 'تسليم واجب C1: مهنة الهندسة.'
+                        en: 'Creating & Maintaining Teams. Read First Day Material.',
+                        ar: 'تكوين الفرق والحفاظ عليها. قراءة مواد اليوم الأول.'
                     }
                 },
-                'C2-3': { 
-                    title: {en: 'Quiz #2', ar: 'كويز 2'},
+                '1-2': {
+                    title: {en: 'Team Norms Step 1', ar: 'قواعد الفريق خطوة 1'},
                     desc: {
-                        en: 'Quiz #2: SCPS Chapter 1 (Pages 1-3) + Blue Workbook Sections B (B5-B10) and E (E1-E12).',
-                        ar: 'كويز 2: الفصل 1 من كتاب SCPS (ص 1-3) + الأقسام B و E من كتاب العمل الأزرق.'
-                    } 
-                },
-                'C3-1': { 
-                    title: {en: 'Quiz #3', ar: 'كويز 3'},
-                    desc: {
-                        en: 'Quiz #3: SCPS Chapter 2 (Sections 2.3, 2.5 on Page 12) + Chapter 3 (Page 29 to end of 3.2C).',
-                        ar: 'كويز 3: الفصل 2 (أقسام محددة) + الفصل 3 (من ص 29 إلى نهاية 3.2C) من SCPS.'
-                    } 
-                },
-                'C3-3': { 
-                    title: {en: 'Quiz #4', ar: 'كويز 4'},
-                    desc: {
-                        en: 'Quiz #4: SCPS Chapter 4 (Page 61 to end of Sec 4.3B).',
-                        ar: 'كويز 4: الفصل 4 من صفحة 61 حتى نهاية القسم 4.3B في كتاب SCPS.'
-                    } 
-                },
-                'C4-1': { 
-                    title: {en: 'Quiz #5', ar: 'كويز 5'},
-                    desc: {
-                        en: 'Quiz #5: More about problem definition: SCPS Chapter 3 (from 3.2D to end of chapter).',
-                        ar: 'كويز 5: تعريف المشكلة: الفصل 3 (من 3.2D للنهاية) في SCPS.'
-                    } 
-                },
-                'C4-3': { 
-                    title: {en: 'Quiz #6', ar: 'كويز 6'},
-                    desc: {
-                        en: 'Quiz #6: SCPS Chapter 5 until end of Page 102.',
-                        ar: 'كويز 6: الفصل 5 حتى نهاية الصفحة 102 في كتاب SCPS.'
-                    } 
-                },
-                'C5-1': { 
-                    title: {en: 'Quiz #7', ar: 'كويز 7'},
-                    desc: {
-                        en: 'Quiz #7: SCPS Chapter 5 (Page 103 to end) + Exxon Valdez problem (handouts).',
-                        ar: 'كويز 7: الفصل 5 (من ص 103 للنهاية) + مشكلة Exxon Valdez.'
-                    } 
-                },
-                'C5-3': { 
-                    title: {en: 'Quiz #8', ar: 'كويز 8'},
-                    desc: {
-                        en: 'Quiz #8: SCPS Chapter 6 until end of section 6.4.',
-                        ar: 'كويز 8: الفصل 6 حتى نهاية القسم 6.4 من الفصل 6 في كتاب SCPS.'
-                    } 
-                },
-                'C6-1': { 
-                    title: {en: 'Quiz #9', ar: 'كويز 9'},
-                    desc: {
-                        en: 'Quiz #9: SCPS Chapter 6 (from section 6.5 to end).',
-                        ar: 'كويز 9: الفصل 6 من القسم 6.5 حتى نهاية الفصل 6 في SCPS.'
-                    } 
-                },
-                'C6-2': {
-                    title: {en: 'Makeup Q6+Q7', ar: 'إعادة كويز 6+7'},
-                    desc: {
-                        en: 'Correction/Makeup for Quiz 6 and Quiz 7.',
-                        ar: 'فرصة إعادة أو تصحيح للكويز رقم 6 و 7.'
+                        en: 'Due: Bring First Day Material & Expectations of team norms assignment (Step 1 report out).',
+                        ar: 'تسليم: إحضار مواد اليوم الأول وواجب توقعات قواعد الفريق (Step 1).'
                     }
                 },
-                'C6-3': { 
-                    title: {en: 'Quiz #10', ar: 'كويز 10'},
+                '2-1': {
+                    title: {en: 'Excel Intro', ar: 'مقدمة في Excel'},
                     desc: {
-                        en: 'Quiz #10: All of SCPS Chapter 7.',
-                        ar: 'كويز 10: كامل الفصل 7 في كتاب SCPS.'
-                    } 
-                },
-                'L1-3': {
-                    title: {en: 'Teammate Interview', ar: 'مقابلة الزملاء'},
-                    desc: {
-                        en: 'Submission: L-1 Teammate Interview (Hard copy).',
-                        ar: 'تسليم L-1 Teammate Interview (ورقي بالكامل).'
+                        en: 'Due: Bring Excel Handout Part (I). Finish Team Norms.',
+                        ar: 'تسليم: إحضار نشرة إكسل الجزء الأول. إنهاء قواعد الفريق.'
                     }
                 },
-                'L2-1': {
-                    title: {en: 'L2 Draft', ar: 'مسودة L2'},
+                '2-2': {
+                    title: {en: 'Excel Assign - Expectations', ar: 'واجب إكسل - التوقعات'},
                     desc: {
-                        en: 'L-2 Setting Team Norms (Step 1) - Draft only.',
-                        ar: 'تسليم L-2 Setting Team Norms (Step 1) - مسودة فقط.'
+                        en: 'Due: Excel Assignment checklist and team process check. Exploring Expectations.',
+                        ar: 'واجب إكسل وقائمة التحقق وفحص عملية الفريق.'
                     }
                 },
-                'L2-2': {
-                    title: {en: 'L5 Checks', ar: 'فحص L5'},
+                '3-1': {
+                    title: {en: 'Excel Team Work', ar: 'عمل الفريق في إكسل'},
                     desc: {
-                        en: 'L-5 Team Process Checks (Checklist + forms).',
-                        ar: 'L-5 Team Process Checks (Checklist + forms).'
+                        en: 'Due: Bring Sign-off Form. Excel Assignment checklist.',
+                        ar: 'إحضار نموذج التوقيع (Sign-off Form) وقائمة تحقق واجب إكسل.'
                     }
                 },
-                'L2-3': { 
-                    title: {en: 'Zeroth Notebook', ar: 'دفتر Zeroth'}, 
+                '3-2': {
+                    title: {en: 'Ch 1: Introducing Models', ar: 'الفصل 1: تقديم النماذج'},
                     desc: {
-                        en: 'Submission: L-3-0th Team’s Design Notebook (Zeroth) (Hard copy).',
-                        ar: 'تسليم L-3-0th Team’s Design Notebook (Zeroth) (ورقي بالكامل).'
-                    } 
+                        en: 'Due: Bring Textbook "How to Model It". Topics: Heuristics, Constraints.',
+                        ar: 'إحضار الكتاب. الموضوعات: الاستدلال والقيود.'
+                    }
                 },
-                'L3-1': { 
-                    title: {en: 'Submit L1+L2 | Makeup Q1', ar: 'تسليم L1+L2 | إعادة Q1'}, 
+                '4-1': {
+                    title: {en: 'Ch 1: Variables & Trade-offs', ar: 'الفصل 1: المتغيرات والمفاضلات'},
                     desc: {
-                        en: 'Final submission for L-1 & L-2. Makeup Quiz 1 in first 10 mins.',
-                        ar: 'تسليم نهائي لـ L-1 و L-2. إعادة كويز 1 في أول 10 دقائق.'
-                    } 
+                        en: 'Due: Submit Excel assignment with checklist. Working on Chapter 1.',
+                        ar: 'تسليم واجب إكسل مع القائمة. العمل على الفصل الأول.'
+                    }
                 },
-                'L3-2': { 
-                    title: {en: 'Makeup Q2', ar: 'إعادة Q2'}, 
+                '4-2': {
+                    title: {en: 'Entry Survey', ar: 'الاستبيان الأولي'},
                     desc: {
-                        en: 'Makeup Quiz 2 in first 10 mins.',
-                        ar: 'إعادة كويز 2 في أول 10 دقائق.'
-                    } 
+                        en: 'Due: Bring Entry Survey. Chapter 1 Assignment - Team.',
+                        ar: 'تسليم الاستبيان الأولي. واجب الفصل الأول (فريق).'
+                    }
                 },
-                'L4-1': { 
-                    title: {en: 'L4-a + L2 Final', ar: 'L4-a + L2 تسليم'}, 
+                // Week 5 is holiday
+                '5-1': { title: {en: 'OFF', ar: 'إجازة'}, desc: {en:'Vacation', ar:'إجازة'} }, 
+                '5-2': { 
+                    title: {en: 'Sample Report', ar: 'تقرير نموذجي'},
                     desc: {
-                        en: 'Presentation of Project Phase (a) + DNB 1st assessment. L-2 Final Submission.',
-                        ar: 'عرض تقديمي للمشروع L-4-a + التقييم الأول لدفتر التصميم (DNB). تسليم نهائي لـ L-2.'
-                    } 
+                        en: 'Feedback on Excel Assignment. Review Sample Report.',
+                        ar: 'ملاحظات على واجب إكسل. مراجعة التقرير النموذجي.'
+                    }
                 },
-                'L4-2': { 
-                    title: {en: 'Submit L4-b | Makeup Q3', ar: 'تسليم L4-b | إعادة Q3'}, 
+                '6-1': {
+                    title: {en: 'Excel Part II', ar: 'إكسل الجزء الثاني'},
                     desc: {
-                        en: 'Presentation of Project Phase (b) + DNB 2nd assessment. Makeup Quiz 3 in first 10 mins.',
-                        ar: 'عرض تقديمي للمشروع L-4-b + التقييم الثاني لدفتر التصميم. إعادة كويز 3 in first 10 mins.'
-                    } 
+                        en: 'Due: Bring Excel Handout Part (II). Resubmit Excel assignment (if needed).',
+                        ar: 'إحضار نشرة إكسل الجزء الثاني. إعادة تسليم واجب إكسل (إذا لزم الأمر).'
+                    }
                 },
-                'L4-3': { 
-                    title: {en: 'Makeup Q4', ar: 'إعادة Q4'}, 
+                '6-2': {
+                    title: {en: 'Ch 4: Hot & Thirsty Exec', ar: 'الفصل 4: المدير العطشان'},
                     desc: {
-                        en: 'Makeup Quiz 4 in first 10 mins.',
-                        ar: 'إعادة كويز 4 في أول 10 دقائق.'
-                    } 
+                        en: 'Due: Submit Chapter 1 Assignment. Topics: Heuristics, Assumptions.',
+                        ar: 'تسليم واجب الفصل الأول. الموضوعات: الفرضيات والنماذج.'
+                    }
                 },
-                'L5-2': { 
-                    title: {en: 'Submit L4-c | Makeup Q5', ar: 'تسليم L4-c | إعادة Q5'}, 
+                '7-1': {
+                    title: {en: 'Ch 4: Lumping & Calibration', ar: 'الفصل 4: التجميع والمعايرة'},
                     desc: {
-                        en: 'Presentation of Project Phase (c) + DNB 3rd assessment. Makeup Quiz 5 in first 10 mins.',
-                        ar: 'عرض تقديمي للمشروع L-4-c + التقييم الثالث لدفتر التصميم. إعادة كويز 5 في أول 10 دقائق.'
-                    } 
+                        en: 'Due: Report out on Reading Assignment. Bring Course Portfolio Checklist-1.',
+                        ar: 'تقرير عن واجب القراءة. إحضار قائمة ملف إنجاز المقرر-1.'
+                    }
                 },
-                'L5-3': { 
-                    title: {en: 'Final Checks', ar: 'فحص نهائي'}, 
+                '7-2': {
+                    title: {en: 'Ch 4: Goal Seek', ar: 'الفصل 4: البحث عن الهدف'},
                     desc: {
-                        en: 'Submission: L-4-d (Presentation) + DNB 4th Assessment.',
-                        ar: 'تسليم L-4-d (عرض تقديمي) + التقييم الرابع لدفتر التصميم.'
-                    } 
+                        en: 'Due: Bring Course Portfolio with Portfolio Checklist-1.',
+                        ar: 'تسليم ملف إنجاز المقرر مع القائمة رقم 1.'
+                    }
                 },
-                'L6-1': { 
-                    title: {en: 'Submit L4-d | Makeup Q8', ar: 'تسليم L4-d | إعادة Q8'}, 
+                '8-1': {
+                    title: {en: 'Individual Assign Ch 4', ar: 'واجب فردي فصل 4'},
                     desc: {
-                        en: 'Submission: L-4-e (Presentation) + DNB 5th Assessment. Makeup Quiz 8 in first 10 mins.',
-                        ar: 'تسليم L-4-e (عرض تقديمي) + التقييم الخامس لدفتر التصميم. إعادة كويز 8 في أول 10 دقائق.'
-                    } 
+                        en: 'Task: Individual Assignment on Chapter 4.',
+                        ar: 'واجب فردي على الفصل الرابع.'
+                    }
                 },
-                'L6-2': { 
-                    title: {en: 'Makeup Q9', ar: 'إعادة Q9'}, 
+                '8-2': {
+                    title: {en: 'Ch 7: Student’s Dilemma', ar: 'الفصل 7: معضلة الطالب'},
                     desc: {
-                        en: 'Makeup Quiz 9.',
-                        ar: 'إعادة كويز 9.'
-                    } 
+                        en: 'Due: Course Portfolio first assessment. Resubmit Chapter 1 Assignment.',
+                        ar: 'التقييم الأول لملف الإنجاز. إعادة تسليم واجب الفصل الأول.'
+                    }
                 },
-                'L6-3': { 
-                    title: {en: 'Submit L4-e | Makeup Q10', ar: 'تسليم L4-e | إعادة Q10'}, 
+                '9-1': {
+                    title: {en: 'Team In Class Assign', ar: 'واجب فريق في الفصل'},
                     desc: {
-                        en: 'Final Submission: L-3-final (Celebration) + DNB. Makeup Quiz 10.',
-                        ar: 'تسليم نهائي للمشروع L-3-final (Celebration) وملفات الدفتر. إعادة كويز 10.'
-                    } 
+                        en: 'Exploring expectations of Course Project – Part I.',
+                        ar: 'استكشاف توقعات مشروع المقرر - الجزء الأول.'
+                    }
+                },
+                '9-2': {
+                    title: {en: 'Ch 7: Optimization', ar: 'الفصل 7: الأمثلة'},
+                    desc: {
+                        en: 'Due: Course Portfolio second assessment using Checklist-2.',
+                        ar: 'التقييم الثاني لملف الإنجاز باستخدام القائمة-2.'
+                    }
+                },
+                '10-1': {
+                    title: {en: 'Ch 7 Individual Assign', ar: 'واجب فردي فصل 7'},
+                    desc: {
+                        en: 'In-Class Assignment. Resubmit Chapter 4 assignment.',
+                        ar: 'واجب داخل الفصل. إعادة تسليم واجب الفصل 4.'
+                    }
+                },
+                '10-2': {
+                    title: {en: 'Course Project Part I', ar: 'مشروع المقرر الجزء 1'},
+                    desc: {
+                        en: 'Due: Report out on expectations of Course Project - Part I.',
+                        ar: 'تقرير عن توقعات مشروع المقرر - الجزء الأول.'
+                    }
+                },
+                '11-1': {
+                    title: {en: 'Individual In Class', ar: 'واجب فردي في الفصل'},
+                    desc: {
+                        en: 'Finalize problem definition of course project.',
+                        ar: 'إنهاء تعريف المشكلة لمشروع المقرر.'
+                    }
+                },
+                '11-2': {
+                    title: {en: 'Course Project Part II', ar: 'مشروع المقرر الجزء 2'},
+                    desc: {
+                        en: 'Due: Report out on Course Project (Part II). Interim Assessment.',
+                        ar: 'تقرير عن مشروع المقرر (الجزء الثاني). تقييم مرحلي.'
+                    }
+                },
+                '12-1': {
+                    title: {en: 'Defect Removal', ar: 'إزالة العيوب'},
+                    desc: {
+                        en: 'Defect Removal in Class Assignment. Complete working in Course Project Report.',
+                        ar: 'واجب إزالة العيوب في الفصل. إكمال العمل على تقرير المشروع.'
+                    }
+                },
+                '12-2': {
+                    title: {en: 'Prep for Final', ar: 'التحضير للنهائي'},
+                    desc: {
+                        en: 'Prepare final presentation + Course Portfolio.',
+                        ar: 'تحضير العرض النهائي وملف الإنجاز.'
+                    }
+                },
+                '13-1': {
+                    title: {en: 'Final Submission', ar: 'التسليم النهائي'},
+                    desc: {
+                        en: 'Due: Course Project Report, Presentation, and Portfolio Final Submission.',
+                        ar: 'تسليم تقرير المشروع، العرض التقديمي، وملف الإنجاز النهائي.'
+                    }
+                },
+                '13-2': {
+                    title: {en: 'Presentations', ar: 'العروض التقديمية'},
+                    desc: {
+                        en: 'Course Project Presentation (Celebration).',
+                        ar: 'عروض مشروع المقرر (الاحتفال).'
+                    }
                 }
             };
 
@@ -772,40 +604,16 @@
             const [expandedBlocks, setExpandedBlocks] = useState({});
 
             const sessions = useMemo(() => {
-                let list = [], curr = new Date(startDate), type='concept', count=0, cycles={concept:1, lab:1};
-                let safety=0, sessionIndex = 0;
-                while(cycles.concept <= 10 && safety < 150) {
-                    let d = curr.getDay();
-                    if(d===0 || d===2 || d===4) {
-                        let dateStr = curr.toISOString().split('T')[0];
-                        let isHol = holidays.find(h => dateStr >= h.start && dateStr <= h.end);
-                        if(isHol) {
-                            list.push({type:'holiday', date:new Date(curr), id:'OFF', topic:isHol.name});
-                        } else {
-                            if (cycles[type] > 6) break;
-
-                            let pre = type==='concept'?'C':'L';
-                            let id = `${pre}${cycles[type]}-${count+1}`;
-                            let isStart = (count===0);
-                            
-                            let details = sessionDetails[id] || {};
-                            
-                            list.push({
-                                type, date:new Date(curr), id, 
-                                topic: '',
-                                due: details.title, 
-                                fullDesc: details.desc,
-                                isBlockStart: isStart,
-                                index: sessionIndex 
-                            });
-                            sessionIndex++;
-                            count++;
-                            if(count>=3) { cycles[type]++; count=0; type = type==='concept'?'lab':'concept'; }
-                        }
-                    }
-                    curr.setDate(curr.getDate()+1); safety++;
-                }
-                return list;
+                const baseSessions = generateAllSessions();
+                return baseSessions.map((s, index) => {
+                    const details = sessionDetails[s.id] || {};
+                    return {
+                        ...s,
+                        due: details.title,
+                        fullDesc: details.desc,
+                        index
+                    };
+                });
             }, []);
 
             const getDayName = (d) => d.toLocaleDateString('en-US', {weekday:'short'});
@@ -828,27 +636,21 @@
                 setTransMode(false);
                 setSelectedSession({...s, roles: getRoles(s.index)});
             };
-
-            const getFileUrl = (id) => {
-                if (!id) return null;
-                const prefix = id.split('-')[0];
-                return fileResources[prefix] || null;
-            };
             
             const handleCloseModal = () => setSelectedSession(null);
-
-            const toggleBlock = (prefix) => {
-                setExpandedBlocks(prev => ({...prev, [prefix]: !prev[prefix]}));
-            };
+            const toggleBlock = (prefix) => setExpandedBlocks(prev => ({...prev, [prefix]: !prev[prefix]}));
 
             const today = new Date();
             today.setHours(0,0,0,0);
 
+            // Group by Week
             const groups = useMemo(() => {
                 let g = {};
                 let order = [];
                 sessions.forEach(s => {
-                    let prefix = s.type === 'holiday' ? `HOL-${s.date.getTime()}` : s.id.split('-')[0];
+                    let prefix = `Week ${s.week}`;
+                    if(s.type === 'holiday') prefix = "Vacation";
+                    
                     if(!g[prefix]) {
                         g[prefix] = [];
                         order.push(prefix);
@@ -862,7 +664,7 @@
                 <div className="timeline-container">
                     {groups.keys.map((prefix, groupIndex) => {
                         const blockSessions = groups.data[prefix];
-                        const isHoliday = prefix.startsWith('HOL');
+                        const isHoliday = prefix === "Vacation";
                         
                         if (isHoliday) {
                             const s = blockSessions[0];
@@ -875,7 +677,7 @@
                                     </div>
                                     <div className="card-content">
                                         <div className="session-header">
-                                            <div className="session-id"><Icons.Holiday/> <span style={{margin:'0 8px'}}>OFF</span></div>
+                                            <div className="session-id"><Icons.Holiday/> <span style={{margin:'0 8px'}}>Vacation</span></div>
                                         </div>
                                         <div className="session-topic">{s.topic}</div>
                                     </div>
@@ -890,16 +692,17 @@
 
                         const isExpanded = expandedBlocks[prefix];
 
+                        // Archived weeks Logic
                         if (isAllPast && !isExpanded) {
                             return (
                                 <React.Fragment key={prefix}>
-                                    {groupIndex > 0 && <div className="block-divider"></div>}
+                                    <div className="block-divider"></div>
                                     <div className="completed-block-card" onClick={() => toggleBlock(prefix)}>
                                         <div className="block-info">
-                                            <Icons.Folder /> <span>تم الانتهاء من {prefix}</span>
+                                            <Icons.Check /> <span>Done: {prefix}</span>
                                         </div>
                                         <div className="block-status">
-                                            عرض التفاصيل <Icons.ChevronDown/>
+                                            Show <Icons.ChevronDown/>
                                         </div>
                                     </div>
                                 </React.Fragment>
@@ -913,13 +716,15 @@
                                 {isAllPast && isExpanded && (
                                     <div className="completed-block-card" onClick={() => toggleBlock(prefix)} style={{marginBottom:'15px', background:'rgba(255,255,255,0.08)'}}>
                                         <div className="block-info" style={{color:'#fff'}}>
-                                            <Icons.Folder /> <span>أرشيف {prefix}</span>
+                                            <Icons.Check /> <span>Archive: {prefix}</span>
                                         </div>
                                         <div className="block-status" style={{color:'#fff'}}>
-                                            إخفاء <Icons.ChevronUp/>
+                                            Hide <Icons.ChevronUp/>
                                         </div>
                                     </div>
                                 )}
+
+                                <div style={{marginBottom:'10px', color:'var(--color-lab)', fontWeight:'bold', fontSize:'0.9rem'}}>{prefix}</div>
 
                                 {blockSessions.map((s, i) => {
                                     const sDate = new Date(s.date); sDate.setHours(0,0,0,0);
@@ -935,7 +740,7 @@
                                             style={{animationDelay: `${i * 0.05}s`}}
                                             onClick={() => openDetails(s)} 
                                         >
-                                            {isPast && <div className="past-badge"><Icons.Check/> منتهية</div>}
+                                            {isPast && <div className="past-badge"><Icons.Check/> Done</div>}
                                             <div className="date-box">
                                                 <span className="date-day-name">{getDayName(s.date)}</span>
                                                 <span className="date-day-num">{s.date.getDate()}</span>
@@ -944,8 +749,8 @@
                                             <div className="card-content">
                                                 <div className="session-header">
                                                     <div className="session-id">
-                                                        {s.type==='concept' && <Icons.Concept />}
-                                                        {s.type==='lab' && <Icons.Lab />}
+                                                        {s.type==='class1' && <Icons.Concept />}
+                                                        {s.type==='class2' && <Icons.Lab />}
                                                         <span style={{margin:'0 8px'}}>{s.id}</span>
                                                     </div>
                                                 </div>
@@ -954,16 +759,6 @@
                                         </div>
                                     );
                                 })}
-
-                                {getFileUrl(blockSessions[0].id) && (
-                                    <a 
-                                        href={getFileUrl(blockSessions[0].id)} 
-                                        target="_blank" 
-                                        className={`external-file-btn ${blockSessions[0].type}`}
-                                    >
-                                        <Icons.Folder /> <span>فتح ملفات {prefix}</span>
-                                    </a>
-                                )}
                             </React.Fragment>
                         );
                     })}
@@ -972,10 +767,10 @@
                         <div className="modal-overlay" onClick={handleCloseModal}>
                             <div className="modal-content" onClick={e => e.stopPropagation()}>
                                 <button className="modal-close" onClick={handleCloseModal}>×</button>
-                                <h2 className="modal-title">{selectedSession.id} - تفاصيل الجلسة</h2>
+                                <h2 className="modal-title">{selectedSession.id} Details</h2>
                                 
                                 <div style={{marginBottom:'20px'}}>
-                                    <h3 style={{fontSize:'0.9rem', color:'#888', marginBottom:'10px'}}>أدوار الفريق لهذه الجلسة:</h3>
+                                    <h3 style={{fontSize:'0.9rem', color:'#888', marginBottom:'10px'}}>Team Roles:</h3>
                                     <div className="role-row">
                                         <span className="role-label"><Icons.Star/> Leader</span>
                                         <span className="role-value">{selectedSession.roles.Leader}</span>
@@ -997,7 +792,7 @@
                                         <div className="desc-header">
                                             <div className="desc-title">
                                                 <Icons.Info/>
-                                                {transMode ? "تفاصيل المهمة / الكويز" : "Task / Quiz Details"}
+                                                {transMode ? "تفاصيل الجلسة" : "Session Tasks"}
                                             </div>
                                             <div className={`lang-switch ${transMode ? 'active' : ''}`} onClick={() => setTransMode(!transMode)}>
                                                 <div className="lang-active-bg"></div>
@@ -1030,41 +825,112 @@
 
         const GradeView = () => {
             const [state, setState] = useState(() => {
-                const saved = localStorage.getItem('ge211_data');
+                const saved = localStorage.getItem('ge213_data');
                 return saved ? JSON.parse(saved) : {
-                    cE: 0, cNI: 0, cNCE: 0, cLapses: 0,
-                    lE: 0, lNI: 0, lNCE: 0, lLapses: 0,
-                    missed: false
+                    ns_nce: 0, 
+                    ni: 0, 
+                    lapses: 0,
+                    exceeds: 0,
+                    plagiarism: 0,
+                    cheating: false
                 };
             });
 
-            useEffect(() => { localStorage.setItem('ge211_data', JSON.stringify(state)); }, [state]);
+            useEffect(() => { localStorage.setItem('ge213_data', JSON.stringify(state)); }, [state]);
             const update = (key, val) => setState(prev => ({...prev, [key]: val}));
 
+            // Logic based on GE 213 Table 1 and Table 2
             const calc = () => {
-                const getD = (nce, ni, lapses) => {
-                    let d = 0;
-                    if(nce===1) d+=2; else if(nce>=2) d+=3;
-                    if(ni===2) d+=1; else if(ni>2 && ni<=5) d+=2; else if(ni>5) d+=3;
-                    let lapseDefects = 0;
-                    if(lapses >= 4 && lapses <= 5) lapseDefects = 1;
-                    else if(lapses > 5 && lapses <= 7) lapseDefects = 2;
-                    else if(lapses > 7) lapseDefects = 3;
-                    return { total: d + lapseDefects, lapseDefects };
-                };
-                const getG = (ex, def, isL) => {
-                    if(def>=5) return 'F';
-                    if(def===0) return ex >= (isL?5:4) ? 'A' : 'B';
-                    if(def===1) return 'C'; if(def===2) return 'D'; return 'F';
-                };
-                let cStats = getD(state.cNCE, state.cNI, state.cLapses);
-                let lStats = getD(state.lNCE, state.lNI, state.lLapses);
-                let cg = getG(state.cE, cStats.total, false);
-                let lg = getG(state.lE, lStats.total, true);
-                if(state.missed || cStats.total>=5 || lStats.total>=5) return { grade: 'F', cd: cStats.total, ld: lStats.total };
-                const map = {'AA':'A+','AB':'A','AC':'B+','AD':'B','AF':'C+','BB':'B+','BC':'B','BD':'C+','BF':'C','CC':'C+','CD':'C','CF':'D+','DD':'D+','DF':'D','FF':'F'};
-                let key = [cg, lg].sort().join('');
-                return { grade: map[key] || 'F', cd: cStats.total, ld: lStats.total };
+                // Table 1: Cognitive Problems
+                let cognitiveDefects = 0;
+                // 1. NS/NCE
+                if(state.ns_nce === 1) cognitiveDefects += 1;
+                else if(state.ns_nce === 2) cognitiveDefects += 2;
+                else if(state.ns_nce === 3) cognitiveDefects += 3;
+                else if(state.ns_nce >= 4) cognitiveDefects += 5; // Automatic F probably
+
+                // 2. NI
+                if(state.ni === 1) cognitiveDefects += 0.5;
+                else if(state.ni === 2) cognitiveDefects += 1;
+                else if(state.ni === 3) cognitiveDefects += 1.5;
+                else if(state.ni === 4) cognitiveDefects += 2;
+                else if(state.ni === 5) cognitiveDefects += 3;
+                else if(state.ni >= 6) cognitiveDefects += 5;
+
+                // 3. Plagiarism (Simplification: using defect mapping directly)
+                if(state.plagiarism >= 1) cognitiveDefects += state.plagiarism; // Assuming input is defects directly for now or mapped
+
+                // Table 1 Part II: Affective (Lapses)
+                let affectiveDefects = 0;
+                let L = state.lapses;
+                if(L <= 2.5) affectiveDefects = 0;
+                else if(L <= 4) affectiveDefects = 0.5;
+                else if(L <= 5.5) affectiveDefects = 1;
+                else if(L <= 7) affectiveDefects = 2;
+                else if(L <= 8) affectiveDefects = 3;
+                else if(L <= 9.5) affectiveDefects = 4;
+                else affectiveDefects = 5;
+
+                const totalDefects = cognitiveDefects + affectiveDefects;
+
+                // Table 2: Grades
+                // Fail Conditions
+                if(state.cheating) return { grade: 'FX', defects: totalDefects };
+                if(totalDefects > 3) return { grade: 'F', defects: totalDefects };
+
+                let grade = 'F';
+                let E = state.exceeds;
+                let D = totalDefects;
+
+                // Row 0 Defects
+                if(D === 0) {
+                    if(E >= 3) grade = 'A+';
+                    else if(E === 2) grade = 'A';
+                    else if(E === 1) grade = 'B+';
+                    else grade = 'B';
+                }
+                // Row 0.5 Defects
+                else if(D === 0.5) {
+                    if(E >= 3) grade = 'A';
+                    else if(E === 2) grade = 'B+';
+                    else if(E === 1) grade = 'B';
+                    else grade = 'C+';
+                }
+                // Row 1 Defect
+                else if(D === 1) {
+                    if(E >= 3) grade = 'B+';
+                    else if(E === 2) grade = 'B';
+                    else if(E === 1) grade = 'C+';
+                    else grade = 'C';
+                }
+                // Row 1.5 Defects
+                else if(D === 1.5) {
+                    if(E >= 3) grade = 'B';
+                    else if(E === 2) grade = 'C+';
+                    else if(E === 1) grade = 'C';
+                    else grade = 'D+';
+                }
+                // Row 2 Defects
+                else if(D === 2) {
+                    if(E >= 3) grade = 'C+';
+                    else if(E === 2) grade = 'C';
+                    else if(E === 1) grade = 'D+';
+                    else grade = 'D';
+                }
+                 // Row 2.5 Defects
+                 else if(D === 2.5) {
+                    if(E >= 3) grade = 'C';
+                    else if(E === 2) grade = 'D+';
+                    else grade = 'D';
+                }
+                // Row 3 Defects
+                else if(D === 3) {
+                    if(E >= 3) grade = 'D+';
+                    else if(E === 2) grade = 'D';
+                    else grade = 'F';
+                }
+
+                return { grade, defects: totalDefects };
             };
 
             const result = calc();
@@ -1075,36 +941,35 @@
                     <div className="calc-grid">
                         <div className="calc-section">
                             <h3 className="calc-section-title" style={{color:'var(--color-concept)'}}>
-                                <Icons.Concept/> Concepts
+                                <Icons.Concept/> Cognitive (Part I)
                             </h3>
-                            <Counter label="Exceeds (E)" val={state.cE} onChange={v => update('cE', v)} />
-                            <Counter label="Needs Imp. (NI)" val={state.cNI} onChange={v => update('cNI', v)} />
-                            <Counter label="No Credit (NCE)" val={state.cNCE} onChange={v => update('cNCE', v)} />
-                            <Counter label="Lapses (زلات)" val={state.cLapses} onChange={v => update('cLapses', v)} />
+                            <Counter label="Exceeds (E)" val={state.exceeds} onChange={v => update('exceeds', v)} />
+                            <Counter label="Needs Imp. (NI)" val={state.ni} onChange={v => update('ni', v)} />
+                            <Counter label="No Credit/Submit" val={state.ns_nce} onChange={v => update('ns_nce', v)} />
                         </div>
                         <div className="calc-section">
                             <h3 className="calc-section-title" style={{color:'var(--color-lab)'}}>
-                                <Icons.Lab/> Lab
+                                <Icons.Lab/> Affective (Part II)
                             </h3>
-                            <Counter label="Exceeds (E)" val={state.lE} onChange={v => update('lE', v)} />
-                            <Counter label="Needs Imp. (NI)" val={state.lNI} onChange={v => update('lNI', v)} />
-                            <Counter label="No Credit (NCE)" val={state.lNCE} onChange={v => update('lNCE', v)} />
-                            <Counter label="Lapses (زلات)" val={state.lLapses} onChange={v => update('lLapses', v)} />
+                            <Counter label="Lapses (زلات)" val={state.lapses} onChange={v => update('lapses', v)} />
+                            <div style={{fontSize:'0.8rem', color:'#666', marginTop:'10px'}}>
+                                * >4 lapses results in defects.
+                            </div>
                         </div>
                     </div>
                     
-                    <div className={`missed-btn ${state.missed ? 'active' : ''}`} onClick={() => update('missed', !state.missed)}>
+                    <div className={`missed-btn ${state.cheating ? 'active' : ''}`} onClick={() => update('cheating', !state.cheating)}>
                         <div className="missed-info">
-                            <span className="missed-title">{state.missed ? "فاتني الاختبار (رسوب)" : "حضور الاختبار النهائي"}</span>
-                            <span className="missed-sub">{state.missed ? "احذر! سيؤدي هذا إلى الرسوب الفوري." : "اضغط للتبديل في حال عدم الحضور."}</span>
+                            <span className="missed-title">{state.cheating ? "Cheating/Integrity Violation (FX)" : "Academic Integrity Status"}</span>
+                            <span className="missed-sub">{state.cheating ? "Violation Recorded." : "Click if violation occurs."}</span>
                         </div>
                     </div>
 
                     <div className="grade-result">
-                        <div style={{color:'#888', marginBottom:'5px'}}>الدرجة المتوقعة</div>
+                        <div style={{color:'#888', marginBottom:'5px'}}>Expected Grade</div>
                         <div className={`grade-big ${gClass}`}>{result.grade}</div>
-                        <div className="defects-text">العيوب: Concepts ({result.cd}) | Lab ({result.ld})</div>
-                        <button className="reset-btn" onClick={() => confirm('هل أنت متأكد؟') && setState({cE:0, cNI:0, cNCE:0, cLapses:0, lE:0, lNI:0, lNCE:0, lLapses:0, missed:false})}>تصفير البيانات</button>
+                        <div className="defects-text">Total Defects: {result.defects}</div>
+                        <button className="reset-btn" onClick={() => confirm('Reset?') && setState({ns_nce:0, ni:0, lapses:0, exceeds:0, plagiarism:0, cheating:false})}>Reset Data</button>
                     </div>
                 </div>
             );
@@ -1119,7 +984,7 @@
                 <div className="modal-overlay" onClick={onClose}>
                     <div className="modal-content" onClick={e => e.stopPropagation()}>
                         <button className="modal-close" onClick={onClose}>×</button>
-                        <h2 className="modal-title">إعدادات الفريق</h2>
+                        <h2 className="modal-title">Team Settings</h2>
                         
                         <button 
                             className={`timer-toggle-btn ${settings.timer ? 'active' : ''}`}
@@ -1127,10 +992,10 @@
                         >
                             <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
                                 <Icons.Clock />
-                                <span>دور المؤقت (Timer)</span>
+                                <span>Include Timer Role</span>
                             </div>
                             <span className="timer-status-text">
-                                {settings.timer ? 'مفعل' : 'غير مفعل'}
+                                {settings.timer ? 'On' : 'Off'}
                             </span>
                         </button>
 
@@ -1143,14 +1008,14 @@
                                         className="team-input-clean" 
                                         value={m} 
                                         onChange={(e) => handleChange(i, e.target.value)} 
-                                        placeholder={`اسم العضو ${i+1}`} 
+                                        placeholder={`Member ${i+1}`} 
                                     />
                                 </div>
                             ))}
                         </div>
 
                         <button className="save-btn-new" onClick={onClose}>
-                            <Icons.Check/> حفظ الإعدادات
+                            <Icons.Check/> Save
                         </button>
                     </div>
                 </div>
@@ -1160,11 +1025,11 @@
 		function App() {
             const [tab, setTab] = useState('schedule');
             const [showTeamModal, setShowTeamModal] = useState(false);
-            const [teamMembers, setTeamMembers] = useState(() => JSON.parse(localStorage.getItem('ge211_team')) || ["عضو 1", "عضو 2", "عضو 3", "عضو 4", "عضو 5"]);
-            const [settings, setSettings] = useState(() => JSON.parse(localStorage.getItem('ge211_settings')) || { timer: true });
+            const [teamMembers, setTeamMembers] = useState(() => JSON.parse(localStorage.getItem('ge213_team')) || ["Member 1", "Member 2", "Member 3", "Member 4", "Member 5"]);
+            const [settings, setSettings] = useState(() => JSON.parse(localStorage.getItem('ge213_settings')) || { timer: true });
 
-            useEffect(() => { localStorage.setItem('ge211_team', JSON.stringify(teamMembers)); }, [teamMembers]);
-            useEffect(() => { localStorage.setItem('ge211_settings', JSON.stringify(settings)); }, [settings]);
+            useEffect(() => { localStorage.setItem('ge213_team', JSON.stringify(teamMembers)); }, [teamMembers]);
+            useEffect(() => { localStorage.setItem('ge213_settings', JSON.stringify(settings)); }, [settings]);
 
 			return (
 				<div className="app">
@@ -1174,18 +1039,18 @@
                                 <Icons.Users />
                             </button>
                             
-                            <a href="https://t.me/MUTLAQ1" target="_blank" className="author-link">
-                                إعداد: مطلق
+                            <a href="#" className="author-link">
+                                GE 213 (Spring 2026)
                             </a>
 
-							<h1 className="title">GE 211</h1>
-							<p className="subtitle">Introduction to Engineering Design</p>
+							<h1 className="title">GE 213</h1>
+							<p className="subtitle">Introduction to Engineering Design-2</p>
 						</header>
 
                         <div className="nav-tabs">
-                            <button className={`tab-btn ${tab==='schedule'?'active':''}`} onClick={()=>setTab('schedule')}>الجدول</button>
-                            <button className={`tab-btn ${tab==='resources'?'active':''}`} onClick={()=>setTab('resources')}>المحتوى</button>
-                            <button className={`tab-btn ${tab==='grades'?'active':''}`} onClick={()=>setTab('grades')}>الحاسبة</button>
+                            <button className={`tab-btn ${tab==='schedule'?'active':''}`} onClick={()=>setTab('schedule')}>Calendar</button>
+                            <button className={`tab-btn ${tab==='resources'?'active':''}`} onClick={()=>setTab('resources')}>Resources</button>
+                            <button className={`tab-btn ${tab==='grades'?'active':''}`} onClick={()=>setTab('grades')}>Calculator</button>
                         </div>
 
                         {tab === 'schedule' && <ScheduleView openTeamSettings={() => setShowTeamModal(true)} teamMembers={teamMembers} settings={settings} />}
