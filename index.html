@@ -1,1075 +1,442 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-	<meta name="theme-color" content="#0a0a0a">
-	<title>GE 213 - 472</title>
-	
-	<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
-	<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
-	<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-	<style>
-		@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap");
-		@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap");
-
-		:root{
-            --bg-dark: #050505;
-            --color-concept: #ffd700; /* Yellow/Gold for Class 1 */
-            --color-lab: #00f2ff;     /* Cyan for Class 2 */
-            --color-record: #ff3e4d;
-            --color-holiday: #ff4757;
-            --color-success: #00e676;
-            --font-body: "Cairo", sans-serif;
-            --font-nums: "Outfit", sans-serif;
-            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-		
-        * {margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color: transparent;}
-		html{scroll-behavior:smooth;scrollbar-width:none;}
-		::-webkit-scrollbar {display: none;}
-        
-        @keyframes fadeIn { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
-        
-        @keyframes pulse-gold { 
-            0% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.4);} 
-            70% {box-shadow: 0 0 0 10px rgba(255, 215, 0, 0);} 
-            100% {box-shadow: 0 0 0 0 rgba(255, 215, 0, 0);} 
-        }
-
-        @keyframes pulse-cyan-calm { 
-            0% {box-shadow: 0 0 0 0 rgba(0, 242, 255, 0.4); border-color: rgba(0, 242, 255, 0.5);} 
-            70% {box-shadow: 0 0 0 10px rgba(0, 242, 255, 0); border-color: rgba(0, 242, 255, 0.3);} 
-            100% {box-shadow: 0 0 0 0 rgba(0, 242, 255, 0); border-color: rgba(0, 242, 255, 0.5);} 
-        }
-
-		body{
-            font-family:var(--font-body);
-            background-color:var(--bg-dark);
-            color:#fff;
-            direction:rtl;
-            overflow-x:hidden;
-        }
-		
-        .cosmic-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background: radial-gradient(circle at 50% 10%, #1a1a2e 0%, #000 100%);}
-        .stars {position:absolute;width:100%;height:100%;background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px; opacity: 0.1;}
-		
-        .app{min-height:100vh;position:relative;padding:20px 15px;}
-		.container{width:100%;max-width:700px;margin:0 auto;}
-		
-        .header{text-align:center; margin-bottom: 30px; animation: fadeIn 0.8s ease; position: relative;}
-		.title{
-            font-family: var(--font-nums);
-            font-weight:700; font-size:3rem; margin:0;
-            background: linear-gradient(to right, #fff, #aaa);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -1px;
-        }
-		.subtitle{color:#888; font-size:1rem; margin-top: -5px;}
-
-        .team-settings-btn {
-            position: absolute; top: 10px; left: 0;
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: #fff; border-radius: 50%; width: 40px; height: 40px;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: var(--transition);
-            z-index: 10;
-        }
-        .team-settings-btn:hover { background: rgba(255,255,255,0.2); transform: scale(1.1); }
-
-        .author-link {
-            position: absolute; top: 10px; right: 0;
-            text-decoration: none;
-            color: #888; 
-            font-size: 0.8rem; font-weight: 700;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            padding: 8px 15px;
-            border-radius: 20px;
-            transition: var(--transition);
-            display: flex; align-items: center; gap: 5px;
-            z-index: 10;
-        }
-        .author-link:hover {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            border-color: rgba(255,255,255,0.3);
-            transform: translateY(-2px);
-        }
-
-        .nav-tabs { 
-            background: rgba(255,255,255,0.05); 
-            padding: 5px; border-radius: 15px; 
-            display: flex; justify-content: space-between;
-            margin-bottom: 25px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        .tab-btn {
-            flex: 1; text-align: center; padding: 12px;
-            background: transparent; border: none; color: #888;
-            font-family: var(--font-body); font-weight: 700; cursor: pointer;
-            border-radius: 12px; transition: var(--transition);
-        }
-        .tab-btn.active { 
-            background: rgba(255,255,255,0.1); color: #fff; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .content-area { animation: fadeIn 0.4s ease-out; }
-        
-        .pro-resource-card {
-            display: flex; flex-direction: column; padding: 20px; margin-bottom: 15px;
-            background: linear-gradient(145deg, rgba(30,30,35,0.6), rgba(20,20,25,0.8));
-            border: 1px solid rgba(255,255,255,0.06); border-radius: 16px; transition: var(--transition);
-            backdrop-filter: blur(10px); position: relative; overflow: hidden;
-        }
-        .pro-resource-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0,0,0,0.3); border-color: rgba(255,255,255,0.15); }
-
-        .pro-resource-card.pinned-file {
-            background: linear-gradient(145deg, rgba(40, 40, 30, 0.8), rgba(20, 20, 25, 0.9));
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            animation: pulse-gold 3s infinite;
-        }
-        .pro-resource-card.pinned-file .resource-icon-box {
-            color: var(--color-concept);
-            background: rgba(255, 215, 0, 0.1);
-            border-color: rgba(255, 215, 0, 0.2);
-        }
-
-        .resource-header { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; }
-        .resource-icon-box { 
-            width: 45px; height: 45px; border-radius: 12px; 
-            display: flex; align-items: center; justify-content: center; font-size: 1.5rem;
-            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
-        }
-        .type-files .resource-icon-box { color: var(--color-lab); }
-        .resource-info h3 { margin: 0; font-size: 1.1rem; font-weight: 700; color: #fff; }
-        .resource-info p { margin: 3px 0 0; font-size: 0.85rem; color: #888; }
-        
-        .resource-links { display: flex; gap: 10px; flex-wrap: wrap; }
-        .res-link-btn {
-            flex: 1; text-align: center; padding: 12px; font-size: 0.9rem;
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1);
-            color: #ccc; border-radius: 10px; text-decoration: none; transition: 0.2s;
-            display: flex; align-items: center; justify-content: center; gap: 8px; min-width: 140px; cursor: pointer;
-        }
-        .res-link-btn:hover { background: rgba(255,255,255,0.1); color: #fff; transform: translateY(-2px); }
-        .res-link-btn.primary { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); }
-
-        .timeline-container { padding-bottom: 50px; }
-        .session-card {
-            display: flex; align-items: stretch;
-            margin-bottom: 10px; position: relative; overflow: hidden;
-            transition: var(--transition); backdrop-filter: blur(12px);
-            border-radius: 16px; border: 1px solid rgba(255,255,255,0.05);
-            background: rgba(30,30,35,0.6); animation: fadeIn 0.5s ease both;
-            cursor: pointer; flex-wrap: wrap;
-        }
-        
-        .session-card.current-day {
-            border: 1px solid rgba(0, 242, 255, 0.5);
-            background: linear-gradient(145deg, rgba(0, 242, 255, 0.1), rgba(20, 20, 25, 0.9));
-            animation: pulse-cyan-calm 3s infinite;
-            z-index: 5;
-        }
-        
-        .session-card.is-past {
-            opacity: 0.6; filter: grayscale(0.9); border-color: #222;
-        }
-        .session-card.is-past .session-topic { text-decoration: line-through; color: #666; }
-        .session-card.is-past:hover { opacity: 0.8; }
-
-        .past-badge {
-            position: absolute; top: 10px; left: 10px;
-            background: rgba(0,0,0,0.6); color: #aaa; font-size: 0.7rem; padding: 3px 10px;
-            border-radius: 10px; font-weight: bold; border: 1px solid #333;
-            display: flex; align-items: center; gap: 4px; z-index: 2;
-        }
-
-        .session-card.class1 { border-color: rgba(255, 215, 0, 0.4); background: linear-gradient(145deg, rgba(255, 215, 0, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
-        .session-card.class2 { border-color: rgba(0, 242, 255, 0.4); background: linear-gradient(145deg, rgba(0, 242, 255, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); }
-        .session-card.holiday { border-color: rgba(255, 71, 87, 0.4); background: linear-gradient(145deg, rgba(255, 71, 87, 0.05) 0%, rgba(20, 20, 25, 0.8) 100%); pointer-events: none; }
-
-        .session-card:hover { transform: translateY(-3px) scale(1.01); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
-        
-        .date-box {
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            padding: 15px; min-width: 85px; background: rgba(0,0,0,0.2);
-            border-left: 1px solid rgba(255,255,255,0.05);
-        }
-        .date-day-name { font-size: 0.8rem; color: #aaa; margin-bottom: 2px; }
-        .date-day-num { font-family: var(--font-nums); font-size: 1.8rem; font-weight: 700; color: #fff; line-height: 1; }
-        .date-month { font-family: var(--font-nums); font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 1px; }
-
-        .card-content { flex: 1; padding: 15px; display: flex; flex-direction: column; justify-content: center; position: relative; }
-        .session-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-        .session-id { font-family: var(--font-nums); font-size: 1.3rem; font-weight: 700; display: flex; align-items: center; gap: 8px; letter-spacing: 0.5px; }
-        .session-card.class1 .session-id { color: var(--color-concept); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
-        .session-card.class2 .session-id { color: var(--color-lab); text-shadow: 0 0 10px rgba(0, 242, 255, 0.3); }
-        
-        .session-topic { font-size: 1rem; color: #eee; font-weight: 500; line-height: 1.4; transition: var(--transition); direction: ltr; text-align: right; }
-        
-        .due-tag {
-            align-self: flex-start; margin-top: 10px; font-size: 0.8rem; padding: 5px 12px;
-            border-radius: 20px; background: rgba(255, 71, 87, 0.15); color: #ff6b81; border: 1px solid rgba(255, 71, 87, 0.3);
-            display: flex; align-items: center; gap: 6px; font-weight: 600; width: fit-content; direction: ltr;
-        }
-
-        .block-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent); margin: 25px 0; width: 70%; margin-left: auto; margin-right: auto; }
-        .completed-block-card { display: flex; align-items: center; justify-content: space-between; background: rgba(255, 255, 255, 0.03); border: 1px dashed rgba(255, 255, 255, 0.2); padding: 15px 20px; border-radius: 16px; cursor: pointer; margin-bottom: 25px; transition: all 0.3s ease; }
-        .completed-block-card:hover { background: rgba(255, 255, 255, 0.06); border-color: rgba(255, 255, 255, 0.4); transform: translateY(-2px); }
-        .block-info { display: flex; align-items: center; gap: 12px; font-weight: 700; color: #aaa; }
-        .block-status { font-size: 0.8rem; color: #666; display: flex; align-items: center; gap: 5px; }
-
-        .calc-container { padding: 5px; }
-        .calc-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        @media (min-width: 600px) { .calc-grid { grid-template-columns: 1fr 1fr; } }
-        .calc-section-title { margin-bottom: 10px; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
-        .calc-section { background: rgba(255,255,255,0.02); padding: 15px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
-        .input-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
-        .input-row label { font-size: 0.9rem; color: #ccc; flex: 1; margin-left: 10px; line-height: 1.3; }
-        .counter-control { display: flex; align-items: center; gap: 5px; background: #000; padding: 4px; border-radius: 10px; border: 1px solid #333; flex-shrink: 0; }
-        .counter-btn { width: 32px; height: 32px; border: none; background: #222; color: #fff; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-        .counter-btn:active { background: #444; }
-        .counter-val { width: 30px; text-align: center; font-family: var(--font-nums); font-size: 1.1rem; }
-
-        .grade-result { text-align: center; padding: 30px; margin-top: 20px; background: radial-gradient(circle, rgba(94, 156, 255, 0.1) 0%, transparent 70%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; }
-        .grade-big { font-size: 4rem; font-family: var(--font-nums); font-weight: 800; text-shadow: 0 0 30px currentColor; }
-        .grade-A { color: #00c853; } .grade-B { color: #2979ff; } .grade-C { color: #ffd600; } .grade-D { color: #ff6d00; } .grade-F { color: #ff1744; }
-        .defects-text { font-size: 0.9rem; color: #888; margin-top: 5px; }
-        .reset-btn { background: transparent; border: 1px solid rgba(255,71,87,0.3); color: #ff6b81; padding: 8px 15px; border-radius: 8px; margin-top: 15px; cursor: pointer; font-size: 0.8rem; }
-
-        .missed-btn { width: 100%; display: flex; justify-content: center; align-items: center; padding: 18px; margin-top: 25px; border-radius: 16px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.03); transition: all 0.3s; text-align: center; }
-        .missed-btn:active { transform: scale(0.98); }
-        .missed-btn.active { background: rgba(255, 71, 87, 0.15); border-color: #ff4757; box-shadow: 0 0 20px rgba(255, 71, 87, 0.2); animation: pulse-border 2s infinite; }
-        .missed-info { display: flex; flex-direction: column; align-items: center; }
-        .missed-title { font-weight: 700; font-size: 1rem; color: #ccc; transition: 0.3s; }
-        .missed-sub { font-size: 0.8rem; color: #666; margin-top: 3px; }
-        .missed-btn.active .missed-title { color: #ff4757; }
-
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); z-index: 1000; display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #121215; width: 100%; max-width: 400px; border-radius: 24px; border: 1px solid rgba(255,255,255,0.1); padding: 30px; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.6); animation: fadeIn 0.3s ease; }
-        .modal-title { text-align: center; font-size: 1.3rem; margin-bottom: 25px; font-weight: 800; color: #fff; }
-        .modal-close { position: absolute; top: 15px; left: 15px; background: none; border: none; color: #888; font-size: 1.5rem; cursor: pointer; }
-        
-        .role-row { display: flex; align-items: center; justify-content: space-between; padding: 12px; background: rgba(255,255,255,0.03); border-radius: 10px; margin-bottom: 8px; }
-        .role-label { font-weight: 700; color: var(--color-lab); display: flex; align-items: center; gap: 8px; }
-        .role-value { font-family: var(--font-body); color: #fff; }
-
-        .desc-box { background: linear-gradient(145deg, #1e1e24, #121215); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 24px; margin-top: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
-        .desc-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 12px; }
-        .desc-title { color: #fff; font-weight: 700; display: flex; align-items: center; gap: 8px; font-size: 1rem; }
-        .desc-content { color: #ddd; line-height: 1.6; font-size: 0.95rem; font-family: 'Outfit', sans-serif; direction: ltr; text-align: left; }
-        .desc-content.rtl { direction: rtl; text-align: right; font-family: var(--font-body); }
-        
-        .timer-toggle-btn { width: 100%; padding: 15px; margin-bottom: 25px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; color: #fff; font-family: var(--font-body); font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; }
-        .timer-toggle-btn.active { background: rgba(0, 230, 118, 0.15); border-color: #00e676; color: #00e676; box-shadow: 0 0 15px rgba(0, 230, 118, 0.2); }
-        .timer-toggle-btn:hover { transform: translateY(-2px); }
-        .timer-status-text { font-size: 0.9rem; }
-
-        .team-member-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; background: rgba(255,255,255,0.03); padding: 8px 15px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); transition: 0.3s; }
-        .team-member-row:focus-within { border-color: var(--color-lab); background: rgba(0, 242, 255, 0.05); }
-        .member-icon { color: #666; font-size: 1.1rem; }
-        .team-input-clean { background: transparent; border: none; color: #fff; width: 100%; outline: none; font-family: var(--font-body); font-size: 0.95rem; padding: 5px 0; }
-        .team-input-clean::placeholder { color: #444; }
-        
-        .save-btn-new { width: 100%; padding: 16px; background: linear-gradient(90deg, var(--color-lab), #00d2ff); color: #000; font-weight: 800; font-size: 1rem; border: none; border-radius: 14px; margin-top: 20px; cursor: pointer; transition: 0.3s; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        .save-btn-new:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(0, 242, 255, 0.2); }
-
-	</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="theme-color" content="#0a0a0a">
+<title>GE 211 - 472</title>
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+@import url("https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap");
+:root{--bg-dark:#050505;--color-concept:#ffd700;--color-lab:#00f2ff;--color-record:#ff3e4d;--color-holiday:#ff4757;--color-success:#00e676;--font-body:"Cairo",sans-serif;--font-nums:"Outfit",sans-serif;--transition:0.3s cubic-bezier(0.4, 0, 0.2, 1)}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;scrollbar-width:none}
+::-webkit-scrollbar{display:none}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse-gold{0%{box-shadow:0 0 0 0 rgba(255,215,0,0.4)}70%{box-shadow:0 0 0 10px rgba(255,215,0,0)}100%{box-shadow:0 0 0 0 rgba(255,215,0,0)}}
+@keyframes pulse-cyan-calm{0%{box-shadow:0 0 0 0 rgba(0,242,255,0.4);border-color:rgba(0,242,255,0.5)}70%{box-shadow:0 0 0 10px rgba(0,242,255,0);border-color:rgba(0,242,255,0.3)}100%{box-shadow:0 0 0 0 rgba(0,242,255,0);border-color:rgba(0,242,255,0.5)}}
+body{font-family:var(--font-body);background-color:var(--bg-dark);color:#fff;direction:rtl;overflow-x:hidden}
+.cosmic-bg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;background:radial-gradient(circle at 50% 10%,#1a1a2e 0%,#000 100%)}
+.stars{position:absolute;width:100%;height:100%;background-image:radial-gradient(white 1px,transparent 1px);background-size:50px 50px;opacity:0.1}
+.app{min-height:100vh;position:relative;padding:20px 15px}
+.container{width:100%;max-width:700px;margin:0 auto}
+.header{text-align:center;margin-bottom:30px;animation:fadeIn 0.8s ease;position:relative}
+.title{font-family:var(--font-nums);font-weight:700;font-size:3rem;margin:0;background:linear-gradient(to right,#fff,#aaa);-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1px}
+.subtitle{color:#888;font-size:1rem;margin-top:-5px}
+.team-settings-btn{position:absolute;top:10px;left:0;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:var(--transition);z-index:10}
+.team-settings-btn:hover{background:rgba(255,255,255,0.2);transform:scale(1.1)}
+.author-link{position:absolute;top:10px;right:0;text-decoration:none;color:#888;font-size:0.8rem;font-weight:700;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);padding:8px 15px;border-radius:20px;transition:var(--transition);display:flex;align-items:center;gap:5px;z-index:10}
+.author-link:hover{background:rgba(255,255,255,0.15);color:#fff;border-color:rgba(255,255,255,0.3);transform:translateY(-2px)}
+.nav-tabs{background:rgba(255,255,255,0.05);padding:5px;border-radius:15px;display:flex;justify-content:space-between;margin-bottom:25px;backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,0.1)}
+.tab-btn{flex:1;text-align:center;padding:12px;background:transparent;border:none;color:#888;font-family:var(--font-body);font-weight:700;cursor:pointer;border-radius:12px;transition:var(--transition)}
+.tab-btn.active{background:rgba(255,255,255,0.1);color:#fff;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.sub-nav-wrapper{background:rgba(255,255,255,0.03);border-radius:14px;padding:4px;position:relative;display:grid;grid-template-columns:1fr 1fr 1fr;margin-bottom:25px;border:1px solid rgba(255,255,255,0.05);overflow:hidden}
+.sub-nav-glider{position:absolute;top:4px;bottom:4px;width:calc((100% - 8px)/3);right:4px;background:linear-gradient(145deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));border-radius:10px;transition:transform 0.3s cubic-bezier(0.2, 0, 0, 1),border-color 0.3s,box-shadow 0.3s;border:1px solid rgba(255,255,255,0.1);box-shadow:0 4px 15px rgba(0,0,0,0.2);z-index:1}
+.sub-nav-wrapper[data-active="0"] .sub-nav-glider{border-color:rgba(255,215,0,0.3);box-shadow:0 0 20px rgba(255,215,0,0.1);transform:translateX(0)}
+.sub-nav-wrapper[data-active="1"] .sub-nav-glider{border-color:rgba(0,242,255,0.3);box-shadow:0 0 20px rgba(0,242,255,0.1);transform:translateX(-100%)}
+.sub-nav-wrapper[data-active="2"] .sub-nav-glider{border-color:rgba(255,62,77,0.3);box-shadow:0 0 20px rgba(255,62,77,0.1);transform:translateX(-200%)}
+.sub-tab-item{position:relative;z-index:2;background:transparent;border:none;padding:10px;font-family:var(--font-body);font-weight:700;color:#666;cursor:pointer;transition:color 0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.sub-tab-item.active{color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.5)}
+.sub-tab-item svg{font-size:1.1rem;margin-bottom:-2px}
+.content-area{animation:fadeIn 0.4s ease-out}
+.pro-resource-card{display:flex;flex-direction:column;padding:20px;margin-bottom:15px;background:linear-gradient(145deg,rgba(30,30,35,0.6),rgba(20,20,25,0.8));border:1px solid rgba(255,255,255,0.06);border-radius:16px;transition:var(--transition);backdrop-filter:blur(10px);position:relative;overflow:hidden}
+.pro-resource-card:hover{transform:translateY(-3px);box-shadow:0 15px 30px rgba(0,0,0,0.3);border-color:rgba(255,255,255,0.15)}
+.pro-resource-card.pinned-file{background:linear-gradient(145deg,rgba(40,40,30,0.8),rgba(20,20,25,0.9));border:1px solid rgba(255,215,0,0.3);animation:pulse-gold 3s infinite}
+.pro-resource-card.pinned-file .resource-icon-box{color:var(--color-concept);background:rgba(255,215,0,0.1);border-color:rgba(255,215,0,0.2)}
+.resource-header{display:flex;align-items:center;gap:15px;margin-bottom:15px}
+.resource-icon-box{width:45px;height:45px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1)}
+.type-files .resource-icon-box{color:var(--color-lab)}
+.type-quizzes .resource-icon-box{color:var(--color-concept)}
+.resource-info h3{margin:0;font-size:1.1rem;font-weight:700;color:#fff}
+.resource-info p{margin:3px 0 0;font-size:0.85rem;color:#888}
+.resource-links{display:flex;gap:10px;flex-wrap:wrap}
+.res-link-btn{flex:1;text-align:center;padding:12px;font-size:0.9rem;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#ccc;border-radius:10px;text-decoration:none;transition:0.2s;display:flex;align-items:center;justify-content:center;gap:8px;min-width:140px;cursor:pointer}
+.res-link-btn:hover{background:rgba(255,255,255,0.1);color:#fff;transform:translateY(-2px)}
+.res-link-btn.primary{border-color:rgba(255,255,255,0.2);background:rgba(255,255,255,0.05)}
+.week-header{display:flex;align-items:center;justify-content:center;gap:15px;margin:25px 0 15px;color:var(--color-lab);font-weight:700;font-size:0.95rem}
+.week-header::before,.week-header::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,rgba(0,242,255,0.3),transparent)}
+.section-separator{margin:20px 0 10px;padding-left:10px;color:#888;font-size:0.9rem;font-weight:700;display:flex;align-items:center;gap:10px}
+.section-separator::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1)}
+.quiz-active-container{background:#121215;border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:24px;animation:fadeIn 0.5s ease;position:relative;box-shadow:0 20px 50px rgba(0,0,0,0.4)}
+.quiz-top-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+.quiz-progress-bar{width:100%;height:6px;background:rgba(255,255,255,0.1);border-radius:10px;margin-bottom:25px;overflow:hidden}
+.quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--color-concept),var(--color-lab));border-radius:10px;transition:width 0.4s cubic-bezier(0.4, 0, 0.2, 1)}
+.auto-advance-wrapper{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);padding:5px 10px;border-radius:20px;border:1px solid rgba(255,255,255,0.1)}
+.toggle-switch{width:36px;height:20px;background:#333;border-radius:20px;position:relative;cursor:pointer;transition:0.3s}
+.toggle-switch.on{background:var(--color-success)}
+.toggle-knob{width:16px;height:16px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:0.3s}
+.toggle-switch.on .toggle-knob{transform:translateX(16px)}
+.quiz-q-counter{color:#888;font-size:0.85rem;font-weight:bold;text-transform:uppercase;letter-spacing:1px}
+.quiz-question-text{font-size:1.25rem;line-height:1.6;margin-bottom:30px;color:#fff;font-weight:700;border-left:3px solid var(--color-concept);padding-left:15px}
+.quiz-options-grid{display:grid;gap:12px}
+.quiz-option-btn{padding:18px 20px;border-radius:14px;background:linear-gradient(145deg,rgba(255,255,255,0.03),rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.08);color:#ccc;text-align:left;cursor:pointer;transition:all 0.2s;font-family:var(--font-body);font-size:1.05rem;display:flex;gap:12px;align-items:center;position:relative;overflow:hidden}
+.quiz-option-btn:hover:not(:disabled){background:rgba(255,255,255,0.08);transform:translateX(5px);border-color:rgba(255,255,255,0.2)}
+.quiz-option-btn.selected{border-color:#fff;background:rgba(255,255,255,0.1);color:#fff}
+.quiz-option-btn.correct{background:rgba(0,230,118,0.15);border-color:#00e676;color:#00e676;box-shadow:0 0 15px rgba(0,230,118,0.1)}
+.quiz-option-btn.wrong{background:rgba(255,71,87,0.15);border-color:#ff4757;color:#ff4757;opacity:0.7}
+.option-letter{font-weight:900;font-family:var(--font-nums);width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.3);border-radius:8px;font-size:0.9rem}
+.quiz-option-btn.correct .option-letter{background:#00e676;color:#000}
+.quiz-option-btn.wrong .option-letter{background:#ff4757;color:#fff}
+.quiz-nav-actions{display:flex;justify-content:space-between;margin-top:30px;padding-top:20px;border-top:1px solid rgba(255,255,255,0.05)}
+.quiz-nav-btn{padding:12px 25px;border-radius:12px;border:none;font-weight:800;cursor:pointer;background:#fff;color:#000;display:flex;align-items:center;gap:8px;transition:0.3s}
+.quiz-nav-btn:hover{transform:translateY(-2px);box-shadow:0 5px 15px rgba(255,255,255,0.2)}
+.quiz-nav-btn.secondary{background:transparent;color:#888;border:1px solid rgba(255,255,255,0.1)}
+.quiz-nav-btn.secondary:hover{color:#fff;border-color:#fff;background:transparent}
+.group-select-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-bottom:20px}
+.group-btn{padding:15px 10px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);color:#fff;border-radius:12px;font-weight:700;cursor:pointer;transition:var(--transition);text-align:center}
+.group-btn:hover{background:var(--color-lab);color:#000;border-color:var(--color-lab);box-shadow:0 0 15px rgba(0,242,255,0.3)}
+.group-btn.all-btn{grid-column:1/-1;background:linear-gradient(90deg,var(--color-concept),var(--color-lab));color:#000;border:none}
+.group-title{text-align:center;margin-bottom:20px;color:#ccc}
+.beautiful-player-card{background:linear-gradient(135deg,rgba(20,20,25,0.95),rgba(30,30,40,0.8));border:1px solid rgba(255,255,255,0.08);border-radius:18px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,0.5);transition:0.3s;position:relative;padding:15px;margin-bottom:15px}
+.beautiful-player-card:hover{border-color:var(--color-record);box-shadow:0 15px 50px rgba(255,62,77,0.15)}
+.player-info-section{display:flex;align-items:center;gap:15px;margin-bottom:12px}
+.vinyl-icon{font-size:1.6rem;color:var(--color-record);width:45px;height:45px;background:rgba(255,62,77,0.1);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 15px rgba(255,62,77,0.2);animation:pulse-border 2s infinite}
+.player-text h3{font-size:1.1rem;color:#fff;margin:0}
+.player-text span{font-size:0.8rem;color:#888}
+.custom-html5-audio{width:100%;height:35px;outline:none;margin-top:5px;filter:invert(1) hue-rotate(180deg) grayscale(20%);opacity:0.9}
+.timeline-container{padding-bottom:50px}
+.session-card{display:flex;align-items:stretch;margin-bottom:10px;position:relative;overflow:hidden;transition:var(--transition);backdrop-filter:blur(12px);border-radius:16px;border:1px solid rgba(255,255,255,0.05);background:rgba(30,30,35,0.6);animation:fadeIn 0.5s ease both;cursor:pointer;flex-wrap:wrap}
+.session-card.current-day{border:1px solid rgba(0,242,255,0.5);background:linear-gradient(145deg,rgba(0,242,255,0.1),rgba(20,20,25,0.9));animation:pulse-cyan-calm 3s infinite;z-index:5}
+.session-card.is-past{opacity:0.6;filter:grayscale(0.9);border-color:#222}
+.session-card.is-past .session-topic{text-decoration:line-through;color:#666}
+.session-card.is-past:hover{opacity:0.8}
+.past-badge{position:absolute;top:10px;left:10px;background:rgba(0,0,0,0.6);color:#aaa;font-size:0.7rem;padding:3px 10px;border-radius:10px;font-weight:bold;border:1px solid #333;display:flex;align-items:center;gap:4px;z-index:2}
+.session-card.concept{border-color:rgba(255,215,0,0.4);background:linear-gradient(145deg,rgba(255,215,0,0.05) 0%,rgba(20,20,25,0.8) 100%)}
+.session-card.lab{border-color:rgba(0,242,255,0.4);background:linear-gradient(145deg,rgba(0,242,255,0.05) 0%,rgba(20,20,25,0.8) 100%)}
+.session-card.holiday{border-color:rgba(255,71,87,0.4);background:linear-gradient(145deg,rgba(255,71,87,0.05) 0%,rgba(20,20,25,0.8) 100%);pointer-events:none}
+.session-card:hover{transform:translateY(-3px) scale(1.01);box-shadow:0 12px 40px rgba(0,0,0,0.5)}
+.date-box{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:15px;min-width:85px;background:rgba(0,0,0,0.2);border-left:1px solid rgba(255,255,255,0.05)}
+.date-day-name{font-size:0.8rem;color:#aaa;margin-bottom:2px}
+.date-day-num{font-family:var(--font-nums);font-size:1.8rem;font-weight:700;color:#fff;line-height:1}
+.date-month{font-family:var(--font-nums);font-size:0.8rem;color:#888;text-transform:uppercase;letter-spacing:1px}
+.card-content{flex:1;padding:15px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.session-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:5px}
+.session-id{font-family:var(--font-nums);font-size:1.3rem;font-weight:700;display:flex;align-items:center;gap:8px;letter-spacing:0.5px}
+.session-card.concept .session-id{color:var(--color-concept);text-shadow:0 0 10px rgba(255,215,0,0.3)}
+.session-card.lab .session-id{color:var(--color-lab);text-shadow:0 0 10px rgba(0,242,255,0.3)}
+.session-topic{font-size:1rem;color:#eee;font-weight:500;line-height:1.4;transition:var(--transition);direction:ltr;text-align:right}
+.due-tag{align-self:flex-start;margin-top:10px;font-size:0.8rem;padding:5px 12px;border-radius:20px;background:rgba(255,71,87,0.15);color:#ff6b81;border:1px solid rgba(255,71,87,0.3);display:flex;align-items:center;gap:6px;font-weight:600;width:fit-content}
+.external-file-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:12px;margin-top:5px;margin-bottom:25px;border-radius:12px;text-decoration:none;font-weight:700;background:rgba(0,0,0,0.4);border:1px solid rgba(255,255,255,0.1);transition:var(--transition);animation:fadeIn 0.5s ease both}
+.external-file-btn.concept{color:var(--color-concept);border-color:rgba(255,215,0,0.2)}
+.external-file-btn.lab{color:var(--color-lab);border-color:rgba(0,242,255,0.2)}
+.external-file-btn:hover{background:rgba(255,255,255,0.1);transform:translateY(-2px)}
+.block-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.15),transparent);margin:25px 0;width:70%;margin-left:auto;margin-right:auto}
+.completed-block-card{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,0.03);border:1px dashed rgba(255,255,255,0.2);padding:15px 20px;border-radius:16px;cursor:pointer;margin-bottom:25px;transition:all 0.3s ease}
+.completed-block-card:hover{background:rgba(255,255,255,0.06);border-color:rgba(255,255,255,0.4);transform:translateY(-2px)}
+.block-info{display:flex;align-items:center;gap:12px;font-weight:700;color:#aaa}
+.block-status{font-size:0.8rem;color:#666;display:flex;align-items:center;gap:5px}
+.calc-container{padding:5px}
+.calc-grid{display:grid;grid-template-columns:1fr;gap:20px}
+@media(min-width:600px){.calc-grid{grid-template-columns:1fr 1fr}}
+.calc-section-title{margin-bottom:10px;font-size:1.2rem;display:flex;align-items:center;gap:8px}
+.calc-section{background:rgba(255,255,255,0.02);padding:15px;border-radius:15px;border:1px solid rgba(255,255,255,0.05)}
+.input-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;padding:12px;background:rgba(0,0,0,0.2);border-radius:12px;border:1px solid rgba(255,255,255,0.05)}
+.input-row label{font-size:0.9rem;color:#ccc;flex:1;margin-left:10px;line-height:1.3}
+.counter-control{display:flex;align-items:center;gap:5px;background:#000;padding:4px;border-radius:10px;border:1px solid #333;flex-shrink:0}
+.counter-btn{width:32px;height:32px;border:none;background:#222;color:#fff;border-radius:8px;cursor:pointer;font-weight:bold;font-size:1.2rem;display:flex;align-items:center;justify-content:center;transition:0.2s}
+.counter-btn:active{background:#444}
+.counter-val{width:30px;text-align:center;font-family:var(--font-nums);font-size:1.1rem}
+.grade-result{text-align:center;padding:30px;margin-top:20px;background:radial-gradient(circle,rgba(94,156,255,0.1) 0%,transparent 70%);border:1px solid rgba(255,255,255,0.1);border-radius:20px}
+.grade-big{font-size:4rem;font-family:var(--font-nums);font-weight:800;text-shadow:0 0 30px currentColor}
+.grade-A{color:#00c853}.grade-B{color:#2979ff}.grade-C{color:#ffd600}.grade-D{color:#ff6d00}.grade-F{color:#ff1744}
+.defects-text{font-size:0.9rem;color:#888;margin-top:5px}
+.reset-btn{background:transparent;border:1px solid rgba(255,71,87,0.3);color:#ff6b81;padding:8px 15px;border-radius:8px;margin-top:15px;cursor:pointer;font-size:0.8rem}
+.missed-btn{width:100%;display:flex;justify-content:center;align-items:center;padding:18px;margin-top:25px;border-radius:16px;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.03);transition:all 0.3s;text-align:center}
+.missed-btn:active{transform:scale(0.98)}
+.missed-btn.active{background:rgba(255,71,87,0.15);border-color:#ff4757;box-shadow:0 0 20px rgba(255,71,87,0.2);animation:pulse-border 2s infinite}
+.missed-info{display:flex;flex-direction:column;align-items:center}
+.missed-title{font-weight:700;font-size:1rem;color:#ccc;transition:0.3s}
+.missed-sub{font-size:0.8rem;color:#666;margin-top:3px}
+.missed-btn.active .missed-title{color:#ff4757}
+.modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);backdrop-filter:blur(8px);z-index:1000;display:flex;justify-content:center;align-items:center;padding:20px}
+.modal-content{background:#121215;width:100%;max-width:400px;border-radius:24px;border:1px solid rgba(255,255,255,0.1);padding:30px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,0.6);animation:fadeIn 0.3s ease}
+.modal-title{text-align:center;font-size:1.3rem;margin-bottom:25px;font-weight:800;color:#fff}
+.modal-close{position:absolute;top:15px;left:15px;background:none;border:none;color:#888;font-size:1.5rem;cursor:pointer}
+.role-row{display:flex;align-items:center;justify-content:space-between;padding:12px;background:rgba(255,255,255,0.03);border-radius:10px;margin-bottom:8px}
+.role-label{font-weight:700;color:var(--color-lab);display:flex;align-items:center;gap:8px}
+.role-value{font-family:var(--font-body);color:#fff}
+.desc-box{background:linear-gradient(145deg,#1e1e24,#121215);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:24px;margin-top:20px;box-shadow:0 10px 30px rgba(0,0,0,0.3);position:relative;overflow:hidden}
+.desc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:15px;border-bottom:1px solid rgba(255,255,255,0.05);padding-bottom:12px}
+.desc-title{color:#fff;font-weight:700;display:flex;align-items:center;gap:8px;font-size:1rem}
+.desc-content{color:#ddd;line-height:1.6;font-size:0.95rem;font-family:'Outfit',sans-serif;direction:ltr;text-align:left}
+.desc-content.rtl{direction:rtl;text-align:right;font-family:var(--font-body)}
+.lang-switch{display:flex;background:rgba(0,0,0,0.3);border-radius:20px;padding:3px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;position:relative;width:70px;height:28px}
+.lang-option{flex:1;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:bold;color:#888;z-index:2;transition:0.3s}
+.lang-active-bg{position:absolute;top:3px;left:3px;width:32px;height:20px;background:var(--color-lab);border-radius:15px;z-index:1;transition:0.3s cubic-bezier(0.4, 0, 0.2, 1)}
+.lang-switch.active .lang-active-bg{transform:translateX(32px)}
+.lang-switch.active .lang-option:last-child{color:#000}
+.lang-switch:not(.active) .lang-option:first-child{color:#000}
+.timer-toggle-btn{width:100%;padding:15px;margin-bottom:25px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:16px;color:#fff;font-family:var(--font-body);font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all 0.3s ease}
+.timer-toggle-btn.active{background:rgba(0,230,118,0.15);border-color:#00e676;color:#00e676;box-shadow:0 0 15px rgba(0,230,118,0.2)}
+.timer-toggle-btn:hover{transform:translateY(-2px)}
+.timer-status-text{font-size:0.9rem}
+.team-member-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;background:rgba(255,255,255,0.03);padding:8px 15px;border-radius:14px;border:1px solid rgba(255,255,255,0.05);transition:0.3s}
+.team-member-row:focus-within{border-color:var(--color-lab);background:rgba(0,242,255,0.05)}
+.member-icon{color:#666;font-size:1.1rem}
+.team-input-clean{background:transparent;border:none;color:#fff;width:100%;outline:none;font-family:var(--font-body);font-size:0.95rem;padding:5px 0}
+.team-input-clean::placeholder{color:#444}
+.save-btn-new{width:100%;padding:16px;background:linear-gradient(90deg,var(--color-lab),#00d2ff);color:#000;font-weight:800;font-size:1rem;border:none;border-radius:14px;margin-top:20px;cursor:pointer;transition:0.3s;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn-new:hover{transform:translateY(-2px);box-shadow:0 10px 25px rgba(0,242,255,0.2)}
+.rec-group-card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.05);border-radius:16px;margin-bottom:15px;overflow:hidden;transition:0.3s}
+.rec-group-header{padding:15px 20px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;background:rgba(255,255,255,0.02)}
+.rec-group-header:hover{background:rgba(255,255,255,0.05)}
+.rec-group-title{font-weight:700;color:#fff;display:flex;align-items:center;gap:10px;font-size:1.1rem}
+.rec-list-container{padding:15px;animation:fadeIn 0.3s ease;border-top:1px solid rgba(255,255,255,0.05)}
+</style>
 </head>
 <body>
-    <div class="cosmic-bg"><div class="stars"></div></div>
-	<div id="root"></div>
-
-	<script type="text/babel">
-		const { useState, useEffect, useMemo, StrictMode } = React;
-
-        const Icons = {
-            Concept: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>,
-            Lab: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 2v7.31"></path><path d="M14 2v7.31"></path><path d="M8.5 2h7"></path><path d="M14 9.3a6.5 6.5 0 1 1-4 0"></path></svg>,
-            Holiday: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>,
-            Alert: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>,
-            Folder: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>,
-            File: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>,
-            Check: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"></polyline></svg>,
-            Users: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>,
-            Star: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>,
-            Clock: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>,
-            Edit: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>,
-            Info: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>,
-            User: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>,
-            ChevronDown: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"></polyline></svg>,
-            ChevronUp: () => <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"></polyline></svg>
-        };
-
-        const fileResources = {
-            'FirstDay': 'https://lms.qu.edu.sa/webapps/login/', 
-            'Excel': 'https://lms.qu.edu.sa/webapps/login/',
-            'Project': 'https://lms.qu.edu.sa/webapps/login/',
-            'Portfolio': 'https://lms.qu.edu.sa/webapps/login/'
-        };
-
-        const generateAllSessions = () => {
-            // Spring 2026 starts approx Jan 25, 2026 (based on Week 5 being Feb 22)
-            const startDate = new Date('2026-01-25'); 
-            const holidays = [
-                { start: '2026-02-22', end: '2026-02-26', name: "إجازة (Vacation)" }
-            ];
-            
-            let list = [], curr = new Date(startDate);
-            let week = 1;
-            let sessionInWeek = 1;
-            let safety = 0;
-
-            // Generate 13 weeks
-            while(week <= 13 && safety < 150) {
-                let d = curr.getDay();
-                // Assume classes are Sunday (0) and Tuesday (2) standard schedule
-                if(d === 0 || d === 2) {
-                    let dateStr = curr.toISOString().split('T')[0];
-                    let isHol = holidays.find(h => dateStr >= h.start && dateStr <= h.end);
-                    
-                    if(isHol) {
-                        list.push({type:'holiday', date:new Date(curr), id:`HOL-${week}`, topic:isHol.name});
-                    } else {
-                        // Create ID like 1-1, 1-2, 2-1...
-                        let id = `${week}-${sessionInWeek}`;
-                        let type = sessionInWeek === 1 ? 'class1' : 'class2'; // Alternate colors
-                        list.push({ type, date:new Date(curr), id, week });
-                    }
-
-                    if(sessionInWeek === 2) {
-                         week++; 
-                         sessionInWeek = 1; 
-                    } else {
-                        sessionInWeek++;
-                    }
-                }
-                curr.setDate(curr.getDate()+1); 
-                safety++;
-            }
-            return list;
-        };
-
-        const ContentView = () => {
-            const files = [
-                {
-                    title: 'First Day Material',
-                    type: 'pinned',
-                    links: [
-                        { name: 'تحميل الملف (FDM)', url: fileResources['FirstDay'], isImportant: true }
-                    ]
-                },
-                { 
-                    title: 'Excel Handouts', 
-                    type: 'folder',
-                    links: [
-                        { name: 'Excel Handout Part I', url: fileResources['Excel'] },
-                        { name: 'Excel Handout Part II', url: fileResources['Excel'] }
-                    ]
-                },
-                { 
-                    title: 'Project Documents', 
-                    type: 'folder',
-                    links: [
-                        { name: 'Project Guidelines', url: fileResources['Project'] }
-                    ]
-                },
-                { 
-                    title: 'Course Portfolio', 
-                    type: 'folder',
-                    links: [
-                        { name: 'Portfolio Checklist', url: fileResources['Portfolio'] }
-                    ]
-                }
-            ];
-
-            return (
-                <div className="content-area">
-                    {files.map((f, i) => (
-                        <div key={i} className={`pro-resource-card ${f.type === 'pinned' ? 'pinned-file' : 'type-files'}`} style={{animationDelay: `${i * 0.1}s`}}>
-                            <div className="resource-header">
-                                <div className="resource-icon-box">
-                                    {f.type === 'pinned' ? <Icons.Star /> : <Icons.Folder />}
-                                </div>
-                                <div className="resource-info">
-                                    <h3 style={f.type==='pinned' ? {color:'var(--color-concept)'} : {}}>{f.title}</h3>
-                                    {f.type==='pinned' && <p style={{fontSize:'0.8rem'}}>مواد أساسية مهمة</p>}
-                                </div>
-                            </div>
-                            <div className="resource-links">
-                                {f.links.map((link, idx) => (
-                                    <a key={idx} href={link.url} target="_blank" className={`res-link-btn ${link.isImportant ? 'primary' : ''}`}>
-                                        <Icons.File/> {link.name}
-                                    </a>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                    <div className="empty-state-box" style={{marginTop:'20px'}}>
-                        <div className="empty-icon"><Icons.Info/></div>
-                        <div className="empty-title">LMS Access</div>
-                        <div className="empty-desc">جميع الملفات متاحة عبر نظام إدارة التعلم (Blackboard)</div>
-                    </div>
-                </div>
-            );
-        };
-
-        const ScheduleView = ({ openTeamSettings, teamMembers, settings }) => {
-            
-            const sessionDetails = {
-                '1-1': {
-                    title: {en: 'Intro to GE-213', ar: 'مقدمة في GE-213'},
-                    desc: {
-                        en: 'Creating & Maintaining Teams. Read First Day Material.',
-                        ar: 'تكوين الفرق والحفاظ عليها. قراءة مواد اليوم الأول.'
-                    }
-                },
-                '1-2': {
-                    title: {en: 'Team Norms Step 1', ar: 'قواعد الفريق خطوة 1'},
-                    desc: {
-                        en: 'Due: Bring First Day Material & Expectations of team norms assignment (Step 1 report out).',
-                        ar: 'تسليم: إحضار مواد اليوم الأول وواجب توقعات قواعد الفريق (Step 1).'
-                    }
-                },
-                '2-1': {
-                    title: {en: 'Excel Intro', ar: 'مقدمة في Excel'},
-                    desc: {
-                        en: 'Due: Bring Excel Handout Part (I). Finish Team Norms.',
-                        ar: 'تسليم: إحضار نشرة إكسل الجزء الأول. إنهاء قواعد الفريق.'
-                    }
-                },
-                '2-2': {
-                    title: {en: 'Excel Assign - Expectations', ar: 'واجب إكسل - التوقعات'},
-                    desc: {
-                        en: 'Due: Excel Assignment checklist and team process check. Exploring Expectations.',
-                        ar: 'واجب إكسل وقائمة التحقق وفحص عملية الفريق.'
-                    }
-                },
-                '3-1': {
-                    title: {en: 'Excel Team Work', ar: 'عمل الفريق في إكسل'},
-                    desc: {
-                        en: 'Due: Bring Sign-off Form. Excel Assignment checklist.',
-                        ar: 'إحضار نموذج التوقيع (Sign-off Form) وقائمة تحقق واجب إكسل.'
-                    }
-                },
-                '3-2': {
-                    title: {en: 'Ch 1: Introducing Models', ar: 'الفصل 1: تقديم النماذج'},
-                    desc: {
-                        en: 'Due: Bring Textbook "How to Model It". Topics: Heuristics, Constraints.',
-                        ar: 'إحضار الكتاب. الموضوعات: الاستدلال والقيود.'
-                    }
-                },
-                '4-1': {
-                    title: {en: 'Ch 1: Variables & Trade-offs', ar: 'الفصل 1: المتغيرات والمفاضلات'},
-                    desc: {
-                        en: 'Due: Submit Excel assignment with checklist. Working on Chapter 1.',
-                        ar: 'تسليم واجب إكسل مع القائمة. العمل على الفصل الأول.'
-                    }
-                },
-                '4-2': {
-                    title: {en: 'Entry Survey', ar: 'الاستبيان الأولي'},
-                    desc: {
-                        en: 'Due: Bring Entry Survey. Chapter 1 Assignment - Team.',
-                        ar: 'تسليم الاستبيان الأولي. واجب الفصل الأول (فريق).'
-                    }
-                },
-                // Week 5 is holiday
-                '5-1': { title: {en: 'OFF', ar: 'إجازة'}, desc: {en:'Vacation', ar:'إجازة'} }, 
-                '5-2': { 
-                    title: {en: 'Sample Report', ar: 'تقرير نموذجي'},
-                    desc: {
-                        en: 'Feedback on Excel Assignment. Review Sample Report.',
-                        ar: 'ملاحظات على واجب إكسل. مراجعة التقرير النموذجي.'
-                    }
-                },
-                '6-1': {
-                    title: {en: 'Excel Part II', ar: 'إكسل الجزء الثاني'},
-                    desc: {
-                        en: 'Due: Bring Excel Handout Part (II). Resubmit Excel assignment (if needed).',
-                        ar: 'إحضار نشرة إكسل الجزء الثاني. إعادة تسليم واجب إكسل (إذا لزم الأمر).'
-                    }
-                },
-                '6-2': {
-                    title: {en: 'Ch 4: Hot & Thirsty Exec', ar: 'الفصل 4: المدير العطشان'},
-                    desc: {
-                        en: 'Due: Submit Chapter 1 Assignment. Topics: Heuristics, Assumptions.',
-                        ar: 'تسليم واجب الفصل الأول. الموضوعات: الفرضيات والنماذج.'
-                    }
-                },
-                '7-1': {
-                    title: {en: 'Ch 4: Lumping & Calibration', ar: 'الفصل 4: التجميع والمعايرة'},
-                    desc: {
-                        en: 'Due: Report out on Reading Assignment. Bring Course Portfolio Checklist-1.',
-                        ar: 'تقرير عن واجب القراءة. إحضار قائمة ملف إنجاز المقرر-1.'
-                    }
-                },
-                '7-2': {
-                    title: {en: 'Ch 4: Goal Seek', ar: 'الفصل 4: البحث عن الهدف'},
-                    desc: {
-                        en: 'Due: Bring Course Portfolio with Portfolio Checklist-1.',
-                        ar: 'تسليم ملف إنجاز المقرر مع القائمة رقم 1.'
-                    }
-                },
-                '8-1': {
-                    title: {en: 'Individual Assign Ch 4', ar: 'واجب فردي فصل 4'},
-                    desc: {
-                        en: 'Task: Individual Assignment on Chapter 4.',
-                        ar: 'واجب فردي على الفصل الرابع.'
-                    }
-                },
-                '8-2': {
-                    title: {en: 'Ch 7: Student’s Dilemma', ar: 'الفصل 7: معضلة الطالب'},
-                    desc: {
-                        en: 'Due: Course Portfolio first assessment. Resubmit Chapter 1 Assignment.',
-                        ar: 'التقييم الأول لملف الإنجاز. إعادة تسليم واجب الفصل الأول.'
-                    }
-                },
-                '9-1': {
-                    title: {en: 'Team In Class Assign', ar: 'واجب فريق في الفصل'},
-                    desc: {
-                        en: 'Exploring expectations of Course Project – Part I.',
-                        ar: 'استكشاف توقعات مشروع المقرر - الجزء الأول.'
-                    }
-                },
-                '9-2': {
-                    title: {en: 'Ch 7: Optimization', ar: 'الفصل 7: الأمثلة'},
-                    desc: {
-                        en: 'Due: Course Portfolio second assessment using Checklist-2.',
-                        ar: 'التقييم الثاني لملف الإنجاز باستخدام القائمة-2.'
-                    }
-                },
-                '10-1': {
-                    title: {en: 'Ch 7 Individual Assign', ar: 'واجب فردي فصل 7'},
-                    desc: {
-                        en: 'In-Class Assignment. Resubmit Chapter 4 assignment.',
-                        ar: 'واجب داخل الفصل. إعادة تسليم واجب الفصل 4.'
-                    }
-                },
-                '10-2': {
-                    title: {en: 'Course Project Part I', ar: 'مشروع المقرر الجزء 1'},
-                    desc: {
-                        en: 'Due: Report out on expectations of Course Project - Part I.',
-                        ar: 'تقرير عن توقعات مشروع المقرر - الجزء الأول.'
-                    }
-                },
-                '11-1': {
-                    title: {en: 'Individual In Class', ar: 'واجب فردي في الفصل'},
-                    desc: {
-                        en: 'Finalize problem definition of course project.',
-                        ar: 'إنهاء تعريف المشكلة لمشروع المقرر.'
-                    }
-                },
-                '11-2': {
-                    title: {en: 'Course Project Part II', ar: 'مشروع المقرر الجزء 2'},
-                    desc: {
-                        en: 'Due: Report out on Course Project (Part II). Interim Assessment.',
-                        ar: 'تقرير عن مشروع المقرر (الجزء الثاني). تقييم مرحلي.'
-                    }
-                },
-                '12-1': {
-                    title: {en: 'Defect Removal', ar: 'إزالة العيوب'},
-                    desc: {
-                        en: 'Defect Removal in Class Assignment. Complete working in Course Project Report.',
-                        ar: 'واجب إزالة العيوب في الفصل. إكمال العمل على تقرير المشروع.'
-                    }
-                },
-                '12-2': {
-                    title: {en: 'Prep for Final', ar: 'التحضير للنهائي'},
-                    desc: {
-                        en: 'Prepare final presentation + Course Portfolio.',
-                        ar: 'تحضير العرض النهائي وملف الإنجاز.'
-                    }
-                },
-                '13-1': {
-                    title: {en: 'Final Submission', ar: 'التسليم النهائي'},
-                    desc: {
-                        en: 'Due: Course Project Report, Presentation, and Portfolio Final Submission.',
-                        ar: 'تسليم تقرير المشروع، العرض التقديمي، وملف الإنجاز النهائي.'
-                    }
-                },
-                '13-2': {
-                    title: {en: 'Presentations', ar: 'العروض التقديمية'},
-                    desc: {
-                        en: 'Course Project Presentation (Celebration).',
-                        ar: 'عروض مشروع المقرر (الاحتفال).'
-                    }
-                }
-            };
-
-            const [selectedSession, setSelectedSession] = useState(null);
-            const [transMode, setTransMode] = useState(false);
-            const [expandedBlocks, setExpandedBlocks] = useState({});
-
-            const sessions = useMemo(() => {
-                const baseSessions = generateAllSessions();
-                return baseSessions.map((s, index) => {
-                    const details = sessionDetails[s.id] || {};
-                    return {
-                        ...s,
-                        due: details.title,
-                        fullDesc: details.desc,
-                        index
-                    };
-                });
-            }, []);
-
-            const getDayName = (d) => d.toLocaleDateString('en-US', {weekday:'short'});
-            const getMonth = (d) => d.toLocaleDateString('en-US', {month:'short'});
-
-            const getRoles = (idx) => {
-                if (idx === undefined) return null;
-                const leaderIdx = idx % 5;
-                const timerIdx = (idx + 1) % 5;
-                const writerIdx = (idx + 2) % 5;
-                return {
-                    Leader: teamMembers[leaderIdx],
-                    Timer: teamMembers[timerIdx],
-                    Writer: teamMembers[writerIdx]
-                };
-            };
-
-            const openDetails = (s) => {
-                if(s.type === 'holiday') return;
-                setTransMode(false);
-                setSelectedSession({...s, roles: getRoles(s.index)});
-            };
-            
-            const handleCloseModal = () => setSelectedSession(null);
-            const toggleBlock = (prefix) => setExpandedBlocks(prev => ({...prev, [prefix]: !prev[prefix]}));
-
-            const today = new Date();
-            today.setHours(0,0,0,0);
-
-            // Group by Week
-            const groups = useMemo(() => {
-                let g = {};
-                let order = [];
-                sessions.forEach(s => {
-                    let prefix = `Week ${s.week}`;
-                    if(s.type === 'holiday') prefix = "Vacation";
-                    
-                    if(!g[prefix]) {
-                        g[prefix] = [];
-                        order.push(prefix);
-                    }
-                    g[prefix].push(s);
-                });
-                return { data: g, keys: order };
-            }, [sessions]);
-
-            return (
-                <div className="timeline-container">
-                    {groups.keys.map((prefix, groupIndex) => {
-                        const blockSessions = groups.data[prefix];
-                        const isHoliday = prefix === "Vacation";
-                        
-                        if (isHoliday) {
-                            const s = blockSessions[0];
-                            return (
-                                <div key={prefix} className="session-card holiday">
-                                    <div className="date-box">
-                                        <span className="date-day-name">{getDayName(s.date)}</span>
-                                        <span className="date-day-num">{s.date.getDate()}</span>
-                                        <span className="date-month">{getMonth(s.date)}</span>
-                                    </div>
-                                    <div className="card-content">
-                                        <div className="session-header">
-                                            <div className="session-id"><Icons.Holiday/> <span style={{margin:'0 8px'}}>Vacation</span></div>
-                                        </div>
-                                        <div className="session-topic">{s.topic}</div>
-                                    </div>
-                                </div>
-                            );
-                        }
-
-                        const isAllPast = blockSessions.every(s => {
-                            let d = new Date(s.date); d.setHours(0,0,0,0);
-                            return d.getTime() < today.getTime();
-                        });
-
-                        const isExpanded = expandedBlocks[prefix];
-
-                        // Archived weeks Logic
-                        if (isAllPast && !isExpanded) {
-                            return (
-                                <React.Fragment key={prefix}>
-                                    <div className="block-divider"></div>
-                                    <div className="completed-block-card" onClick={() => toggleBlock(prefix)}>
-                                        <div className="block-info">
-                                            <Icons.Check /> <span>Done: {prefix}</span>
-                                        </div>
-                                        <div className="block-status">
-                                            Show <Icons.ChevronDown/>
-                                        </div>
-                                    </div>
-                                </React.Fragment>
-                            );
-                        }
-
-                        return (
-                            <React.Fragment key={prefix}>
-                                {groupIndex > 0 && <div className="block-divider"></div>}
-                                
-                                {isAllPast && isExpanded && (
-                                    <div className="completed-block-card" onClick={() => toggleBlock(prefix)} style={{marginBottom:'15px', background:'rgba(255,255,255,0.08)'}}>
-                                        <div className="block-info" style={{color:'#fff'}}>
-                                            <Icons.Check /> <span>Archive: {prefix}</span>
-                                        </div>
-                                        <div className="block-status" style={{color:'#fff'}}>
-                                            Hide <Icons.ChevronUp/>
-                                        </div>
-                                    </div>
-                                )}
-
-                                <div style={{marginBottom:'10px', color:'var(--color-lab)', fontWeight:'bold', fontSize:'0.9rem'}}>{prefix}</div>
-
-                                {blockSessions.map((s, i) => {
-                                    const sDate = new Date(s.date); sDate.setHours(0,0,0,0);
-                                    const isToday = sDate.getTime() === today.getTime();
-                                    const isPast = sDate.getTime() < today.getTime();
-                                    
-                                    const dueTitle = s.due ? s.due['en'] : '';
-                                    
-                                    return (
-                                        <div 
-                                            key={i}
-                                            className={`session-card ${s.type} ${isToday ? 'current-day' : ''} ${isPast ? 'is-past' : ''}`} 
-                                            style={{animationDelay: `${i * 0.05}s`}}
-                                            onClick={() => openDetails(s)} 
-                                        >
-                                            {isPast && <div className="past-badge"><Icons.Check/> Done</div>}
-                                            <div className="date-box">
-                                                <span className="date-day-name">{getDayName(s.date)}</span>
-                                                <span className="date-day-num">{s.date.getDate()}</span>
-                                                <span className="date-month">{getMonth(s.date)}</span>
-                                            </div>
-                                            <div className="card-content">
-                                                <div className="session-header">
-                                                    <div className="session-id">
-                                                        {s.type==='class1' && <Icons.Concept />}
-                                                        {s.type==='class2' && <Icons.Lab />}
-                                                        <span style={{margin:'0 8px'}}>{s.id}</span>
-                                                    </div>
-                                                </div>
-                                                {dueTitle && <div className="due-tag"><Icons.Alert/> {dueTitle}</div>}
-                                            </div>
-                                        </div>
-                                    );
-                                })}
-                            </React.Fragment>
-                        );
-                    })}
-
-                    {selectedSession && (
-                        <div className="modal-overlay" onClick={handleCloseModal}>
-                            <div className="modal-content" onClick={e => e.stopPropagation()}>
-                                <button className="modal-close" onClick={handleCloseModal}>×</button>
-                                <h2 className="modal-title">{selectedSession.id} Details</h2>
-                                
-                                <div style={{marginBottom:'20px'}}>
-                                    <h3 style={{fontSize:'0.9rem', color:'#888', marginBottom:'10px'}}>Team Roles:</h3>
-                                    <div className="role-row">
-                                        <span className="role-label"><Icons.Star/> Leader</span>
-                                        <span className="role-value">{selectedSession.roles.Leader}</span>
-                                    </div>
-                                    {settings.timer && (
-                                        <div className="role-row">
-                                            <span className="role-label"><Icons.Clock/> Timer</span>
-                                            <span className="role-value">{selectedSession.roles.Timer}</span>
-                                        </div>
-                                    )}
-                                    <div className="role-row">
-                                        <span className="role-label"><Icons.Edit/> Writer</span>
-                                        <span className="role-value">{selectedSession.roles.Writer}</span>
-                                    </div>
-                                </div>
-
-                                {selectedSession.fullDesc && (
-                                    <div className="desc-box">
-                                        <div className="desc-header">
-                                            <div className="desc-title">
-                                                <Icons.Info/>
-                                                {transMode ? "تفاصيل الجلسة" : "Session Tasks"}
-                                            </div>
-                                            <div className={`lang-switch ${transMode ? 'active' : ''}`} onClick={() => setTransMode(!transMode)}>
-                                                <div className="lang-active-bg"></div>
-                                                <div className="lang-option">EN</div>
-                                                <div className="lang-option">AR</div>
-                                            </div>
-                                        </div>
-                                        <div className={`desc-content ${transMode ? 'rtl' : ''}`}>
-                                            {selectedSession.fullDesc[transMode ? 'ar' : 'en']}
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    )}
-                </div>
-            );
-        };
-
-        const Counter = ({ label, val, onChange }) => (
-            <div className="input-row">
-                <label>{label}</label>
-                <div className="counter-control">
-                    <button className="counter-btn" onClick={() => onChange(Math.max(0, val-1))}>-</button>
-                    <div className="counter-val">{val}</div>
-                    <button className="counter-btn" onClick={() => onChange(val+1)}>+</button>
-                </div>
-            </div>
-        );
-
-        const GradeView = () => {
-            const [state, setState] = useState(() => {
-                const saved = localStorage.getItem('ge213_data');
-                return saved ? JSON.parse(saved) : {
-                    ns_nce: 0, 
-                    ni: 0, 
-                    lapses: 0,
-                    exceeds: 0,
-                    plagiarism: 0,
-                    cheating: false
-                };
-            });
-
-            useEffect(() => { localStorage.setItem('ge213_data', JSON.stringify(state)); }, [state]);
-            const update = (key, val) => setState(prev => ({...prev, [key]: val}));
-
-            // Logic based on GE 213 Table 1 and Table 2
-            const calc = () => {
-                // Table 1: Cognitive Problems
-                let cognitiveDefects = 0;
-                // 1. NS/NCE
-                if(state.ns_nce === 1) cognitiveDefects += 1;
-                else if(state.ns_nce === 2) cognitiveDefects += 2;
-                else if(state.ns_nce === 3) cognitiveDefects += 3;
-                else if(state.ns_nce >= 4) cognitiveDefects += 5; // Automatic F probably
-
-                // 2. NI
-                if(state.ni === 1) cognitiveDefects += 0.5;
-                else if(state.ni === 2) cognitiveDefects += 1;
-                else if(state.ni === 3) cognitiveDefects += 1.5;
-                else if(state.ni === 4) cognitiveDefects += 2;
-                else if(state.ni === 5) cognitiveDefects += 3;
-                else if(state.ni >= 6) cognitiveDefects += 5;
-
-                // 3. Plagiarism (Simplification: using defect mapping directly)
-                if(state.plagiarism >= 1) cognitiveDefects += state.plagiarism; // Assuming input is defects directly for now or mapped
-
-                // Table 1 Part II: Affective (Lapses)
-                let affectiveDefects = 0;
-                let L = state.lapses;
-                if(L <= 2.5) affectiveDefects = 0;
-                else if(L <= 4) affectiveDefects = 0.5;
-                else if(L <= 5.5) affectiveDefects = 1;
-                else if(L <= 7) affectiveDefects = 2;
-                else if(L <= 8) affectiveDefects = 3;
-                else if(L <= 9.5) affectiveDefects = 4;
-                else affectiveDefects = 5;
-
-                const totalDefects = cognitiveDefects + affectiveDefects;
-
-                // Table 2: Grades
-                // Fail Conditions
-                if(state.cheating) return { grade: 'FX', defects: totalDefects };
-                if(totalDefects > 3) return { grade: 'F', defects: totalDefects };
-
-                let grade = 'F';
-                let E = state.exceeds;
-                let D = totalDefects;
-
-                // Row 0 Defects
-                if(D === 0) {
-                    if(E >= 3) grade = 'A+';
-                    else if(E === 2) grade = 'A';
-                    else if(E === 1) grade = 'B+';
-                    else grade = 'B';
-                }
-                // Row 0.5 Defects
-                else if(D === 0.5) {
-                    if(E >= 3) grade = 'A';
-                    else if(E === 2) grade = 'B+';
-                    else if(E === 1) grade = 'B';
-                    else grade = 'C+';
-                }
-                // Row 1 Defect
-                else if(D === 1) {
-                    if(E >= 3) grade = 'B+';
-                    else if(E === 2) grade = 'B';
-                    else if(E === 1) grade = 'C+';
-                    else grade = 'C';
-                }
-                // Row 1.5 Defects
-                else if(D === 1.5) {
-                    if(E >= 3) grade = 'B';
-                    else if(E === 2) grade = 'C+';
-                    else if(E === 1) grade = 'C';
-                    else grade = 'D+';
-                }
-                // Row 2 Defects
-                else if(D === 2) {
-                    if(E >= 3) grade = 'C+';
-                    else if(E === 2) grade = 'C';
-                    else if(E === 1) grade = 'D+';
-                    else grade = 'D';
-                }
-                 // Row 2.5 Defects
-                 else if(D === 2.5) {
-                    if(E >= 3) grade = 'C';
-                    else if(E === 2) grade = 'D+';
-                    else grade = 'D';
-                }
-                // Row 3 Defects
-                else if(D === 3) {
-                    if(E >= 3) grade = 'D+';
-                    else if(E === 2) grade = 'D';
-                    else grade = 'F';
-                }
-
-                return { grade, defects: totalDefects };
-            };
-
-            const result = calc();
-            const gClass = `grade-${result.grade.charAt(0)}`;
-
-            return (
-                <div className="calc-container">
-                    <div className="calc-grid">
-                        <div className="calc-section">
-                            <h3 className="calc-section-title" style={{color:'var(--color-concept)'}}>
-                                <Icons.Concept/> Cognitive (Part I)
-                            </h3>
-                            <Counter label="Exceeds (E)" val={state.exceeds} onChange={v => update('exceeds', v)} />
-                            <Counter label="Needs Imp. (NI)" val={state.ni} onChange={v => update('ni', v)} />
-                            <Counter label="No Credit/Submit" val={state.ns_nce} onChange={v => update('ns_nce', v)} />
-                        </div>
-                        <div className="calc-section">
-                            <h3 className="calc-section-title" style={{color:'var(--color-lab)'}}>
-                                <Icons.Lab/> Affective (Part II)
-                            </h3>
-                            <Counter label="Lapses (زلات)" val={state.lapses} onChange={v => update('lapses', v)} />
-                            <div style={{fontSize:'0.8rem', color:'#666', marginTop:'10px'}}>
-                                * >4 lapses results in defects.
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className={`missed-btn ${state.cheating ? 'active' : ''}`} onClick={() => update('cheating', !state.cheating)}>
-                        <div className="missed-info">
-                            <span className="missed-title">{state.cheating ? "Cheating/Integrity Violation (FX)" : "Academic Integrity Status"}</span>
-                            <span className="missed-sub">{state.cheating ? "Violation Recorded." : "Click if violation occurs."}</span>
-                        </div>
-                    </div>
-
-                    <div className="grade-result">
-                        <div style={{color:'#888', marginBottom:'5px'}}>Expected Grade</div>
-                        <div className={`grade-big ${gClass}`}>{result.grade}</div>
-                        <div className="defects-text">Total Defects: {result.defects}</div>
-                        <button className="reset-btn" onClick={() => confirm('Reset?') && setState({ns_nce:0, ni:0, lapses:0, exceeds:0, plagiarism:0, cheating:false})}>Reset Data</button>
-                    </div>
-                </div>
-            );
-        };
-
-        const TeamSettingsModal = ({ isOpen, onClose, members, setMembers, settings, setSettings }) => {
-            if(!isOpen) return null;
-            const handleChange = (i, val) => {
-                const newM = [...members]; newM[i] = val; setMembers(newM);
-            };
-            return (
-                <div className="modal-overlay" onClick={onClose}>
-                    <div className="modal-content" onClick={e => e.stopPropagation()}>
-                        <button className="modal-close" onClick={onClose}>×</button>
-                        <h2 className="modal-title">Team Settings</h2>
-                        
-                        <button 
-                            className={`timer-toggle-btn ${settings.timer ? 'active' : ''}`}
-                            onClick={() => setSettings({...settings, timer: !settings.timer})}
-                        >
-                            <div style={{display:'flex', alignItems:'center', gap:'10px'}}>
-                                <Icons.Clock />
-                                <span>Include Timer Role</span>
-                            </div>
-                            <span className="timer-status-text">
-                                {settings.timer ? 'On' : 'Off'}
-                            </span>
-                        </button>
-
-                        <div className="members-grid">
-                            {members.map((m, i) => (
-                                <div key={i} className="team-member-row">
-                                    <span className="member-icon"><Icons.User/></span>
-                                    <input 
-                                        type="text" 
-                                        className="team-input-clean" 
-                                        value={m} 
-                                        onChange={(e) => handleChange(i, e.target.value)} 
-                                        placeholder={`Member ${i+1}`} 
-                                    />
-                                </div>
-                            ))}
-                        </div>
-
-                        <button className="save-btn-new" onClick={onClose}>
-                            <Icons.Check/> Save
-                        </button>
-                    </div>
-                </div>
-            );
-        }
-
-		function App() {
-            const [tab, setTab] = useState('schedule');
-            const [showTeamModal, setShowTeamModal] = useState(false);
-            const [teamMembers, setTeamMembers] = useState(() => JSON.parse(localStorage.getItem('ge213_team')) || ["Member 1", "Member 2", "Member 3", "Member 4", "Member 5"]);
-            const [settings, setSettings] = useState(() => JSON.parse(localStorage.getItem('ge213_settings')) || { timer: true });
-
-            useEffect(() => { localStorage.setItem('ge213_team', JSON.stringify(teamMembers)); }, [teamMembers]);
-            useEffect(() => { localStorage.setItem('ge213_settings', JSON.stringify(settings)); }, [settings]);
-
-			return (
-				<div className="app">
-					<div className="container">
-						<header className="header">
-                            <button className="team-settings-btn" onClick={() => setShowTeamModal(true)}>
-                                <Icons.Users />
-                            </button>
-                            
-                            <a href="#" className="author-link">
-                                GE 213 (Spring 2026)
-                            </a>
-
-							<h1 className="title">GE 213</h1>
-							<p className="subtitle">Introduction to Engineering Design-2</p>
-						</header>
-
-                        <div className="nav-tabs">
-                            <button className={`tab-btn ${tab==='schedule'?'active':''}`} onClick={()=>setTab('schedule')}>Calendar</button>
-                            <button className={`tab-btn ${tab==='resources'?'active':''}`} onClick={()=>setTab('resources')}>Resources</button>
-                            <button className={`tab-btn ${tab==='grades'?'active':''}`} onClick={()=>setTab('grades')}>Calculator</button>
-                        </div>
-
-                        {tab === 'schedule' && <ScheduleView openTeamSettings={() => setShowTeamModal(true)} teamMembers={teamMembers} settings={settings} />}
-                        {tab === 'resources' && <ContentView />}
-                        {tab === 'grades' && <GradeView />}
-
-                        <TeamSettingsModal 
-                            isOpen={showTeamModal} 
-                            onClose={() => setShowTeamModal(false)} 
-                            members={teamMembers} setMembers={setTeamMembers}
-                            settings={settings} setSettings={setSettings}
-                        />
-					</div>
-				</div>
-			);
-		}
-		
-		const root = ReactDOM.createRoot(document.getElementById("root"));
-		root.render(<StrictMode><App /></StrictMode>);
-	</script>
+<div class="cosmic-bg"><div class="stars"></div></div>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useMemo } = React;
+const Icons = {
+Concept: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>,
+Lab: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10 2v7.31"/><path d="M14 2v7.31"/><path d="M8.5 2h7"/><path d="M14 9.3a6.5 6.5 0 1 1-4 0"/></svg>,
+Holiday: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>,
+Alert: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+Folder: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>,
+File: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>,
+Check: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>,
+Users: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+Star: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>,
+Clock: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
+Edit: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+Info: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>,
+User: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
+ChevronDown: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9"/></svg>,
+ChevronUp: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="18 15 12 9 6 15"/></svg>,
+Mic: ()=><svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+};
+const fileResources = {
+'C1':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgBsZMm8IgCRTqhDX_ANa2pmAckD8u73ILSfXhTbOFK5WPE?e=ZCzoK2',
+'C2':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDn7UcbYTPtRpkJNVFch1yeAT37pqOezgtg554yCLiHyLM?e=pIf5yU',
+'C3':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgCdZ7NzomSyS5Ln0n7uXkYWAfOukPzN3C6CyznIYP1DiL0?e=3H9PoD',
+'L1':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDL-fpADYWmSaQESGlldC7WAZc9DHkFJus3G_DSoGF5J88?e=lwgE7y',
+'L2':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgDZbZacOjuLTKee1FHuo14WAb0xq1DGJbTPUe4Qs_DCzCY?e=VGKNzC',
+'FDM':'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgCEkYAUr-F-TLUsEgwkrnb0AeUxpPv7XtflM9LuOicGtzA?e=acJxqo',
+'Checklist':'https://quedusa-my.sharepoint.com/:b:/g/personal/aahmad_qu_edu_sa/IQB3UVfE4DSRSa2bQK5VDpFEAdASYot8Je77AvHZBfEz7E8?e=yUp8LN'
+};
+const sessionDetails = {
+'C2-1':{title:{en:'Quiz #1',ar:'كويز 1'},desc:{en:'Quiz #1: First Day materials + Blue Workbook (J49-J56).',ar:'كويز 1: مواد اليوم الأول + كتاب العمل الأزرق (J49-J56).'}},
+'C2-2':{title:{en:'Submit C1',ar:'تسليم C1'},desc:{en:'Assignment C1 Due: Engineering the Profession.',ar:'تسليم واجب C1: مهنة الهندسة.'}},
+'C2-3':{title:{en:'Quiz #2',ar:'كويز 2'},desc:{en:'Quiz #2: SCPS Ch1 (p1-3) + Workbook B (B5-B10) & E (E1-E12).',ar:'كويز 2: الفصل 1 (ص 1-3) + الأقسام B و E من كتاب العمل.'}},
+'C3-1':{title:{en:'Quiz #3',ar:'كويز 3'},desc:{en:'Quiz #3: SCPS Ch2 (2.3, 2.5) + Ch3 (p29 to 3.2C).',ar:'كويز 3: الفصل 2 + الفصل 3 (من ص 29 إلى نهاية 3.2C).'}},
+'C3-3':{title:{en:'Quiz #4',ar:'كويز 4'},desc:{en:'Quiz #4: SCPS Ch4 (p61 to end of 4.3B).',ar:'كويز 4: الفصل 4 (ص 61 إلى نهاية 4.3B).'}},
+'C4-1':{title:{en:'Quiz #5',ar:'كويز 5'},desc:{en:'Quiz #5: SCPS Ch3 (3.2D to end).',ar:'كويز 5: الفصل 3 (من 3.2D للنهاية).'}},
+'C4-3':{title:{en:'Quiz #6',ar:'كويز 6'},desc:{en:'Quiz #6: SCPS Ch5 until end of p102.',ar:'كويز 6: الفصل 5 حتى نهاية ص 102.'}},
+'C5-1':{title:{en:'Quiz #7',ar:'كويز 7'},desc:{en:'Quiz #7: SCPS Ch5 (p103 to end) + Exxon Valdez.',ar:'كويز 7: الفصل 5 (ص 103 للنهاية) + مشكلة Exxon Valdez.'}},
+'C5-3':{title:{en:'Quiz #8',ar:'كويز 8'},desc:{en:'Quiz #8: SCPS Ch6 until end of 6.4.',ar:'كويز 8: الفصل 6 حتى نهاية 6.4.'}},
+'C6-1':{title:{en:'Quiz #9',ar:'كويز 9'},desc:{en:'Quiz #9: SCPS Ch6 (6.5 to end).',ar:'كويز 9: الفصل 6 (من 6.5 للنهاية).'}},
+'C6-2':{title:{en:'Makeup Q6+Q7',ar:'إعادة كويز 6+7'},desc:{en:'Correction/Makeup for Quiz 6 and Quiz 7.',ar:'فرصة إعادة أو تصحيح للكويز رقم 6 و 7.'}},
+'C6-3':{title:{en:'Quiz #10',ar:'كويز 10'},desc:{en:'Quiz #10: All of SCPS Ch7.',ar:'كويز 10: كامل الفصل 7.'}},
+'L1-3':{title:{en:'Teammate Interview',ar:'مقابلة الزملاء'},desc:{en:'Submission: L-1 Teammate Interview (Hard copy).',ar:'تسليم L-1 Teammate Interview (ورقي).'}},
+'L2-1':{title:{en:'L2 Draft',ar:'مسودة L2'},desc:{en:'L-2 Setting Team Norms (Step 1) - Draft only.',ar:'تسليم L-2 Setting Team Norms (Step 1) - مسودة.'}},
+'L2-2':{title:{en:'L5 Checks',ar:'فحص L5'},desc:{en:'L-5 Team Process Checks (Checklist + forms).',ar:'L-5 Team Process Checks (Checklist + forms).'}},
+'L2-3':{title:{en:'Zeroth Notebook',ar:'دفتر Zeroth'},desc:{en:'Submission: L-3-0th Team’s Design Notebook (Zeroth).',ar:'تسليم L-3-0th Team’s Design Notebook (ورقي).'}},
+'L3-1':{title:{en:'Submit L1+L2 | Makeup Q1',ar:'تسليم L1+L2 | إعادة Q1'},desc:{en:'Final submission for L-1 & L-2. Makeup Quiz 1.',ar:'تسليم نهائي L-1 و L-2. إعادة كويز 1.'}},
+'L3-2':{title:{en:'Makeup Q2',ar:'إعادة Q2'},desc:{en:'Makeup Quiz 2.',ar:'إعادة كويز 2.'}},
+'L4-1':{title:{en:'L4-a + L2 Final',ar:'L4-a + L2 تسليم'},desc:{en:'Presentation (a) + DNB 1st assessment. L-2 Final.',ar:'عرض (a) + التقييم الأول للدفتر. تسليم نهائي L-2.'}},
+'L4-2':{title:{en:'Submit L4-b | Makeup Q3',ar:'تسليم L4-b | إعادة Q3'},desc:{en:'Presentation (b) + DNB 2nd assessment. Makeup Quiz 3.',ar:'عرض (b) + التقييم الثاني للدفتر. إعادة كويز 3.'}},
+'L4-3':{title:{en:'Makeup Q4',ar:'إعادة Q4'},desc:{en:'Makeup Quiz 4.',ar:'إعادة كويز 4.'}},
+'L5-2':{title:{en:'Submit L4-c | Makeup Q5',ar:'تسليم L4-c | إعادة Q5'},desc:{en:'Presentation (c) + DNB 3rd assessment. Makeup Quiz 5.',ar:'عرض (c) + التقييم الثالث للدفتر. إعادة كويز 5.'}},
+'L5-3':{title:{en:'Final Checks',ar:'فحص نهائي'},desc:{en:'Submission: L-4-d (Presentation) + DNB 4th Assessment.',ar:'تسليم L-4-d + التقييم الرابع للدفتر.'}},
+'L6-1':{title:{en:'Submit L4-d | Makeup Q8',ar:'تسليم L4-d | إعادة Q8'},desc:{en:'Submission: L-4-e + DNB 5th Assessment. Makeup Quiz 8.',ar:'تسليم L-4-e + التقييم الخامس للدفتر. إعادة كويز 8.'}},
+'L6-2':{title:{en:'Makeup Q9',ar:'إعادة Q9'},desc:{en:'Makeup Quiz 9.',ar:'إعادة كويز 9.'}},
+'L6-3':{title:{en:'Submit L4-e | Makeup Q10',ar:'تسليم L4-e | إعادة Q10'},desc:{en:'Final Submission: L-3-final + DNB. Makeup Quiz 10.',ar:'تسليم نهائي للمشروع والملفات. إعادة كويز 10.'}}
+};
+const generateAllSessions = () => {
+const startDate = new Date('2026-01-22'), holidays = [{ start: '2026-03-22', end: '2026-03-26', name: "إجازة عيد الفطر" }];
+let list = [], curr = new Date(startDate), type='concept', count=0, cycles={concept:1, lab:1}, safety=0;
+while(cycles.concept <= 10 && safety < 150) {
+let d = curr.getDay();
+if(d===0||d===2||d===4) {
+let dateStr = curr.toISOString().split('T')[0], isHol = holidays.find(h => dateStr >= h.start && dateStr <= h.end);
+if(isHol) list.push({type:'holiday', date:new Date(curr), id:'OFF', topic:isHol.name});
+else {
+if(cycles[type]>6) break;
+list.push({ type, date:new Date(curr), id: `${type==='concept'?'C':'L'}${cycles[type]}-${count+1}` });
+count++;
+if(count>=3) { cycles[type]++; count=0; type = type==='concept'?'lab':'concept'; }
+}
+}
+curr.setDate(curr.getDate()+1); safety++;
+}
+return list;
+};
+const AudioPlayer = ({ fileName, title }) => (
+<div className="beautiful-player-card">
+<div className="player-info-section"><div className="vinyl-icon"><Icons.Mic/></div><div className="player-text"><h3>{title}</h3></div></div>
+<audio controls className="custom-html5-audio" controlsList="nodownload"><source src={`https://mutlaq001.github.io/GE211/audio/${fileName}.m4a`} type="audio/mp4"/></audio>
+</div>
+);
+const InteractiveQuiz = ({ url, onClose }) => {
+const [questions, setQuestions] = useState([]), [currentQ, setCurrentQ] = useState(0), [score, setScore] = useState(0);
+const [showScore, setShowScore] = useState(false), [selectedOption, setSelectedOption] = useState(null), [autoAdvance, setAutoAdvance] = useState(false);
+const [allQ, setAllQ] = useState([]), [groups, setGroups] = useState([]), [selectedGroup, setSelectedGroup] = useState(null), [loading, setLoading] = useState(true);
+useEffect(() => {
+fetch(url).then(r=>r.text()).then(text => {
+const parsed = [], lines = text.split('\n');
+let grp="General", q=null;
+lines.forEach(l => {
+l=l.trim(); if(!l) return;
+if(/^[A-E]$/i.test(l)) { if(q){q.answer=l.toUpperCase();q.group=grp;parsed.push(q);q=null;} return; }
+const opt = l.match(/^([A-E])\)\s*(.+)/i);
+if(opt) { if(q) q.options.push({letter:opt[1].toUpperCase(),text:opt[2]}); return; }
+if(!q) {
+if(/^(AI|\d{3}(\s+(AM|PM))?|General|Journal|[A-Z0-9\s]{2,15})$/i.test(l)&&!l.includes(')')) grp=l;
+else q={id:parsed.length,text:l,options:[],answer:null,group:grp};
+} else q.text+=" "+l;
+});
+if(q&&q.answer){q.group=grp;parsed.push(q);}
+setAllQ(parsed); setGroups([...new Set(parsed.map(i=>i.group))]); setLoading(false);
+});
+}, [url]);
+const start = (g) => { setQuestions(g==='ALL'?allQ:allQ.filter(x=>x.group===g)); setSelectedGroup(g); setCurrentQ(0); setScore(0); setShowScore(false); };
+const next = () => { if(currentQ<questions.length-1){setCurrentQ(c=>c+1);setSelectedOption(null);}else setShowScore(true); };
+const handle = (l) => { if(selectedOption)return; setSelectedOption(l); if(l===questions[currentQ].answer)setScore(s=>s+1); if(autoAdvance)setTimeout(next,1000); };
+if(loading) return <div className="quiz-active-container" style={{textAlign:'center'}}>جاري التحميل...</div>;
+if(!selectedGroup) return (
+<div className="quiz-active-container">
+<div className="quiz-top-bar"><h2 style={{margin:0,fontSize:'1.2rem'}}>اختر المجموعة</h2><button className="quiz-nav-btn secondary" onClick={onClose} style={{padding:'5px 10px'}}>إغلاق</button></div>
+<div className="group-select-grid"><button className="group-btn all-btn" onClick={()=>start('ALL')}>الكل ({allQ.length})</button>{groups.map((g,i)=><button key={i} className="group-btn" onClick={()=>start(g)}>{g}</button>)}</div>
+</div>
+);
+if(showScore) return (
+<div className="quiz-active-container" style={{textAlign:'center'}}>
+<h2 style={{fontSize:'2rem'}}>النتيجة</h2><div style={{fontSize:'3rem',color:score>=questions.length/2?'#00e676':'#ff4757'}}>{score}/{questions.length}</div>
+<button className="save-btn-new" onClick={()=>setSelectedGroup(null)}>مجموعة أخرى</button><button className="quiz-nav-btn secondary" onClick={onClose} style={{marginTop:'10px',width:'100%',justifyContent:'center'}}>خروج</button>
+</div>
+);
+const q=questions[currentQ];
+return (
+<div className="quiz-active-container">
+<div className="quiz-top-bar"><div className="quiz-q-counter">{selectedGroup} | {currentQ+1}/{questions.length}</div>
+<div className="auto-advance-wrapper" onClick={()=>setAutoAdvance(!autoAdvance)}><span style={{fontSize:'0.8rem'}}>تلقائي</span><div className={`toggle-switch ${autoAdvance?'on':''}`}><div className="toggle-knob"/></div></div></div>
+<div className="quiz-progress-bar"><div className="quiz-progress-fill" style={{width:`${((currentQ+1)/questions.length)*100}%`}}/></div>
+<div className="quiz-question-text" dir="ltr">{q.text}</div>
+<div className="quiz-options-grid">{q.options.map((o,i)=><button key={i} className={`quiz-option-btn ${selectedOption?(o.letter===q.answer?'correct':(o.letter===selectedOption?'wrong':'')):''} ${selectedOption===o.letter?'selected':''}`} onClick={()=>handle(o.letter)} disabled={!!selectedOption} dir="ltr"><div className="option-letter">{o.letter}</div><div className="option-text">{o.text}</div></button>)}</div>
+<div className="quiz-nav-actions"><button className="quiz-nav-btn secondary" onClick={()=>setSelectedGroup(null)}>رجوع</button>{selectedOption&&!autoAdvance&&<button className="quiz-nav-btn" onClick={next}>{currentQ===questions.length-1?"إنهاء":"التالي"}<Icons.ChevronDown style={{transform:'rotate(90deg)'}}/></button>}</div>
+</div>
+);
+};
+const ContentView = () => {
+const [activeIdx, setActiveIdx] = useState(1), [activeQuizUrl, setActiveQuizUrl] = useState(null), [showArchived, setShowArchived] = useState(false), [expandedRecs, setExpandedRecs] = useState({});
+const generatedSessions = useMemo(generateAllSessions, []), isPast = (id) => { if(!id)return false; const ss=generatedSessions.filter(s=>s.id.startsWith(id)); if(!ss.length)return false; return ss[ss.length-1].date.getTime() < new Date().setHours(0,0,0,0); };
+const tabs = [{id:'q',label:'الكويزات',icon:<Icons.Edit/>},{id:'f',label:'الملفات',icon:<Icons.File/>},{id:'r',label:'التسجيلات',icon:<Icons.Mic/>}];
+const quizzes = [{title:'Quiz #1',links:[{name:'ملف الكويز',url:'https://drive.google.com/file/d/1EcZ616WFuW4JZ8m8CzGSnghMflKT9Wkr/view?usp=sharing'},{name:'بدء الكويز',url:'https://mutlaq001.github.io/GE211/Q/Q1.txt',interactive:true}]}];
+const files = [
+{title:'Checklist',links:[{name:'فتح الملف',url:fileResources['Checklist'],imp:true}]},
+{title:'First Day Material (FDM)',sessionId:'C1',links:[{name:'فتح المجلد',url:fileResources['FDM']}]},
+{title:'C1 Concept Session',sessionId:'C1',links:[{name:'ملفات الجلسة',url:fileResources['C1']},{name:'تسليم ورقي',url:'https://quedusa-my.sharepoint.com/:f:/g/personal/aahmad_qu_edu_sa/IgA3a2WpU-uXTrOKBYRswqBeAWfVih3Z_XzIqH0UBUO0Y4M?e=lnLaDi',imp:true}]},
+{title:'C2 Concept Session',sessionId:'C2',links:[{name:'فتح المجلد',url:fileResources['C2']}]},
+{title:'C3 Concept Session',sessionId:'C3',links:[{name:'فتح المجلد',url:fileResources['C3']}]},
+{title:'L1 Lab Session',sessionId:'L1',links:[{name:'فتح المجلد',url:fileResources['L1']}]},
+{title:'L2 Lab Session',sessionId:'L2',links:[{name:'فتح المجلد',url:fileResources['L2']}]}
+];
+const recordings = [{t:'Quiz 1',f:'Q1',c:'Q'},{t:'Concept 1',f:'C1',c:'C'},{t:'Concept 2',f:'C2',c:'C'},{t:'Concept 3',f:'C3',c:'C'},{t:'Lab 1',f:'L1',c:'L'},{t:'Lab 2',f:'L2',c:'L'}];
+const render = () => {
+if(activeIdx===0) {
+if(activeQuizUrl) return <InteractiveQuiz url={activeQuizUrl} onClose={()=>setActiveQuizUrl(null)}/>;
+return <div className="content-area">{quizzes.map((q,i)=><div key={i} className="pro-resource-card type-quizzes"><div className="resource-header"><div className="resource-icon-box"><Icons.Edit/></div><div className="resource-info"><h3>{q.title}</h3></div></div><div className="resource-links">{q.links.map((l,x)=>l.interactive?<button key={x} onClick={()=>setActiveQuizUrl(l.url)} className="res-link-btn primary"><Icons.Check/> {l.name}</button>:<a key={x} href={l.url} target="_blank" className="res-link-btn"><Icons.File/> {l.name}</a>)}</div></div>)}</div>;
+}
+if(activeIdx===1) {
+const currBlk = (() => { const s = generatedSessions.find(s=>s.type!=='holiday'&&s.date>=new Date().setHours(0,0,0,0)); return s?s.id.split('-')[0]:null; })();
+const groups = { pinned:[], fdm:[], curr:[], up:[], arch:[] };
+files.forEach(f => { if(f.title==='Checklist')groups.pinned.push(f); else if(f.title.includes('FDM'))groups.fdm.push(f); else if(f.sessionId===currBlk)groups.curr.push(f); else if(isPast(f.sessionId))groups.arch.push(f); else groups.up.push(f); });
+return (
+<div className="content-area">
+{groups.pinned.map((f,i)=><div key={i} className="pro-resource-card pinned-file"><div className="resource-header"><div className="resource-icon-box"><Icons.Check/></div><div className="resource-info"><h3 style={{color:'var(--color-concept)'}}>{f.title}</h3><p>مهم جداً</p></div></div><div className="resource-links">{f.links.map((l,x)=><a key={x} href={l.url} className="res-link-btn primary" target="_blank"><Icons.Star/> {l.name}</a>)}</div></div>)}
+{groups.fdm.map((f,i)=><div key={i} className="pro-resource-card type-files"><div className="resource-header"><div className="resource-icon-box"><Icons.Folder/></div><h3>{f.title}</h3></div><div className="resource-links">{f.links.map((l,x)=><a key={x} href={l.url} className="res-link-btn" target="_blank"><Icons.File/> {l.name}</a>)}</div></div>)}
+{groups.curr.length>0&&<><div className="week-header">ملفات الأسبوع: {currBlk}</div>{groups.curr.map((f,i)=><div key={i} className="pro-resource-card type-files"><div className="resource-header"><div className="resource-icon-box"><Icons.Folder/></div><h3>{f.title}</h3></div><div className="resource-links">{f.links.map((l,x)=><a key={x} href={l.url} className={`res-link-btn ${l.imp?'primary':''}`} target="_blank">{l.imp?<Icons.Star/>:<Icons.File/>} {l.name}</a>)}</div></div>)}</>}
+{groups.up.length>0&&<><div className="section-separator">قادمة</div>{groups.up.map((f,i)=><div key={i} className="pro-resource-card type-files" style={{opacity:0.9}}><div className="resource-header"><div className="resource-icon-box"><Icons.Folder/></div><h3>{f.title}</h3></div><div className="resource-links">{f.links.map((l,x)=><a key={x} href={l.url} className="res-link-btn" target="_blank"><Icons.File/> {l.name}</a>)}</div></div>)}</>}
+{groups.arch.length>0&&<><div className="block-divider"/><div className="completed-block-card" onClick={()=>setShowArchived(!showArchived)}><div className="block-info"><Icons.Folder/> أرشيف ({groups.arch.length})</div><div className="block-status">{showArchived?<Icons.ChevronUp/>:<Icons.ChevronDown/>}</div></div>{showArchived&&groups.arch.map((f,i)=><div key={i} className="pro-resource-card type-files" style={{opacity:0.8}}><div className="resource-header"><div className="resource-icon-box" style={{filter:'grayscale(1)'}}><Icons.Folder/></div><h3>{f.title}</h3></div><div className="resource-links">{f.links.map((l,x)=><a key={x} href={l.url} className="res-link-btn" target="_blank"><Icons.File/> {l.name}</a>)}</div></div>)}</>}
+</div>
+);
+}
+if(activeIdx===2) {
+const grps = { 'Q':{t:'Quizzes',i:<Icons.Edit/>,l:[]}, 'C':{t:'Concepts',i:<Icons.Concept/>,l:[]}, 'L':{t:'Labs',i:<Icons.Lab/>,l:[]} };
+recordings.forEach(r => grps[r.c].l.push(r));
+return <div className="content-area">{Object.keys(grps).map(k=>{ const g=grps[k]; if(!g.l.length)return null; return <div key={k} className="rec-group-card"><div className="rec-group-header" onClick={()=>setExpandedRecs(p=>({...p,[k]:!p[k]}))}><div className="rec-group-title">{g.i} {g.t}</div><div>{expandedRecs[k]?<Icons.ChevronUp/>:<Icons.ChevronDown/>}</div></div>{expandedRecs[k]&&<div className="rec-list-container">{g.l.map((r,i)=><AudioPlayer key={i} fileName={r.f} title={r.t}/>)}</div>}</div>})}</div>;
+}
+};
+return <div>{!activeQuizUrl&&<div className="sub-nav-wrapper" data-active={activeIdx}><div className="sub-nav-glider"/>{tabs.map((t,i)=><button key={t.id} className={`sub-tab-item ${activeIdx===i?'active':''}`} onClick={()=>setActiveIdx(i)}>{t.icon}<span>{t.label}</span></button>)}</div>}{render()}</div>;
+};
+const ScheduleView = ({ openTeam, team, setts }) => {
+const [sel, setSel] = useState(null), [tm, setTm] = useState(false), [exp, setExp] = useState({});
+const sessions = useMemo(()=>generateAllSessions().map((s,i)=>({...s,due:sessionDetails[s.id]?.title?.en,full:sessionDetails[s.id]?.desc,idx:i})),[]);
+const today = new Date().setHours(0,0,0,0);
+const groups = useMemo(()=>{const g={},k=[]; sessions.forEach(s=>{const p=s.type==='holiday'?`HOL-${s.date.getTime()}`:s.id.split('-')[0];if(!g[p]){g[p]=[];k.push(p);}g[p].push(s);}); return {d:g,k};},[sessions]);
+const getRoles = (i) => ({Leader:team[i%5],Timer:team[(i+1)%5],Writer:team[(i+2)%5]});
+return (
+<div className="timeline-container">
+{groups.k.map((k,gi)=>{
+const blk=groups.d[k], isHol=k.startsWith('HOL'), past=blk.every(s=>s.date.getTime()<today);
+if(isHol) return <div key={k} className="session-card holiday"><div className="date-box"><span className="date-day-num">{blk[0].date.getDate()}</span></div><div className="card-content"><div className="session-id"><Icons.Holiday/> OFF</div><div className="session-topic">{blk[0].topic}</div></div></div>;
+if(past && !exp[k]) return <React.Fragment key={k}><div className="block-divider"/><div className="completed-block-card" onClick={()=>setExp(p=>({...p,[k]:!p[k]}))}><div className="block-info"><Icons.Folder/> تم الانتهاء من {k}</div><Icons.ChevronDown/></div></React.Fragment>;
+return <React.Fragment key={k}>
+{gi>0&&<div className="block-divider"/>}{past&&exp[k]&&<div className="completed-block-card" onClick={()=>setExp(p=>({...p,[k]:!p[k]}))} style={{marginBottom:'15px',background:'rgba(255,255,255,0.08)'}}><div className="block-info" style={{color:'#fff'}}><Icons.Folder/> أرشيف {k}</div><Icons.ChevronUp/></div>}
+{blk.map((s,i)=>{
+const d=s.date.getTime(), isT=d===today, isP=d<today;
+return <div key={i} className={`session-card ${s.type} ${isT?'current-day':''} ${isP?'is-past':''}`} style={{animationDelay:`${i*0.05}s`}} onClick={()=>!isHol&&setSel({...s,roles:getRoles(s.idx)})}>
+{isP&&<div className="past-badge"><Icons.Check/> منتهية</div>}
+<div className="date-box"><span className="date-day-name">{s.date.toLocaleDateString('en-US',{weekday:'short'})}</span><span className="date-day-num">{s.date.getDate()}</span><span className="date-month">{s.date.toLocaleDateString('en-US',{month:'short'})}</span></div>
+<div className="card-content"><div className="session-header"><div className="session-id">{s.type==='concept'?<Icons.Concept/>:<Icons.Lab/>} <span style={{margin:'0 8px'}}>{s.id}</span></div></div>{s.due&&<div className="due-tag"><Icons.Alert/> {s.due}</div>}</div>
+</div>;
+})}
+{fileResources[k.split('-')[0]]&&<a href={fileResources[k.split('-')[0]]} target="_blank" className={`external-file-btn ${blk[0].type}`}><Icons.Folder/> فتح ملفات {k}</a>}
+</React.Fragment>;
+})}
+{sel && <div className="modal-overlay" onClick={()=>setSel(null)}><div className="modal-content" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setSel(null)}>×</button><h2 className="modal-title">{sel.id}</h2>
+<div style={{marginBottom:'20px'}}><div className="role-row"><span className="role-label"><Icons.Star/> Leader</span><span className="role-value">{sel.roles.Leader}</span></div>{setts.timer&&<div className="role-row"><span className="role-label"><Icons.Clock/> Timer</span><span className="role-value">{sel.roles.Timer}</span></div>}<div className="role-row"><span className="role-label"><Icons.Edit/> Writer</span><span className="role-value">{sel.roles.Writer}</span></div></div>
+{sel.full&&<div className="desc-box"><div className="desc-header"><div className="desc-title"><Icons.Info/> التفاصيل</div><div className={`lang-switch ${tm?'active':''}`} onClick={()=>setTm(!tm)}><div className="lang-active-bg"/><div className="lang-option">EN</div><div className="lang-option">AR</div></div></div><div className={`desc-content ${tm?'rtl':''}`}>{sel.full[tm?'ar':'en']}</div></div>}
+</div></div>}
+</div>
+);
+};
+const Counter = ({ l, v, fn }) => <div className="input-row"><label>{l}</label><div className="counter-control"><button className="counter-btn" onClick={()=>fn(Math.max(0,v-1))}>-</button><div className="counter-val">{v}</div><button className="counter-btn" onClick={()=>fn(v+1)}>+</button></div></div>;
+const GradeView = () => {
+const [st, setSt] = useState(()=>JSON.parse(localStorage.getItem('ge211_data'))||{cE:0,cNI:0,cNCE:0,cLapses:0,lE:0,lNI:0,lNCE:0,lLapses:0,missed:false});
+useEffect(()=>localStorage.setItem('ge211_data',JSON.stringify(st)),[st]);
+const up = (k,v)=>setSt(p=>({...p,[k]:v})), calc = () => {
+const gd = (nce,ni,lap) => { let d=(nce===1?2:(nce>1?3:0))+(ni===2?1:(ni>2&&ni<=5?2:(ni>5?3:0))), l=lap>3?(lap>5?(lap>7?3:2):1):0; return {t:d+l}; };
+let c=gd(st.cNCE,st.cNI,st.cLapses), l=gd(st.lNCE,st.lNI,st.lLapses);
+if(st.missed||c.t>=5||l.t>=5) return {g:'F',cd:c.t,ld:l.t};
+const cg=(c.t===0?(st.cE>=4?'A':'B'):(c.t===1?'C':(c.t===2?'D':'F'))), lg=(l.t===0?(st.lE>=5?'A':'B'):(l.t===1?'C':(l.t===2?'D':'F')));
+const map={'AA':'A+','AB':'A','AC':'B+','AD':'B','AF':'C+','BB':'B+','BC':'B','BD':'C+','BF':'C','CC':'C+','CD':'C','CF':'D+','DD':'D+','DF':'D','FF':'F'};
+return {g:map[[cg,lg].sort().join('')]||'F',cd:c.t,ld:l.t};
+};
+const res = calc();
+return (
+<div className="calc-container"><div className="calc-grid">
+<div className="calc-section"><h3 className="calc-section-title" style={{color:'var(--color-concept)'}}><Icons.Concept/> Concepts</h3><Counter l="Exceeds (E)" v={st.cE} fn={v=>up('cE',v)}/><Counter l="Needs Imp (NI)" v={st.cNI} fn={v=>up('cNI',v)}/><Counter l="No Credit" v={st.cNCE} fn={v=>up('cNCE',v)}/><Counter l="Lapses" v={st.cLapses} fn={v=>up('cLapses',v)}/></div>
+<div className="calc-section"><h3 className="calc-section-title" style={{color:'var(--color-lab)'}}><Icons.Lab/> Lab</h3><Counter l="Exceeds (E)" v={st.lE} fn={v=>up('lE',v)}/><Counter l="Needs Imp (NI)" v={st.lNI} fn={v=>up('lNI',v)}/><Counter l="No Credit" v={st.lNCE} fn={v=>up('lNCE',v)}/><Counter l="Lapses" v={st.lLapses} fn={v=>up('lLapses',v)}/></div>
+</div>
+<div className={`missed-btn ${st.missed?'active':''}`} onClick={()=>up('missed',!st.missed)}><div className="missed-info"><span className="missed-title">{st.missed?"فاتني الاختبار (رسوب)":"حضور النهائي"}</span></div></div>
+<div className="grade-result"><div style={{color:'#888'}}>الدرجة</div><div className={`grade-big grade-${res.g[0]}`}>{res.g}</div><div className="defects-text">العيوب: C({res.cd}) | L({res.ld})</div><button className="reset-btn" onClick={()=>confirm('?')&&setSt({cE:0,cNI:0,cNCE:0,cLapses:0,lE:0,lNI:0,lNCE:0,lLapses:0,missed:false})}>تصفير</button></div></div>
+);
+};
+function App() {
+const [tab, setTab] = useState('schedule'), [modal, setModal] = useState(false);
+const [mems, setMems] = useState(()=>JSON.parse(localStorage.getItem('ge211_team'))||["عضو 1","عضو 2","عضو 3","عضو 4","عضو 5"]);
+const [setts, setSetts] = useState(()=>JSON.parse(localStorage.getItem('ge211_settings'))||{timer:true});
+useEffect(()=>localStorage.setItem('ge211_team',JSON.stringify(mems)),[mems]);
+useEffect(()=>localStorage.setItem('ge211_settings',JSON.stringify(setts)),[setts]);
+return (
+<div className="app"><div className="container">
+<header className="header"><button className="team-settings-btn" onClick={()=>setModal(true)}><Icons.Users/></button><a href="https://t.me/MUTLAQ1" className="author-link">إعداد: مطلق</a><h1 className="title">GE 211</h1><p className="subtitle">Introduction to Engineering Design</p></header>
+<div className="nav-tabs"><button className={`tab-btn ${tab==='schedule'?'active':''}`} onClick={()=>setTab('schedule')}>الجدول</button><button className={`tab-btn ${tab==='resources'?'active':''}`} onClick={()=>setTab('resources')}>المحتوى</button><button className={`tab-btn ${tab==='grades'?'active':''}`} onClick={()=>setTab('grades')}>الحاسبة</button></div>
+{tab==='schedule'&&<ScheduleView openTeam={()=>setModal(true)} team={mems} setts={setts}/>}{tab==='resources'&&<ContentView/>}{tab==='grades'&&<GradeView/>}
+{modal&&<div className="modal-overlay" onClick={()=>setModal(false)}><div className="modal-content" onClick={e=>e.stopPropagation()}><button className="modal-close" onClick={()=>setModal(false)}>×</button><h2 className="modal-title">الفريق</h2>
+<button className={`timer-toggle-btn ${setts.timer?'active':''}`} onClick={()=>setSetts({...setts,timer:!setts.timer})}><div><Icons.Clock/> المؤقت</div><span>{setts.timer?'مفعل':'غير مفعل'}</span></button>
+<div className="members-grid">{mems.map((m,i)=><div key={i} className="team-member-row"><span className="member-icon"><Icons.User/></span><input type="text" className="team-input-clean" value={m} onChange={e=>{const n=[...mems];n[i]=e.target.value;setMems(n)}}/></div>)}</div>
+<button className="save-btn-new" onClick={()=>setModal(false)}><Icons.Check/> حفظ</button></div></div>}
+</div></div>
+);
+}
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
 </body>
 </html>
