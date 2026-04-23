@@ -470,6 +470,7 @@ body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 .light .my-schedule-table .schedule-row.has-conflict { background: linear-gradient(90deg, rgba(var(--rgb-danger), 0.1) 0%, rgba(var(--rgb-danger), 0.01) 100%); }
 .moad-btn { padding: 0.4rem 1.2rem; border-radius: 999px; background: linear-gradient(135deg, #8b5cf6, #d946ef); border: none; font-size: 1rem; color: white; flex-shrink: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 700; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3); }
 .moad-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4); }
+.mobile-schedule-footer .moad-btn { padding: 0.85rem 1rem; border-radius: var(--radius-md); font-size: 0.95rem; justify-content: center; background: linear-gradient(135deg, #8b5cf6, #a855f7); }
 .crn-generator-content { text-align: right; font-family: var(--font-body); }
 .info-row { display: flex; align-items: center; gap: 0.5rem; color: var(--color-success); background: rgba(var(--rgb-success), 0.1); padding: 0.75rem; border-radius: var(--radius-md); margin-bottom: 1.25rem; font-size: 0.9rem; font-weight: 600; }
 .input-group { display: flex; flex-direction: column; gap: 0.5rem; }
@@ -498,6 +499,49 @@ margin: -2rem 0 0;
 border-radius: 0;
 }
 }
+
+/* دعم الشاشات المتوسطة (Tablets) */
+@media (min-width: 1024px) and (max-width: 1366px) {
+  .sidebar { width: 340px; }
+  .main-header h1 { font-size: 2rem; }
+}
+
+/* وضع الأداء العالي */
+body.high-performance * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+body.high-performance .card, body.high-performance .sidebar, body.high-performance .main-header {
+  background-color: var(--color-bg) !important;
+}
+body.high-performance .cosmic-bg-container {
+  display: none !important;
+}
+
+/* الطباعة */
+@media print {
+  body { background: white !important; color: black !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; margin: 0 !important; padding: 0 !important; }
+  
+  .cosmic-bg-container, .sidebar, .main-header, .schedule-tabs-container, .moad-btn, .copy-crn-btn, .total-credits-pill, .view-conflicts-btn, .mobile-schedule-footer, #mobile-action-buttons, .designer-credit, .install-actions, .demo-badge, .add-schedule-btn, .expand-collapse-btn, .mobile-header, .mobile-nav, .mobile-schedule-tabs-container { display: none !important; }
+  
+  .page-wrapper { display: block !important; height: auto !important; width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 !important; border: none !important; box-shadow: none !important; }
+  .main-content { display: block !important; height: auto !important; overflow: visible !important; padding: 0 !important; }
+  
+  .card { border: 1px solid #ccc !important; margin-bottom: 20px !important; page-break-inside: avoid; border-radius: 8px !important; box-shadow: none !important; backdrop-filter: none !important; background: white !important; }
+  .card-header-inline { display: flex !important; justify-content: center !important; margin-bottom: 15px !important; }
+  .card-header-actions { justify-content: center !important; }
+  .card-header-actions h3 { color: black !important; }
+  
+  .fc { height: auto !important; max-height: none !important; }
+  .fc-view-harness, .fc-scroller { height: auto !important; overflow: visible !important; }
+  .fc-theme-standard th, .fc-theme-standard td { border-color: #ddd !important; color: black !important; }
+  .fc-event { page-break-inside: avoid; color: #fff !important; }
+  .fc-timegrid-slot { height: 2em !important; }
+  
+  .my-schedule-table { width: 100% !important; border-collapse: collapse !important; }
+  .my-schedule-table th, .my-schedule-table td { border: 1px solid #ccc !important; padding: 8px !important; color: black !important; }
+  .my-schedule-table th { background-color: #f5f5f5 !important; }
+}
 </style>
 </head>
 <body>
@@ -509,9 +553,10 @@ border-radius: 0;
 <header class="main-header">
 <div id="main-header-title-wrapper"><h1><i class="ri-calendar-event-line"></i> QU Schedule</h1></div>
 <div class="header-actions">
-<button id="download-img-btn"><i class="ri-camera-3-line"></i> حفظ صورة</button>
-<button id="settings-btn"><i class="ri-settings-3-line"></i> إعدادات</button>
-<button id="clear-calendar-btn"><i class="ri-delete-bin-6-line"></i> مسح الجدول الحالي</button>
+<button id="download-img-btn" title="حفظ صورة كملف" aria-label="حفظ صورة"><i class="ri-camera-3-line"></i> حفظ صورة</button>
+
+<button id="settings-btn" title="فتح إعدادات الموقع" aria-label="إعدادات"><i class="ri-settings-3-line"></i> إعدادات</button>
+<button id="clear-calendar-btn" title="مسح المقررات من هذا الجدول" aria-label="مسح الجدول"><i class="ri-delete-bin-6-line"></i> مسح الجدول الحالي</button>
 </div>
 </header>
 <div class="schedule-tabs-container" id="schedule-tabs-container"></div>
@@ -524,7 +569,7 @@ border-radius: 0;
 <header class="sidebar-header">
 <div class="sidebar-title-row">
 <h2><i class="ri-stack-line"></i> المقررات</h2>
-<button id="desktop-search-toggle"><i class="ri-search-2-line"></i></button>
+<button id="desktop-search-toggle" title="تفعيل البحث" aria-label="بحث"><i class="ri-search-2-line"></i></button>
 </div>
 <div class="sidebar-search-container" id="desktop-search-container">
 <i class="ri-search-2-line search-icon"></i>
@@ -645,7 +690,7 @@ draw() { if (this.active) { const grad = ctx.createLinearGradient(this.x, this.y
 }
 for (let i = 0; i < numStars; i++) stars.push(new Star());
 for (let i = 0; i < numShootingStars; i++) shootingStars.push(new ShootingStar());
-function animate() { ctx.clearRect(0, 0, w, h); stars.forEach(s => { s.update(); s.draw(); }); shootingStars.forEach(s => { s.update(); s.draw(); }); requestAnimationFrame(animate); }
+function animate() { if (!document.hidden) { ctx.clearRect(0, 0, w, h); stars.forEach(s => { s.update(); s.draw(); }); shootingStars.forEach(s => { s.update(); s.draw(); }); } requestAnimationFrame(animate); }
 animate();
 }
 
@@ -672,7 +717,7 @@ searchTerm: '',
 showExamDates: false,
 isVisibilityNamesMode: false,
 areAllExpanded: false,
-userSettings: { theme: 'dark', accentColor: '#8b5cf6', showWeekends: false, minTime: '08:00:00', maxTime: '22:00:00', hiddenCourseCodes: [], hideClosedCourses: true, examScheduleMode: '3' }
+userSettings: { theme: 'dark', accentColor: '#8b5cf6', showWeekends: false, minTime: '08:00:00', maxTime: '22:00:00', hiddenCourseCodes: [], hideClosedCourses: true, examScheduleMode: '3', highPerformance: false }
 },
 constants: {
 PRESET_COLORS: { purple: '#8b5cf6', blue: '#3b82f6', pink: '#ec4899', green: '#22c55e', orange: '#f97316', red: '#ef4444' },
@@ -723,6 +768,7 @@ this._initializeCalendar();
 this._loadDataFromStorage();
 this._listenForDataFromOpener();
 this._updateBookmarkletCode();
+this._checkUrlForSharedSchedule();
 },
 
 _loadDataFromStorage() {
@@ -757,6 +803,7 @@ this.state.activeScheduleIndex = 0;
 this._saveSchedules();
 this._processAndDisplayData(courses);
 this.updateFullUI();
+this._checkUrlForSharedSchedule();
 }
 }, false);
 if (window.opener) { window.opener.postMessage('request_schedule_data', '*'); }
@@ -904,8 +951,6 @@ const desktopConflictBtn = desktopContainer.querySelector('#desktop-view-conflic
 if (desktopConflictBtn) desktopConflictBtn.addEventListener('click', () => this._handleViewAllConflicts(conflictMap));
 const copyBtn = desktopContainer.querySelector('#desktop-copy-crn-btn');
 if (copyBtn) copyBtn.addEventListener('click', () => this._handleCopyCRNs(selectedCourses));
-const toggleBtn = desktopContainer.querySelector('#schedule-view-toggle-btn');
-if (toggleBtn) toggleBtn.addEventListener('click', () => { const tableWrap = desktopContainer.querySelector('.my-schedule-table-wrapper'); const gridWrap = desktopContainer.querySelector('.my-schedule-grid-wrapper'); const isGrid = tableWrap.classList.contains('hidden'); if(isGrid){ tableWrap.classList.add('hidden'); gridWrap.classList.remove('hidden'); toggleBtn.innerHTML = '<i class="ri-table-line"></i>'; } else { tableWrap.classList.remove('hidden'); gridWrap.classList.add('hidden'); toggleBtn.innerHTML = '<i class="ri-layout-grid-line"></i>'; } });
 const crnGenBtn = desktopContainer.querySelector('#generate-crn-tool-btn');
 if (crnGenBtn) crnGenBtn.addEventListener('click', () => this._handleCRNGenerator());
 }
@@ -995,7 +1040,7 @@ return `<tr class="schedule-row ${isConflicted ? 'has-conflict' : ''}"><td><div>
 }).join('');
 const conflictButtonHTML = conflictMap.size > 0 ? `<button class="view-conflicts-btn" id="desktop-view-conflicts-btn"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
 const gridItemsHTML = selectedCourses.sort((a,b)=>a.code.localeCompare(b.code)).map((course, i) => `<div class="mobile-schedule-item" style="animation-delay:${i*30}ms;"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${course.name}</h3><span>${course.code} - شعبة ${course.section}</span></div>${conflictMap.has(course.uniqueId) ? '<i class="ri-alert-fill mobile-conflict-icon"></i>' : ''}</div><div class="mobile-schedule-details"><div class="mobile-detail-row"><i class="ri-time-line"></i> <strong>المواعيد:</strong> ${course.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div class="mobile-detail-row"><i class="ri-user-line"></i> <strong>المحاضر:</strong> ${course.instructor || 'غير محدد'}</div></div></div>`).join('');
-return `<div class="card my-schedule-card"><div class="my-schedule-section"><div class="card-header-inline"><div class="card-header-actions"><h3><i class="ri-calendar-check-line"></i> جدولـي</h3><button id="schedule-view-toggle-btn" class="data-btn" style="padding: 0 0.8rem;" title="تغيير طريقة العرض"><i class="ri-layout-grid-line"></i></button><button class="copy-crn-btn" id="desktop-copy-crn-btn" title="نسخ أرقام الشعب"><i class="ri-file-copy-line"></i> نسخ الشعب</button></div><div style="display:flex;align-items:center;gap:0.75rem;"><button class="moad-btn" id="generate-crn-tool-btn"><i class="ri-magic-line"></i> مُعِدّ</button><div class="total-credits-pill">إجمالي الساعات: <span>${totalCredits}</span></div></div></div><div class="my-schedule-table-wrapper"><table class="my-schedule-table"><thead><tr><th>المقرر</th><th>الشعبة</th><th>المحاضر</th><th>المواعيد</th><th>فترة الاختبار</th><th>المكان</th><th>الساعات</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div><div class="my-schedule-grid-wrapper hidden">${gridItemsHTML}</div><div class="my-schedule-footer">${conflictButtonHTML}</div></div></div>`;
+return `<div class="card my-schedule-card"><div class="my-schedule-section"><div class="card-header-inline"><div class="card-header-actions"><h3><i class="ri-calendar-check-line"></i> جدولـي</h3><button class="copy-crn-btn" id="desktop-copy-crn-btn" title="نسخ أرقام الشعب"><i class="ri-file-copy-line"></i> نسخ الشعب</button></div><div style="display:flex;align-items:center;gap:0.75rem;"><button class="moad-btn" id="generate-crn-tool-btn"><i class="ri-magic-line"></i> مُعِدّ</button><div class="total-credits-pill">إجمالي الساعات: <span>${totalCredits}</span></div></div></div><div class="my-schedule-table-wrapper"><table class="my-schedule-table"><thead><tr><th>المقرر</th><th>الشعبة</th><th>المحاضر</th><th>المواعيد</th><th>فترة الاختبار</th><th>المكان</th><th>الساعات</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div><div class="my-schedule-grid-wrapper hidden">${gridItemsHTML}</div><div class="my-schedule-footer">${conflictButtonHTML}</div></div></div>`;
 },
 _createMobileScheduleHTML(selectedCourses, conflictMap) {
 let totalCredits = 0; const uniqueCourseCodes = new Set();
@@ -1005,12 +1050,13 @@ const isConflicted = conflictMap.has(course.uniqueId);
 return `<div class="mobile-schedule-item" style="animation-delay:${i*30}ms;"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${course.name}</h3><span>${course.code} - شعبة ${course.section}</span></div>${isConflicted ? `<i class="ri-alert-fill mobile-conflict-icon"></i>` : ''}</div><div class="mobile-schedule-details"><div class="mobile-detail-row"><i class="ri-time-line"></i> <strong>المواعيد:</strong> ${course.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div class="mobile-detail-row"><i class="ri-user-line"></i> <strong>المحاضر:</strong> ${course.instructor || 'غير محدد'}</div></div></div>`;
 }).join('');
 
-const conflictButtonHTML = conflictMap.size > 0 ? `<button class="view-conflicts-btn" id="mobile-view-conflicts-btn"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
-const moadButtonHTML = `<button class="moad-btn" id="mobile-generate-crn-tool-btn"><i class="ri-magic-line"></i> مُعِدّ</button>`;
+const hasConflict = conflictMap.size > 0;
+const conflictButtonHTML = hasConflict ? `<button class="view-conflicts-btn" id="mobile-view-conflicts-btn" style="flex:1;"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
+const moadButtonHTML = `<button class="moad-btn" id="mobile-generate-crn-tool-btn" style="flex:1;"><i class="ri-magic-line"></i> مُعِدّ</button>`;
 return `<div id="mobile-my-schedule-list">${itemsHTML}</div>
 <div class="mobile-schedule-footer">
 <div class="total-credits-pill">إجمالي الساعات: <span>${totalCredits}</span></div>
-<div class="mobile-footer-actions">
+<div style="display:flex; gap:0.5rem; width:100%;">
 ${moadButtonHTML}
 ${conflictButtonHTML}
 </div>
@@ -1213,15 +1259,123 @@ btnIcon.className = 'ri-stack-line';
 });
 }
 },
-_handleDownloadImage(isMobileContext) {
-const btn = isMobileContext ? this.dom.mobileDynamicActionBtn : this.dom.downloadImgBtn;
-if (typeof html2canvas === 'undefined') { this._showToast('error', 'خطأ في تحميل أدوات التصوير.'); return; }
-const originalHTML = btn.innerHTML; btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i>';
-const captureOptions = { backgroundColor: document.body.classList.contains('light') ? '#f4f4f5' : '#0a0a0a', scale: 2, useCORS: true };
-const onCaptureComplete = (canvas) => { const link = document.createElement('a'); link.download = `QU_Schedule_${this.state.schedules[this.state.activeScheduleIndex].name}.png`; link.href = canvas.toDataURL(); link.click(); btn.innerHTML = originalHTML; this._showToast('success', 'تم حفظ الصورة بنجاح'); };
-const onCaptureError = (e) => { console.error("html2canvas error:", e); btn.innerHTML = originalHTML; this._showToast('error', 'فشل حفظ الصورة.'); };
-if(isMobileContext) { const calendarContent = document.getElementById('mobile-calendar'); if (!calendarContent) { onCaptureError("Mobile calendar element not found."); return; } html2canvas(calendarContent, { ...captureOptions, width: calendarContent.scrollWidth, height: calendarContent.scrollHeight }).then(onCaptureComplete).catch(onCaptureError); } 
-else { const calendarEl = document.querySelector('.calendar-wrapper.card'); if (!calendarEl) { onCaptureError("Desktop calendar element not found."); return; } html2canvas(calendarEl, captureOptions).then(onCaptureComplete).catch(onCaptureError); }
+_handleDownloadImage(isMobileContext) { /* v3 - canvas watermark */
+  const btn = isMobileContext ? this.dom.mobileDynamicActionBtn : this.dom.downloadImgBtn;
+  if (typeof html2canvas === 'undefined') { this._showToast('error', 'خطأ في تحميل أدوات التصوير.'); return; }
+  const originalHTML = btn.innerHTML; btn.innerHTML = '<i class="ri-loader-4-line ri-spin"></i>';
+  // On mobile, the calendar view might be hidden — temporarily reveal it
+  const mobileCalView = isMobileContext ? document.getElementById('mobile-calendar-view') : null;
+  let mobileCalViewPrevDisplay = null;
+  if (mobileCalView && mobileCalView.style.display === 'none') {
+    mobileCalViewPrevDisplay = 'none';
+    mobileCalView.style.display = 'flex';
+  }
+  const targetEl = document.querySelector('.calendar-wrapper.card');
+  if (!targetEl) { this._showToast('error', 'لم يتم العثور على عنصر الجدول.'); btn.innerHTML = originalHTML; return; }
+
+  // --- expand element in-place (no position:fixed) ---
+  const expandedEls = [];
+  const applyExpand = (el, styles) => {
+    const saved = {};
+    Object.keys(styles).forEach(k => { saved[k] = el.style[k]; el.style[k] = styles[k]; });
+    expandedEls.push({ el, saved });
+  };
+  const restoreAll = () => { expandedEls.forEach(({ el, saved }) => { Object.keys(saved).forEach(k => { el.style[k] = saved[k]; }); }); expandedEls.length = 0; };
+
+  applyExpand(targetEl, { overflow: 'visible', height: 'auto', maxHeight: 'none', minWidth: '1100px', width: '1100px' });
+  targetEl.querySelectorAll('.fc, .fc-view-harness, .fc-scroller, .fc-timegrid').forEach(el => applyExpand(el, { overflow: 'visible', height: 'auto', maxHeight: 'none', width: '100%' }));
+
+  if (this.state.calendar) { this.state.calendar.setOption('height', 'auto'); this.state.calendar.updateSize(); }
+
+  setTimeout(() => {
+    const captureW = targetEl.scrollWidth;
+    const captureH = targetEl.scrollHeight;
+
+    html2canvas(targetEl, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true,
+      width: captureW,
+      height: captureH,
+      windowWidth: captureW + 200,
+      windowHeight: captureH + 200,
+      scrollX: -window.scrollX,
+      scrollY: -window.scrollY,
+      ignoreElements: (el) => el.classList && (el.classList.contains('cosmic-bg-container') || el.classList.contains('sidebar') || el.classList.contains('main-header'))
+    }).then((calCanvas) => {
+      restoreAll();
+      if (this.state.calendar && !isMobileContext) { this.state.calendar.setOption('height', '100%'); this.state.calendar.updateSize(); }
+
+      const isLight = document.body.classList.contains('light');
+      const accent = this.state.userSettings.accentColor || '#8b5cf6';
+      const sc = 2; // scale already applied by html2canvas
+      const wmH = 70 * sc;
+      const pad = 60 * sc;
+
+      const fc = document.createElement('canvas');
+      fc.width = calCanvas.width + pad * 2;
+      fc.height = calCanvas.height + pad * 2 + wmH;
+      const ctx = fc.getContext('2d');
+
+      // Background
+      const grad = ctx.createLinearGradient(0, 0, fc.width, fc.height);
+      if (isLight) { grad.addColorStop(0, '#f0f0f5'); grad.addColorStop(1, '#e0e0ea'); }
+      else { grad.addColorStop(0, '#0f0f13'); grad.addColorStop(1, '#060608'); }
+      ctx.fillStyle = grad; ctx.fillRect(0, 0, fc.width, fc.height);
+
+      // Glow orbs
+      ctx.globalAlpha = 0.12;
+      ctx.beginPath(); ctx.arc(fc.width * 0.15, fc.height * 0.15, fc.width * 0.4, 0, Math.PI*2); ctx.fillStyle = accent; ctx.fill();
+      ctx.beginPath(); ctx.arc(fc.width * 0.85, fc.height * 0.85, fc.width * 0.45, 0, Math.PI*2); ctx.fillStyle = accent; ctx.fill();
+      ctx.globalAlpha = 1;
+
+      // Card shadow
+      ctx.shadowColor = isLight ? 'rgba(0,0,0,0.2)' : 'rgba(0,0,0,0.6)';
+      ctx.shadowBlur = 50 * sc; ctx.shadowOffsetY = 12 * sc;
+      ctx.fillStyle = isLight ? '#ffffff' : '#141417';
+      ctx.beginPath();
+      if (ctx.roundRect) { ctx.roundRect(pad, pad, calCanvas.width, calCanvas.height + wmH, 16 * sc); } else { ctx.rect(pad, pad, calCanvas.width, calCanvas.height + wmH); }
+      ctx.fill();
+      ctx.shadowColor = 'transparent';
+
+      // Draw calendar
+      ctx.drawImage(calCanvas, pad, pad);
+
+      // Separator line
+      const sepY = pad + calCanvas.height;
+      ctx.strokeStyle = isLight ? 'rgba(0,0,0,0.08)' : 'rgba(255,255,255,0.08)';
+      ctx.lineWidth = sc;
+      ctx.setLineDash([5 * sc, 4 * sc]);
+      ctx.beginPath(); ctx.moveTo(pad + 16 * sc, sepY); ctx.lineTo(pad + calCanvas.width - 16 * sc, sepY); ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Watermark text on canvas
+      const cx = pad + calCanvas.width / 2;
+      const cy = sepY + wmH / 2;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.fillStyle = accent;
+      ctx.font = `700 ${16 * sc}px "Segoe UI", system-ui, sans-serif`;
+      ctx.fillText('QU Schedule', cx, cy - 10 * sc);
+      ctx.fillStyle = isLight ? 'rgba(0,0,0,0.38)' : 'rgba(255,255,255,0.38)';
+      ctx.font = `${10 * sc}px "Segoe UI", system-ui, sans-serif`;
+      ctx.fillText('\u0623\u0646\u0634\u0626 \u062c\u062f\u0648\u0644\u0643 \u0628\u0630\u0643\u0627\u0621', cx, cy + 12 * sc);
+
+      const link = document.createElement('a');
+      link.download = `QU_Schedule_${this.state.schedules[this.state.activeScheduleIndex].name}.png`;
+      link.href = fc.toDataURL('image/png', 1.0);
+      link.click();
+      if (mobileCalViewPrevDisplay !== null && mobileCalView) mobileCalView.style.display = mobileCalViewPrevDisplay;
+      btn.innerHTML = originalHTML;
+      this._showToast('success', '\u062a\u0645 \u062d\u0641\u0638 \u0627\u0644\u0635\u0648\u0631\u0629 \u0628\u0627\u062d\u062a\u0631\u0627\u0641\u064a\u0629!');
+    }).catch((e) => {
+      restoreAll();
+      if (this.state.calendar) { this.state.calendar.setOption('height', isMobileContext ? 'auto' : '100%'); this.state.calendar.updateSize(); }
+      if (mobileCalViewPrevDisplay !== null && mobileCalView) mobileCalView.style.display = mobileCalViewPrevDisplay;
+      console.error('html2canvas error:', e);
+      btn.innerHTML = originalHTML;
+      this._showToast('error', '\u0641\u0634\u0644 \u062d\u0641\u0638 \u0627\u0644\u0635\u0648\u0631\u0629.');
+    });
+  }, 400);
 },
 _handleSectionHover(event, isHovering) {
 if (isMobile) return;
@@ -1473,7 +1627,7 @@ let courseColorsHTML = Object.values(this.state.groupedCourses).sort((a,b)=>a.co
 if (!courseColorsHTML) courseColorsHTML = '<p style="color:var(--color-text-muted);font-size:0.9rem;">لم يتم تحميل بيانات المقررات بعد.</p>';
 let courseVisibilityHTML = Object.values(this.state.groupedCourses).sort((a,b)=>a.code.localeCompare(b.code)).map(g=>{ const isHidden = this.state.hiddenCourseCodes.has(g.code); const label = this.state.isVisibilityNamesMode ? g.name : g.code; return`<button class="course-visibility-btn ${isHidden?'hidden':'visible'}" data-course-code="${g.code}" style="--item-color:${g.color};--item-color-rgb:${this._hexToRgb(g.color)};"><span class="color-dot"></span>${label}</button>`; }).join('');
 if (!courseVisibilityHTML) courseVisibilityHTML = '<p style="color:var(--color-text-muted);font-size:0.9rem;">لم يتم تحميل بيانات المقررات بعد.</p>';
-modal.innerHTML = `<div class="modal-header"><h3><i class="ri-settings-3-line"></i> الإعدادات</h3><i class="ri-close-line modal-close-btn"></i></div><div class="modal-content custom-scrollbar"><div class="settings-group"><h4 class="settings-group-title"><i class="ri-palette-line"></i>المظهر</h4><div class="settings-item"><div class="settings-item-label"><span>الوضع</span></div><div class="mode-toggle"></div></div><div class="settings-item"><div class="settings-item-label"><span>اللون الأساسي</span></div><div class="theme-picker" id="accent-color-picker"></div></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-filter-3-line"></i>ترشيح المقررات</h4><div class="settings-item"><div class="settings-item-label"><span>إخفاء الشعب المغلقة</span><small>لإزالة الشعب غير المتاحة من القائمة</small></div><label class="toggle-switch"><input type="checkbox" id="hide-closed-toggle"><span class="slider"></span></label></div><div class="settings-group-title" style="margin-top:2rem; justify-content: space-between;"><div style="display:flex; align-items:center; gap:0.75rem;"><i class="ri-eye-off-line"></i>التحكم في ظهور المقررات</div><button id="modal-visibility-swap-btn" class="data-btn" style="padding:0.2rem 0.6rem; font-size: 0.9rem;" title="تبديل الاسم/الرمز"><i class="ri-text"></i></button></div><div id="course-visibility-list" class="course-visibility-grid">${courseVisibilityHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-paint-brush-line"></i>ألوان المقررات</h4><div id="course-colors-list">${courseColorsHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-calendar-2-line"></i>عرض التقويم</h4><div class="settings-item"><div class="settings-item-label"><span>إظهار عطلة نهاية الأسبوع</span><small>لعرض يومي الجمعة والسبت</small></div><label class="toggle-switch"><input type="checkbox" id="show-weekend-toggle"><span class="slider"></span></label></div><div class="settings-item"><div class="settings-item-label"><span>نطاق الساعات</span></div><div class="time-range-selects"><div id="min-time-select-container"></div><div id="max-time-select-container"></div></div></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-database-2-line"></i>إدارة البيانات</h4><div class="settings-item"><div class="settings-item-label"><span>تصدير واستيراد</span><small>احفظ جدولك الحالي كملف، أو قم باستيراد جدول محفوظ.</small></div><div class="data-actions-group"><button class="data-btn" id="export-btn"><i class="ri-download-cloud-2-line"></i>تصدير</button><button class="data-btn" id="import-btn"><i class="ri-upload-cloud-2-line"></i>استيراد</button><input type="file" id="import-file-input" accept=".json" style="display:none;"></div></div><div class="settings-item"><div class="settings-item-label"><span>إعادة تعيين التطبيق</span><small>سيؤدي هذا إلى مسح جميع بيانات التطبيق نهائياً.</small></div><button class="data-btn danger" id="reset-app-btn"><i class="ri-restart-line"></i>إعادة تعيين</button></div></div><div style="text-align: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); margin-top: .5rem;"><a href="https://t.me/mutlaq1" target="_blank" rel="noopener noreferrer" class="designer-credit"><i class="ri-telegram-line"></i> MUTLAQ1</a></div></div>`;
+modal.innerHTML = `<div class="modal-header"><h3><i class="ri-settings-3-line"></i> الإعدادات</h3><i class="ri-close-line modal-close-btn"></i></div><div class="modal-content custom-scrollbar"><div class="settings-group"><h4 class="settings-group-title"><i class="ri-palette-line"></i>المظهر</h4><div class="settings-item"><div class="settings-item-label"><span>الوضع</span></div><div class="mode-toggle"></div></div><div class="settings-item"><div class="settings-item-label"><span>اللون الأساسي</span></div><div class="theme-picker" id="accent-color-picker"></div></div><div class="settings-item"><div class="settings-item-label"><span>وضع الأداء العالي</span><small>إلغاء تأثيرات الشفافية لتسريع الموقع</small></div><label class="toggle-switch"><input type="checkbox" id="high-perf-toggle"><span class="slider"></span></label></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-filter-3-line"></i>ترشيح المقررات</h4><div class="settings-item"><div class="settings-item-label"><span>إخفاء الشعب المغلقة</span><small>لإزالة الشعب غير المتاحة من القائمة</small></div><label class="toggle-switch"><input type="checkbox" id="hide-closed-toggle"><span class="slider"></span></label></div><div class="settings-group-title" style="margin-top:2rem; justify-content: space-between;"><div style="display:flex; align-items:center; gap:0.75rem;"><i class="ri-eye-off-line"></i>التحكم في ظهور المقررات</div><button id="modal-visibility-swap-btn" class="data-btn" style="padding:0.2rem 0.6rem; font-size: 0.9rem;" title="تبديل الاسم/الرمز"><i class="ri-text"></i></button></div><div id="course-visibility-list" class="course-visibility-grid">${courseVisibilityHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-paint-brush-line"></i>ألوان المقررات</h4><div id="course-colors-list">${courseColorsHTML}</div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-calendar-2-line"></i>عرض التقويم</h4><div class="settings-item"><div class="settings-item-label"><span>إظهار عطلة نهاية الأسبوع</span><small>لعرض يومي الجمعة والسبت</small></div><label class="toggle-switch"><input type="checkbox" id="show-weekend-toggle"><span class="slider"></span></label></div><div class="settings-item"><div class="settings-item-label"><span>نطاق الساعات</span></div><div class="time-range-selects"><div id="min-time-select-container"></div><div id="max-time-select-container"></div></div></div></div><div class="settings-group"><h4 class="settings-group-title"><i class="ri-database-2-line"></i>إدارة البيانات</h4><div class="settings-item"><div class="settings-item-label"><span>مشاركة وتصدير</span><small>شارك جدولك كرابط، أو احفظه كملف.</small></div><div class="data-actions-group"><button class="data-btn" id="share-btn"><i class="ri-share-forward-line"></i>مشاركة</button><button class="data-btn" id="export-btn"><i class="ri-download-cloud-2-line"></i>تصدير</button><button class="data-btn" id="import-btn"><i class="ri-upload-cloud-2-line"></i>استيراد</button><input type="file" id="import-file-input" accept=".json" style="display:none;"></div></div><div class="settings-item"><div class="settings-item-label"><span>إعادة تعيين التطبيق</span><small>سيؤدي هذا إلى مسح جميع بيانات التطبيق نهائياً.</small></div><button class="data-btn danger" id="reset-app-btn"><i class="ri-restart-line"></i>إعادة تعيين</button></div></div><div style="text-align: center; padding-top: 1.25rem; border-top: 1px solid var(--color-border); margin-top: .5rem;"><a href="https://t.me/mutlaq1" target="_blank" rel="noopener noreferrer" class="designer-credit"><i class="ri-telegram-line"></i> MUTLAQ1</a></div></div>`;
 this._attachModalEventListeners();
 this._populateTimeSelects();
 this._applySettings();
@@ -1484,6 +1638,7 @@ modal.querySelector('.modal-close-btn').addEventListener('click', () => this._to
 modal.querySelector('#course-colors-list').addEventListener('input', e => this._handleCourseColorChange(e));
 modal.querySelector('#course-visibility-list').addEventListener('click', e => this._handleVisibilityToggle(e));
 modal.querySelector('#export-btn').addEventListener('click', () => this._handleExport());
+modal.querySelector('#share-btn').addEventListener('click', () => this._handleShare());
 modal.querySelector('#import-btn').addEventListener('click', () => modal.querySelector('#import-file-input').click());
 modal.querySelector('#import-file-input').addEventListener('change', e => this._handleImport(e));
 modal.querySelector('#reset-app-btn').addEventListener('click', () => this._handleReset());
@@ -1506,6 +1661,39 @@ const code = btn.dataset.courseCode;
 if (this.state.hiddenCourseCodes.has(code)) { this.state.hiddenCourseCodes.delete(code); btn.classList.remove('hidden'); btn.classList.add('visible'); } 
 else { this.state.hiddenCourseCodes.add(code); btn.classList.add('hidden'); btn.classList.remove('visible'); }
 this._saveSettings(); this._renderCoursesList(); this._renderQuickVisibilityList(); this._buildSettingsModal();
+},
+_checkUrlForSharedSchedule() {
+const urlParams = new URLSearchParams(window.location.search);
+const crnsParam = urlParams.get('crns');
+if (crnsParam) {
+if (this.state.allCoursesData.length === 0) {
+Swal.fire('تم العثور على جدول مشارك', 'الرجاء تحميل بيانات المقررات عبر الأداة أولاً ليتم عرض الجدول.', 'info');
+} else {
+const crns = crnsParam.split(',');
+this._addSchedule('جدول مشارك', false);
+const newSchedule = this.state.schedules[this.state.schedules.length - 1];
+this.state.allCoursesData.forEach(c => {
+if (crns.includes(c.section)) newSchedule.sections.add(c.uniqueId);
+});
+this.updateFullUI();
+this._showToast('success', 'تم تحميل الجدول المشارك بنجاح!');
+const newUrl = new URL(window.location.href);
+newUrl.searchParams.delete('crns');
+window.history.replaceState({}, document.title, newUrl);
+}
+}
+},
+_handleShare() {
+const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
+if (!activeSchedule || activeSchedule.sections.size === 0) return Swal.fire('الجدول فارغ!', 'الرجاء اختيار بعض المقررات للمشاركة.', 'warning');
+if(this.state.isDemoMode) return Swal.fire('تنبيه!', 'لا يمكنك المشاركة في وضع المعاينة.', 'info');
+const selectedSections = Array.from(activeSchedule.sections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
+const crns = selectedSections.map(c => c.section).join(',');
+const url = new URL(window.location.href);
+url.searchParams.set('crns', crns);
+navigator.clipboard.writeText(url.toString()).then(() => {
+this._showToast('success', 'تم نسخ رابط المشاركة!');
+});
 },
 _handleExport() {
 const activeSchedule = this.state.schedules[this.state.activeScheduleIndex];
@@ -1543,6 +1731,7 @@ document.documentElement.style.setProperty('--color-primary', pColor); document.
 },
 _applySettings() {
 document.body.className = this.state.userSettings.theme === 'light' ? 'light' : '';
+if (this.state.userSettings.highPerformance) { document.body.classList.add('high-performance'); }
 if (isMobile) { document.body.classList.add('mobile-view'); } else { document.body.classList.add('desktop-view'); }
 this._applyAccentColorStyles(this.state.userSettings.accentColor);
 const modeToggle = this.dom.settingsModal.querySelector('.mode-toggle');
@@ -1555,6 +1744,8 @@ const weekendToggle = this.dom.settingsModal.querySelector('#show-weekend-toggle
 if (weekendToggle) { weekendToggle.checked = this.state.userSettings.showWeekends; weekendToggle.onchange = e => { this.state.userSettings.showWeekends = e.target.checked; this._saveSettings(); this._initializeCalendar(); this.updateCalendarAndConflicts(); }; }
 const closedToggle = this.dom.settingsModal.querySelector('#hide-closed-toggle');
 if (closedToggle) { closedToggle.checked = this.state.userSettings.hideClosedCourses; closedToggle.onchange = e => { this.state.userSettings.hideClosedCourses = e.target.checked; this._saveSettings(); this._renderCoursesList(); this.updateCalendarAndConflicts(); }; }
+const perfToggle = this.dom.settingsModal.querySelector('#high-perf-toggle');
+if (perfToggle) { perfToggle.checked = this.state.userSettings.highPerformance; perfToggle.onchange = e => { this.state.userSettings.highPerformance = e.target.checked; this._saveSettings(); this._applySettings(); }; }
 
 if (this.dom.examScheduleToggleBtn) {
 const textSpan = this.dom.examScheduleToggleBtn.querySelector('span');
