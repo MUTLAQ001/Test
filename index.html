@@ -1285,8 +1285,17 @@ _handleDownloadImage(isMobileContext) { /* v3 - canvas watermark */
   };
   const restoreAll = () => { expandedEls.forEach(({ el, saved }) => { Object.keys(saved).forEach(k => { el.style[k] = saved[k]; }); }); expandedEls.length = 0; };
 
-  applyExpand(targetEl, { overflow: 'visible', height: 'auto', maxHeight: 'none', minWidth: '1100px', width: '1100px' });
+  applyExpand(targetEl, { overflow: 'visible', height: 'auto', maxHeight: 'none', minWidth: '1100px', width: '1100px', backdropFilter: 'none', WebkitBackdropFilter: 'none' });
   targetEl.querySelectorAll('.fc, .fc-view-harness, .fc-scroller, .fc-timegrid, .mobile-calendar-scroll-wrapper').forEach(el => applyExpand(el, { overflow: 'visible', height: 'auto', maxHeight: 'none', width: '100%' }));
+
+  const mobileWrapper = document.querySelector('.mobile-wrapper');
+  if (isMobileContext && mobileWrapper) {
+    applyExpand(mobileWrapper, { overflow: 'visible', width: 'auto', height: 'auto', position: 'static' });
+    const mobileView = document.getElementById('mobile-calendar-view');
+    if (mobileView) applyExpand(mobileView, { overflow: 'visible', height: 'auto' });
+    const mainContent = mobileView ? mobileView.querySelector('.main-content') : null;
+    if (mainContent) applyExpand(mainContent, { overflow: 'visible', height: 'auto' });
+  }
 
   if (this.state.calendar) { this.state.calendar.setOption('height', 'auto'); this.state.calendar.updateSize(); }
 
@@ -1300,7 +1309,7 @@ _handleDownloadImage(isMobileContext) { /* v3 - canvas watermark */
       useCORS: true,
       width: captureW,
       height: captureH,
-      windowWidth: captureW + 200,
+      windowWidth: isMobileContext ? 980 : captureW + 200,
       windowHeight: captureH + 200,
       scrollX: -window.scrollX,
       scrollY: -window.scrollY,
