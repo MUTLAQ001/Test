@@ -345,8 +345,9 @@ input:checked + .slider:before { transform: translateX(20px); }
 .light .conflict-extra-details.visible { background: rgba(0,0,0,0.03); }
 .mobile-wrapper, .mobile-nav { display: none; }
 #mobile-my-schedule-list { padding: 1rem; padding-bottom: calc(1rem + 65px); display: flex; flex-direction: column; gap: 1rem; flex-grow: 1; overflow-y: auto; min-height: 0; }
-.mobile-schedule-item { background: var(--color-card); border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 8px 25px -10px rgba(0,0,0,0.3); }
-.light .mobile-schedule-item { box-shadow: 0 8px 25px -10px rgba(0,0,0,0.1); }
+.mobile-schedule-item { background: linear-gradient(145deg, rgba(255,255,255,0.03), rgba(0,0,0,0.2)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.08); border-radius: calc(var(--radius) * 1.5); padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; box-shadow: 0 12px 30px -10px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05); transition: transform 0.2s cubic-bezier(0.2,0.8,0.2,1); will-change: transform; }
+.mobile-schedule-item:active { transform: scale(0.97); }
+.light .mobile-schedule-item { background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(240,240,245,0.8)); border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 12px 30px -10px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,1); }
 .mobile-schedule-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 1rem; }
 .mobile-schedule-title { display: flex; flex-direction: column; }
 .mobile-schedule-title h3 { font-family: var(--font-title); font-size: 1.1rem; color: var(--color-text-dark); margin: 0; }
@@ -356,12 +357,14 @@ input:checked + .slider:before { transform: translateX(20px); }
 .mobile-detail-row { display: flex; align-items: center; gap: 0.75rem; }
 .mobile-detail-row i { color: var(--color-primary); font-size: 1.2rem; min-width: 20px; text-align: center; }
 .mobile-detail-row strong { color: var(--color-text-muted); }
-.mobile-schedule-footer { position: fixed; bottom: calc(80px + env(safe-area-inset-bottom)); left: 0; right: 0; z-index: 90; padding: 1rem; background-color: var(--color-card); border-top: 1px solid var(--color-border); backdrop-filter: blur(8px); display: flex; flex-wrap: wrap; align-items: center; gap: 0.75rem; box-shadow: 0 -5px 20px -5px rgba(0,0,0,0.2); transition: transform 0.3s ease; transform: translateY(200%); }
+.mobile-schedule-footer { position: fixed; bottom: calc(90px + env(safe-area-inset-bottom)); left: 1rem; right: 1rem; border-radius: var(--radius-lg); z-index: 90; padding: 0.75rem 1rem; background: linear-gradient(145deg, rgba(25,25,30,0.9), rgba(15,15,20,0.95)); border: 1px solid rgba(255,255,255,0.1); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); display: flex; flex-wrap: nowrap; align-items: center; gap: 0.75rem; box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform: translateY(250%); }
+.light .mobile-schedule-footer { background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(240,240,245,0.9)); border: 1px solid rgba(0,0,0,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,1); }
 #mobile-my-schedule-container:not(.empty) .mobile-schedule-footer { transform: translateY(0); }
 .mobile-schedule-footer > .view-conflicts-btn, .mobile-schedule-footer > .total-credits-summary { flex-grow: 1; flex-basis: 0; justify-content: center; text-align: center; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 700; }
 .mobile-section-details-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); backdrop-filter: blur(8px); z-index: 2000; opacity: 0; visibility: hidden; transition: all .3s ease; will-change: opacity; }
 .mobile-section-details-overlay.open { opacity: 1; visibility: visible; }
-.details-panel { position: absolute; bottom: 0; left: 0; right: 0; background-color: var(--color-card); border-top: 1px solid var(--color-border); border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); padding-top: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,0.3); transform: translateY(100%); transition: transform .3s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform; }
+.details-panel { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to bottom, rgba(30,30,35,0.95), rgba(15,15,20,1)); border-top: 1px solid rgba(255,255,255,0.08); border-top-left-radius: 24px; border-top-right-radius: 24px; padding-top: 1.5rem; padding-left: 1.5rem; padding-right: 1.5rem; padding-bottom: calc(1.5rem + env(safe-area-inset-bottom)); box-shadow: 0 -10px 40px rgba(0,0,0,0.5); transform: translateY(100%); transition: transform .4s cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform; backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+.light .details-panel { background: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(245,245,250,1)); border-top: 1px solid rgba(0,0,0,0.1); box-shadow: 0 -10px 40px rgba(0,0,0,0.15); }
 .mobile-section-details-overlay.open .details-panel { transform: translateY(0); }
 .details-panel .conflict-banner { padding: .75rem 1rem; margin-bottom: 1.25rem; background-color: rgba(var(--rgb-warning), 0.1); color: var(--color-warning); border: 1px solid rgba(var(--rgb-warning), 0.2); border-radius: var(--radius-md); display: flex; align-items: center; gap: .75rem; font-size: .9rem; font-weight: 600; }
 .details-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; }
@@ -399,10 +402,11 @@ input:checked + .slider:before { transform: translateX(20px); }
 .mobile-exam-item .mobile-schedule-header { border-bottom: none; padding-bottom: 0; }
 .mobile-exam-date { color: var(--color-primary); font-weight: 700; font-size: 0.9rem; margin-top: 0.5rem; display: block; }
 @media (max-width: 1023px) {
+@keyframes mobileViewEnter { from { opacity: 0; transform: translateY(15px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 .page-wrapper { display: none; }
 .mobile-wrapper { position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; display: flex; flex-direction: column; }
-.mobile-header { display: flex; justify-content: space-between; align-items: center; padding: env(safe-area-inset-top) 1.25rem 0; height: calc(70px + env(safe-area-inset-top)); background-color: rgba(15, 15, 20, 0.7); border-bottom: 1px solid var(--color-border); z-index: 100; -webkit-backdrop-filter: var(--glass-blur); backdrop-filter: var(--glass-blur); box-shadow: 0 5px 20px -5px rgba(0,0,0,0.3); flex-direction: row-reverse; flex-shrink: 0; transition: all 0.3s ease; }
+.mobile-header { display: flex; justify-content: space-between; align-items: center; padding: env(safe-area-inset-top) 1.25rem 0; height: calc(70px + env(safe-area-inset-top)); background: linear-gradient(to bottom, rgba(15, 15, 20, 0.9) 0%, rgba(15, 15, 20, 0.7) 100%); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 100; -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5); flex-direction: row-reverse; flex-shrink: 0; transition: all 0.3s ease; }
 .mobile-header-content { flex: 1; display: flex; align-items: center; min-width: 0; justify-content: flex-end; }
 #mobile-header-title { margin: 0; font-size: 1.25rem; font-family: var(--font-title); color: var(--color-text-dark); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: right; width: 100%;}
 #mobile-search-container { flex: 1; display: none; align-items: center; position: relative; width: 100%;}
@@ -413,7 +417,7 @@ body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 #mobile-action-buttons .icon-btn-ghost { background: none; border: none; color: var(--color-primary); font-size: 1.6rem; padding: 0.5rem; cursor: pointer; transition: transform .2s ease; display: flex; align-items: center; justify-content: center; }
 #mobile-action-buttons .icon-btn-ghost:hover { transform: scale(1.1); }
 .mobile-view-content { display: none; flex: 1; height: 100%; overflow-y: auto; overflow-x: hidden; padding-top: 0; padding-bottom: calc(85px + env(safe-area-inset-bottom)); -webkit-overflow-scrolling: touch; }
-.mobile-view-content.active { display: flex; flex-direction: column; }
+.mobile-view-content.active { display: flex; flex-direction: column; animation: mobileViewEnter 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
 .light .mobile-header { background-color: rgba(248, 250, 252, 0.85); box-shadow: 0 5px 20px -5px rgba(0,0,0,0.05); }
 .light #mobile-search-input { background: rgba(0,0,0,0.05); }
 #mobile-calendar-view .main-content { padding: 0; }
@@ -433,15 +437,14 @@ body { overflow: hidden; position: fixed; width: 100%; height: 100%; }
 #mobile-courses-list { overflow-y: auto; flex: 1; padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important; }
 .my-schedule-container .card { display: none; }
 #mobile-my-schedule-container { display: flex; flex-direction: column; width: 100%; height: 100%; }
-.light .mobile-schedule-footer { background: rgba(255,255,255,0.7); border-color: transparent;}
+
 .mobile-nav { display: flex; position: fixed; bottom: 0; left: 0; right: 0; height: calc(80px + env(safe-area-inset-bottom)); background-color: rgba(15, 15, 20, 0.85); border-top: 1px solid var(--color-border); -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%); z-index: 100; box-shadow: 0 -10px 30px -5px rgba(0,0,0,0.3); padding-bottom: env(safe-area-inset-bottom); will-change: transform; flex-shrink: 0; }
 .light .mobile-nav { background-color: rgba(255, 255, 255, 0.85); box-shadow: 0 -10px 30px -5px rgba(0,0,0,0.05); }
-.mobile-nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; background: none; border: none; color: var(--color-text-muted); font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; }
-.mobile-nav-btn i { font-size: 1.5rem; transition: transform 0.3s ease; }
-.mobile-nav-btn.active { color: var(--color-primary); }
-.mobile-nav-btn.active i { transform: translateY(-4px); }
-.mobile-nav-btn span { transition: all 0.3s ease; padding: 0.2rem 0.8rem; border-radius: 999px; opacity: 0.8; }
-.mobile-nav-btn.active span { color: white; background-color: var(--color-primary); opacity: 1; box-shadow: 0 4px 12px rgba(var(--rgb-primary), 0.3); transform: translateY(-2px); }
+.mobile-nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; background: none; border: none; color: var(--color-text-muted); cursor: pointer; transition: all 0.3s ease; position: relative; }
+.mobile-nav-btn i { font-size: 1.6rem; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease, text-shadow 0.3s ease; }
+.mobile-nav-btn.active i { transform: translateY(-12px) scale(1.1); color: var(--color-primary); text-shadow: 0 4px 12px rgba(var(--rgb-primary), 0.4); }
+.mobile-nav-btn span { position: absolute; bottom: 8px; font-size: 0.75rem; font-weight: 800; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); padding: 0.25rem 0.85rem; border-radius: 999px; opacity: 0; transform: scale(0.8) translateY(5px); pointer-events: none; }
+.mobile-nav-btn.active span { opacity: 1; transform: scale(1) translateY(0); color: white; background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark)); box-shadow: 0 4px 15px rgba(var(--rgb-primary), 0.4); }
 .sidebar { width: 100%; height: 100%; border-left: none; }
 .main-content { padding: 0; height: 100%; }
 .my-schedule-container { display: flex; }
@@ -1832,4 +1835,3 @@ QU_ScheduleApp.init();
 </script>
 </body>
 </html>
-
