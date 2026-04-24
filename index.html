@@ -1090,9 +1090,9 @@ const hasConflict = conflictMap.size > 0;
 const conflictButtonHTML = hasConflict ? `<button class="view-conflicts-btn" id="mobile-view-conflicts-btn" style="flex:1;"><i class="ri-alert-fill"></i> حل التعارض</button>` : '';
 const moadButtonHTML = `<button class="moad-btn" id="mobile-generate-crn-tool-btn" style="flex:1;"><i class="ri-magic-line"></i> مُعِدّ</button>`;
 return `<div id="mobile-my-schedule-list">${itemsHTML}</div>
-<div class="mobile-schedule-footer">
-<div class="total-credits-pill" style="align-self: center; font-size: 0.95rem; padding: 0.4rem 1.5rem; margin-bottom: 0.25rem;">إجمالي الساعات: <span style="font-size: 1.1rem; margin-right: 0.25rem;">${totalCredits}</span></div>
-<div style="display:flex; gap:0.5rem; width:100%;">
+<div class="mobile-schedule-footer" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.75rem;">
+<div class="total-credits-pill" style="margin: 0 auto; text-align: center; font-size: 0.95rem; padding: 0.4rem 1.5rem; background: rgba(var(--rgb-primary), 0.15); border-radius: 999px;">إجمالي الساعات: <span style="font-size: 1.1rem; margin-right: 0.25rem;">${totalCredits}</span></div>
+<div style="display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 0.75rem; width: 100%;">
 ${moadButtonHTML}
 ${conflictButtonHTML}
 </div>
