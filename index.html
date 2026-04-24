@@ -1271,7 +1271,9 @@ _handleDownloadImage(isMobileContext) { /* v3 - canvas watermark */
     mobileCalViewPrevDisplay = 'none';
     mobileCalView.style.display = 'flex';
   }
-  const targetEl = document.querySelector('.calendar-wrapper.card');
+  const targetEl = isMobileContext 
+    ? document.querySelector('#mobile-calendar-view .calendar-wrapper.card')
+    : document.querySelector('.page-wrapper .calendar-wrapper.card');
   if (!targetEl) { this._showToast('error', 'لم يتم العثور على عنصر الجدول.'); btn.innerHTML = originalHTML; return; }
 
   // --- expand element in-place (no position:fixed) ---
@@ -1284,7 +1286,7 @@ _handleDownloadImage(isMobileContext) { /* v3 - canvas watermark */
   const restoreAll = () => { expandedEls.forEach(({ el, saved }) => { Object.keys(saved).forEach(k => { el.style[k] = saved[k]; }); }); expandedEls.length = 0; };
 
   applyExpand(targetEl, { overflow: 'visible', height: 'auto', maxHeight: 'none', minWidth: '1100px', width: '1100px' });
-  targetEl.querySelectorAll('.fc, .fc-view-harness, .fc-scroller, .fc-timegrid').forEach(el => applyExpand(el, { overflow: 'visible', height: 'auto', maxHeight: 'none', width: '100%' }));
+  targetEl.querySelectorAll('.fc, .fc-view-harness, .fc-scroller, .fc-timegrid, .mobile-calendar-scroll-wrapper').forEach(el => applyExpand(el, { overflow: 'visible', height: 'auto', maxHeight: 'none', width: '100%' }));
 
   if (this.state.calendar) { this.state.calendar.setOption('height', 'auto'); this.state.calendar.updateSize(); }
 
