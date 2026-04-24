@@ -882,6 +882,26 @@ this.state.calendar.removeAllEvents();
 document.querySelectorAll('.section-btn').forEach(btn => { btn.classList.toggle('selected', selectedSections.has(btn.dataset.uniqueId)); });
 const selectedCourseDetails = Array.from(selectedSections).map(id => this.state.allCoursesData.find(c => c.uniqueId === id)).filter(Boolean);
 const conflictMap = this._calculateConflicts(selectedCourseDetails);
+
+let earliest = 24, latest = 0, hasEvents = false;
+selectedCourseDetails.forEach(c => c.timeSlots.forEach(s => {
+    const startH = parseInt(s.start.split(':')[0], 10);
+    const endH = parseInt(s.end.split(':')[0], 10) + (parseInt(s.end.split(':')[1], 10) > 0 ? 1 : 0);
+    if(startH < earliest) earliest = startH;
+    if(endH > latest) latest = endH;
+    hasEvents = true;
+}));
+if(hasEvents) {
+    let minHour = Math.max(6, earliest - 1);
+    let maxHour = Math.min(24, latest + 1);
+    if (maxHour - minHour < 10) maxHour = Math.min(24, minHour + 10);
+    this.state.calendar.setOption('slotMinTime', `${String(minHour).padStart(2, '0')}:00:00`);
+    this.state.calendar.setOption('slotMaxTime', `${String(maxHour).padStart(2, '0')}:00:00`);
+} else {
+    this.state.calendar.setOption('slotMinTime', '08:00:00');
+    this.state.calendar.setOption('slotMaxTime', '18:00:00');
+}
+
 selectedCourseDetails.forEach(section => {
 const group = this.state.groupedCourses[section.code];
 if (group && !this.state.hiddenCourseCodes.has(section.code)) { this.state.calendar.addEventSource(this._createLectureEventsForSection(section, false, group.color)); }
