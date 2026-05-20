@@ -2838,6 +2838,124 @@
       }
     }
 
+    /* ============================================
+       TABLET BREAKPOINT (600px – 1023px)
+       ============================================ */
+    @media (min-width: 600px) and (max-width: 1023px) {
+
+      /* Header — bigger for tablet */
+      .mobile-header {
+        height: calc(80px + env(safe-area-inset-top)) !important;
+        padding: env(safe-area-inset-top) 2rem 0 !important;
+      }
+
+      #mobile-header-title {
+        font-size: 1.5rem !important;
+      }
+
+      #mobile-action-buttons {
+        gap: 0.75rem !important;
+        margin-right: 1.5rem !important;
+      }
+
+      #mobile-action-buttons .icon-btn-ghost {
+        font-size: 1.9rem !important;
+        padding: 0.6rem !important;
+      }
+
+      /* Bottom nav — bigger tap targets */
+      .mobile-nav {
+        height: calc(90px + env(safe-area-inset-bottom)) !important;
+      }
+
+      .mobile-nav-btn i {
+        font-size: 1.9rem !important;
+      }
+
+      .mobile-nav-btn span {
+        font-size: 0.85rem !important;
+        bottom: 10px !important;
+        padding: 0.3rem 1rem !important;
+      }
+
+      /* Calendar — wider so it doesn't feel cramped */
+      #mobile-calendar {
+        min-width: 1100px !important;
+      }
+
+      /* Course list — 2-column grid on tablet */
+      #mobile-courses-list {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 1rem !important;
+        padding: 1rem !important;
+        padding-bottom: calc(110px + env(safe-area-inset-bottom)) !important;
+        align-items: start !important;
+      }
+
+      .course-item {
+        margin-bottom: 0 !important;
+      }
+
+      /* Sections grid — 3 columns */
+      .sections-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)) !important;
+      }
+
+      /* Schedule tabs */
+      #mobile-calendar-view .schedule-tabs-container {
+        margin-left: 1.5rem !important;
+        margin-right: 1.5rem !important;
+        margin-top: 0.75rem !important;
+      }
+
+      /* My schedule list — padding for bottom nav */
+      #mobile-my-schedule-list {
+        padding: 1.25rem !important;
+        padding-bottom: calc(1.25rem + 190px) !important;
+        gap: 1.25rem !important;
+      }
+
+      /* My schedule items — 2-column grid */
+      #mobile-my-schedule-list {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        align-items: start !important;
+      }
+
+      /* Footer island on tablet */
+      .mobile-schedule-footer {
+        bottom: calc(90px + env(safe-area-inset-bottom)) !important;
+        padding: 1.5rem 2rem 1.75rem !important;
+        flex-direction: row !important;
+        gap: 1rem !important;
+        border-radius: 28px 28px 0 0 !important;
+      }
+
+      .mobile-schedule-footer .view-conflicts-btn,
+      .mobile-schedule-footer .moad-btn {
+        height: 60px !important;
+        font-size: 1.15rem !important;
+        border-radius: 20px !important;
+      }
+
+      /* Details panel — wider sheet */
+      .details-panel {
+        max-width: 700px !important;
+        margin: 0 auto !important;
+        border-radius: 28px 28px 0 0 !important;
+      }
+
+      .details-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+      }
+
+      /* Content padding */
+      .mobile-view-content {
+        padding-bottom: calc(100px + env(safe-area-inset-bottom)) !important;
+      }
+    }
+
     @keyframes sectionFadeUp {
       from {
         opacity: 0;
