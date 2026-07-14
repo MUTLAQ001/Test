@@ -27,8 +27,8 @@
       --color-success: #10b981;
       --color-bg: #0b0a12;
       --color-card: rgba(19, 17, 28, 0.6);
-      --color-border: rgba(190, 175, 250, 0.10);
-      --color-border-hover: rgba(190, 175, 250, 0.22);
+      --color-border: rgba(190, 175, 250, 0.16);
+      --color-border-hover: rgba(190, 175, 250, 0.30);
       --color-text: #f4f3fa;
       --color-text-muted: #a4a2ba;
       --color-text-dark: #fbfaff;
@@ -2158,8 +2158,6 @@
 
     .mobile-schedule-item {
       background: linear-gradient(145deg, rgba(255, 255, 255, 0.03), rgba(0, 0, 0, 0.2));
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: calc(var(--radius) * 1.5);
       padding: 1.25rem;
@@ -3124,8 +3122,6 @@
         border-radius: calc(var(--radius) * 1.5);
         margin-bottom: 1.25rem;
         box-shadow: 0 10px 25px -10px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
         transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease;
       }
 
@@ -3748,6 +3744,14 @@
     body.high-performance .course-item {
       content-visibility: auto;
       contain-intrinsic-size: auto 4.5rem;
+    }
+
+    /* عناصر تعتمد على الأنيميشن لإظهار نفسها (opacity:0 كحالة أساسية) —
+       لازم نعيد ظهورها يدويًا بعد ما نلغي الأنيميشن أعلاه */
+    body.high-performance .course-item .section-btn,
+    body.high-performance .my-schedule-table .schedule-row {
+      opacity: 1 !important;
+      transform: none !important;
     }
 
     /* الطباعة */
