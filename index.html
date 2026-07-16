@@ -3485,6 +3485,25 @@
       animation: rowIn 0.35s ease-out forwards;
     }
 
+    .closed-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .25rem;
+      font-size: .65rem;
+      font-weight: 700;
+      padding: .15rem .5rem;
+      border-radius: var(--radius-full);
+      color: var(--color-danger);
+      background: rgba(var(--rgb-danger), 0.14);
+      border: 1px solid rgba(var(--rgb-danger), 0.3);
+      margin-inline-start: .4rem;
+      white-space: nowrap;
+    }
+
+    .my-schedule-table .schedule-row.is-closed td:first-child {
+      box-shadow: inset 3px 0 0 0 var(--color-danger);
+    }
+
     .my-schedule-table .schedule-row:nth-child(1) {
       animation-delay: 0.05s;
     }
@@ -4562,13 +4581,6 @@
       background: var(--axis-corner-bg);
     }
 
-    .fc .fc-scrollgrid-section-header > td {
-      box-shadow: 0 6px 14px -8px rgba(0, 0, 0, 0.55);
-    }
-
-    .light .fc .fc-scrollgrid-section-header > td {
-      box-shadow: 0 6px 14px -8px rgba(76, 55, 150, 0.18);
-    }
 
     .fc .fc-timegrid-slot-label-cushion {
       font-size: 0.7rem;
@@ -6948,10 +6960,12 @@ ${statusIndicatorHTML}<div class="section-btn-number">${section.section}</div><d
           const statsHTML = this._createScheduleStatsHTML(selectedCourses, uniqueCourseCodes.size);
           const tableRowsHTML = selectedCourses.sort((a, b) => a.code.localeCompare(b.code)).map(course => {
             const isConflicted = conflictMap.has(course.uniqueId);
-            return `<tr class="schedule-row ${isConflicted ? 'has-conflict' : ''}"><td><div>${course.code}</div><div>${course.name}</div></td><td><div>${course.section}</div><div>${this._typeLabel(course.type)}</div></td><td>${course.instructor}</td><td>${course.time.replace(/<br>/g, ' ')}</td><td>${course.examPeriodId || "لا يوجد"}</td><td>${course.location}</td><td><div class="hours-value">${course.hours}</div></td></tr>`;
+            const isClosed = !!(course.status && course.status.includes('مغلقة'));
+            const closedBadge = isClosed ? '<span class="closed-badge"><i class="ph-fill ph-lock-simple"></i>مغلقة</span>' : '';
+            return `<tr class="schedule-row ${isConflicted ? 'has-conflict' : ''} ${isClosed ? 'is-closed' : ''}"><td><div>${course.code}${closedBadge}</div><div>${course.name}</div></td><td><div>${course.section}</div><div>${this._typeLabel(course.type)}</div></td><td>${course.instructor}</td><td>${course.time.replace(/<br>/g, ' ')}</td><td>${course.examPeriodId || "لا يوجد"}</td><td>${course.location}</td><td><div class="hours-value">${course.hours}</div></td></tr>`;
           }).join('');
           const conflictButtonHTML = conflictMap.size > 0 ? `<button class="view-conflicts-btn" id="desktop-view-conflicts-btn"><i class="ph-fill ph-warning"></i> حل التعارض</button>` : '';
-          const gridItemsHTML = selectedCourses.sort((a, b) => a.code.localeCompare(b.code)).map((course, i) => `<div class="mobile-schedule-item" style="animation-delay:${i * 30}ms;"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${course.name}</h3><span>${course.code} - شعبة ${course.section}</span></div>${conflictMap.has(course.uniqueId) ? '<i class="ph-fill ph-warning mobile-conflict-icon"></i>' : ''}</div><div class="mobile-schedule-details"><div class="mobile-detail-row"><i class="ph ph-clock"></i> <strong>المواعيد:</strong> ${course.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div class="mobile-detail-row"><i class="ph ph-user"></i> <strong>المحاضر:</strong> ${course.instructor || 'غير محدد'}</div></div></div>`).join('');
+          const gridItemsHTML = selectedCourses.sort((a, b) => a.code.localeCompare(b.code)).map((course, i) => { const isClosed = !!(course.status && course.status.includes('مغلقة')); return `<div class="mobile-schedule-item" style="animation-delay:${i * 30}ms;"><div class="mobile-schedule-header"><div class="mobile-schedule-title"><h3>${course.name}</h3><span>${course.code} - شعبة ${course.section}${isClosed ? '<span class="closed-badge"><i class="ph-fill ph-lock-simple"></i>مغلقة</span>' : ''}</span></div>${conflictMap.has(course.uniqueId) ? '<i class="ph-fill ph-warning mobile-conflict-icon"></i>' : ''}</div><div class="mobile-schedule-details"><div class="mobile-detail-row"><i class="ph ph-clock"></i> <strong>المواعيد:</strong> ${course.time.replace(/<br>/g, ' / ') || 'غير محدد'}</div><div class="mobile-detail-row"><i class="ph ph-user"></i> <strong>المحاضر:</strong> ${course.instructor || 'غير محدد'}</div></div></div>`; }).join('');
           return `<div class="card my-schedule-card"><div class="my-schedule-section"><div class="card-header-inline"><div class="card-header-actions"><h3><i class="ph ph-calendar-check"></i> جدولـي</h3><button class="copy-crn-btn" id="desktop-copy-crn-btn" title="نسخ أرقام الشعب"><i class="ph ph-copy"></i> نسخ الشعب</button></div><div style="display:flex;align-items:center;gap:0.75rem;"><button class="moad-btn" id="generate-crn-tool-btn"><i class="ph ph-magic-wand"></i> مُعِدّ</button><div class="total-credits-pill">إجمالي الساعات: <span>${totalCredits}</span></div></div></div>${statsHTML}<div class="my-schedule-table-wrapper"><table class="my-schedule-table"><thead><tr><th>المقرر</th><th>الشعبة</th><th>المحاضر</th><th>المواعيد</th><th>فترة الاختبار</th><th>المكان</th><th>الساعات</th></tr></thead><tbody>${tableRowsHTML}</tbody></table></div><div class="my-schedule-grid-wrapper hidden">${gridItemsHTML}</div><div class="my-schedule-footer">${conflictButtonHTML}</div></div></div>`;
         },
         _createScheduleStatsHTML(selectedCourses, coursesCount) {
@@ -7866,7 +7880,7 @@ ${shareButtonHTML}
         },
         _bundleKeyOf(sec) { return this.state.linkedCourseGroups[sec.name] ? 'n:' + sec.name : 'c:' + sec.code; },
         _instKeyOf(sec) { return this._bundleKeyOf(sec) + '|' + this._canonType(sec.type); },
-        _buildGenBundles() {
+        _buildGenBundles(includeClosed) {
           const groups = Object.values(this.state.groupedCourses).filter(g => !this.state.hiddenCourseCodes.has(g.code));
           const map = new Map();
           groups.forEach(g => {
@@ -7874,7 +7888,7 @@ ${shareButtonHTML}
             if (!map.has(key)) map.set(key, { key, name: g.name, color: g.color, codes: [], sections: [] });
             const b = map.get(key);
             if (!b.codes.includes(g.code)) b.codes.push(g.code);
-            let secs = g.sections.filter(s => !s.status || !s.status.includes('مغلقة'));
+            let secs = includeClosed ? g.sections.slice() : g.sections.filter(s => !s.status || !s.status.includes('مغلقة'));
             if (secs.length === 0) secs = g.sections.slice();
             b.sections.push(...secs);
           });
@@ -7954,9 +7968,10 @@ ${shareButtonHTML}
         },
         _handleAutoGenerate() {
           if (this.state.allCoursesData.length === 0) { this._showToast('error', 'حمّل بيانات المقررات أولاً.'); return; }
-          const bundles = this._buildGenBundles();
-          if (bundles.length === 0) { this._showToast('error', 'لا توجد مقررات ظاهرة لإنشاء جدول.'); return; }
           const saved = this._loadGenPrefs();
+          let includeClosed = !!saved.includeClosed;
+          let bundles = this._buildGenBundles(includeClosed);
+          if (bundles.length === 0) { this._showToast('error', 'لا توجد مقررات ظاهرة لإنشاء جدول.'); return; }
           const dayNames = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'];
           const savedCourses = Array.isArray(saved.courses) && saved.courses.length ? saved.courses : null;
           const selected = new Set(bundles.filter(b => !savedCourses || savedCourses.includes(b.key)).map(b => b.key));
@@ -7965,11 +7980,12 @@ ${shareButtonHTML}
           const savedInst = saved.instructors || {};
           Object.keys(savedInst).forEach(k => { instState[k] = [...savedInst[k]]; });
           const esc = s => this._escapeHTML(s);
-          const courseCardsHTML = bundles.map(b => {
+          const buildCourseCardsHTML = () => bundles.map(b => {
             const partsLabel = b.parts.map(p => p.type).join(' + ');
             return `<div class="gen-course-chip ${selected.has(b.key) ? 'selected' : ''}" data-key="${esc(b.key)}"><span class="color-dot" style="background:${b.color}"></span><div class="gc-info"><div class="gc-name">${esc(b.name)}</div><div class="gc-meta">${esc(b.codes.join(' + '))} <span class="gc-sep"></span> ${partsLabel} <span class="gc-sep"></span> ${b.sections.length} شعبة</div></div><i class="ph ph-check-circle gc-check"></i></div>`;
           }).join('');
-          const coursesHTML = `<div class="gen-select-bar"><span class="gen-count" id="gen-course-count"></span><button type="button" class="gen-mini-btn" id="gen-courses-all"><i class="ph ph-checks"></i>الكل</button><button type="button" class="gen-mini-btn" id="gen-courses-none"><i class="ph ph-prohibit"></i>لا شيء</button></div><div class="gen-course-grid" id="gen-courses">${courseCardsHTML}</div>`;
+          const includeClosedToggleHTML = `<div class="settings-item gen-closed-toggle"><div class="settings-item-label"><span>تضمين الشعب المغلقة</span><small>اعتبارها خياراً عند بناء الجدول رغم أنها مغلقة حالياً</small></div><label class="toggle-switch"><input type="checkbox" id="gen-include-closed"${includeClosed ? ' checked' : ''}><span class="slider"></span></label></div>`;
+          const coursesHTML = `${includeClosedToggleHTML}<div class="gen-select-bar"><span class="gen-count" id="gen-course-count"></span><button type="button" class="gen-mini-btn" id="gen-courses-all"><i class="ph ph-checks"></i>الكل</button><button type="button" class="gen-mini-btn" id="gen-courses-none"><i class="ph ph-prohibit"></i>لا شيء</button></div><div class="gen-course-grid" id="gen-courses">${buildCourseCardsHTML()}</div>`;
           const modesHTML = `<div class="gen-options" id="gen-options">
 <div class="gen-option ${(saved.mode || 'any') === 'any' ? 'selected' : ''}" data-mode="any"><i class="ph ph-shuffle"></i><div><div class="g-title">أي جدول متاح</div><div class="g-desc">تركيبة خالية من التعارض</div></div></div>
 <div class="gen-option ${saved.mode === 'late' ? 'selected' : ''}" data-mode="late"><i class="ph ph-sun-horizon"></i><div><div class="g-title">بدون محاضرات مبكرة</div><div class="g-desc">تفضيل الشعب المتأخرة صباحاً</div></div></div>
@@ -8008,6 +8024,13 @@ ${shareButtonHTML}
               if (i >= 0) { list.splice(i, 1); el.classList.remove('selected'); } else { list.push(name); el.classList.add('selected'); }
             }));
           };
+          const wireCourseChips = () => {
+            document.querySelectorAll('#gen-courses .gen-course-chip').forEach(el => el.addEventListener('click', () => {
+              const k = el.dataset.key;
+              if (selected.has(k)) { selected.delete(k); el.classList.remove('selected'); } else { selected.add(k); el.classList.add('selected'); }
+              syncUI();
+            }));
+          };
           Swal.fire({
             title: 'إنشاء الجدول الذكي',
             html: `<div class="gen-wizard custom-scrollbar">
@@ -8020,11 +8043,17 @@ ${shareButtonHTML}
             showCancelButton: true, confirmButtonText: '<i class="ph ph-magic-wand"></i> أنشئ الجدول', cancelButtonText: 'إلغاء',
             didOpen: () => {
               document.querySelectorAll('#gen-options .gen-option').forEach(el => el.addEventListener('click', () => { document.querySelectorAll('#gen-options .gen-option').forEach(x => x.classList.remove('selected')); el.classList.add('selected'); }));
-              document.querySelectorAll('#gen-courses .gen-course-chip').forEach(el => el.addEventListener('click', () => {
-                const k = el.dataset.key;
-                if (selected.has(k)) { selected.delete(k); el.classList.remove('selected'); } else { selected.add(k); el.classList.add('selected'); }
-                syncUI();
-              }));
+              wireCourseChips();
+              const includeClosedToggle = document.getElementById('gen-include-closed');
+              if (includeClosedToggle) {
+                includeClosedToggle.onchange = e => {
+                  includeClosed = e.target.checked;
+                  bundles = this._buildGenBundles(includeClosed);
+                  const coursesWrap = document.getElementById('gen-courses');
+                  if (coursesWrap) { coursesWrap.innerHTML = buildCourseCardsHTML(); wireCourseChips(); }
+                  syncUI();
+                };
+              }
               const allBtn = document.getElementById('gen-courses-all');
               const noneBtn = document.getElementById('gen-courses-none');
               if (allBtn) allBtn.addEventListener('click', () => { bundles.forEach(b => selected.add(b.key)); document.querySelectorAll('#gen-courses .gen-course-chip').forEach(el => el.classList.add('selected')); syncUI(); });
@@ -8043,7 +8072,8 @@ ${shareButtonHTML}
                 courses: [...selected],
                 mode: document.querySelector('#gen-options .gen-option.selected')?.dataset.mode || 'any',
                 daysOff: [...document.querySelectorAll('#gen-days .pref-chip[data-day].selected')].map(c => +c.dataset.day),
-                instructors
+                instructors,
+                includeClosed
               };
             }
           }).then(res => {
