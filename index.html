@@ -5812,10 +5812,13 @@
       .swal2-actions {
         flex-direction: column !important;
         width: 100% !important;
+        align-items: center !important;
       }
 
       .swal2-styled {
-        width: 100% !important;
+        width: auto !important;
+        min-width: min(260px, 85%) !important;
+        padding-inline: 2rem !important;
       }
     }
 
@@ -6111,8 +6114,8 @@
     }
 
     .fc .fc-timegrid-col.fc-day {
-      border-inline-start-color: var(--grid-line) !important;
-      border-inline-end-color: var(--grid-line) !important;
+      border-inline-start-color: var(--grid-line-soft) !important;
+      border-inline-end-color: var(--grid-line-soft) !important;
     }
 
     .fc .fc-col-header .fc-timegrid-axis {
@@ -6141,8 +6144,8 @@
     }
 
     .fc .fc-col-header-cell {
-      border-inline-start-color: var(--grid-line) !important;
-      border-inline-end-color: var(--grid-line) !important;
+      border-inline-start-color: var(--grid-line-soft) !important;
+      border-inline-end-color: var(--grid-line-soft) !important;
       border-top-color: transparent !important;
       border-bottom-color: transparent !important;
     }
