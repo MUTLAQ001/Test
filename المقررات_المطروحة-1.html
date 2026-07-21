@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>المقررات المطروحة — جامعة القصيم</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F6FA; --card:#FFFFFF;
+  --qu:#0F3D6E; --qu-dark:#0B2E52; --qu-soft:#EAF1F9;
+  --gold:#C6A15B;
+  --ink:#1B2430; --muted:#647089; --line:#E6EBF3;
+  --open:#1B8A5A; --open-bg:#E7F5EE;
+  --closed:#B4462F; --closed-bg:#FBECE8;
+  --shadow:0 1px 2px rgba(16,42,74,.04), 0 8px 24px rgba(16,42,74,.06);
+  --radius:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--bg);
+  color:var(--ink);
+  font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;
+  font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit}
+
+/* ---------- Header ---------- */
+.topbar{
+  background:linear-gradient(180deg,var(--qu) 0%,var(--qu-dark) 100%);
+  color:#fff;
+  border-bottom:3px solid var(--gold);
+}
+.topbar .inner{
+  max-width:1080px; margin:0 auto; padding:16px 22px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+}
+.brand{display:flex; align-items:center; gap:14px; min-width:0}
+.emblem{
+  width:46px; height:46px; border-radius:13px; flex:none;
+  background:rgba(255,255,255,.10);
+  border:1px solid rgba(255,255,255,.28);
+  display:grid; place-items:center;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+}
+.emblem span{
+  font-family:"Readex Pro",serif; font-weight:700; font-size:26px;
+  color:#fff; line-height:1; margin-top:-2px;
+}
+.brand-text{display:flex; flex-direction:column; min-width:0}
+.brand-ar{
+  font-family:"Readex Pro",sans-serif; font-weight:600;
+  font-size:19px; letter-spacing:.2px; white-space:nowrap;
+}
+.brand-en{
+  font-size:10.5px; letter-spacing:3px; text-transform:uppercase;
+  color:rgba(255,255,255,.72); font-weight:500;
+}
+.portal-tag{
+  font-size:12.5px; color:rgba(255,255,255,.85);
+  border:1px solid rgba(255,255,255,.22); border-radius:999px;
+  padding:6px 14px; white-space:nowrap; background:rgba(255,255,255,.05);
+}
+
+/* ---------- Page ---------- */
+.wrap{max-width:1080px; margin:0 auto; padding:28px 22px 60px}
+.pagehead{margin:6px 0 20px}
+.eyebrow{
+  font-size:12px; font-weight:600; letter-spacing:2px; text-transform:uppercase;
+  color:var(--gold);
+}
+h1{
+  font-family:"Readex Pro",sans-serif; font-weight:600;
+  font-size:26px; margin:6px 0 10px; color:var(--qu-dark);
+}
+.meta{display:flex; flex-wrap:wrap; gap:8px 10px; align-items:center}
+.chip{
+  font-size:12.5px; font-weight:500; color:var(--muted);
+  background:#fff; border:1px solid var(--line); border-radius:999px;
+  padding:5px 12px;
+}
+.chip strong{color:var(--qu); font-weight:600}
+.note{
+  margin-top:14px; font-size:13px; color:var(--muted);
+  display:flex; gap:8px; align-items:flex-start;
+}
+.note svg{flex:none; margin-top:3px}
+
+/* ---------- Toolbar ---------- */
+.toolbar{
+  display:flex; flex-wrap:wrap; gap:12px; align-items:center;
+  margin:18px 0 14px;
+}
+.search{position:relative; flex:1 1 280px; min-width:220px}
+.search svg{
+  position:absolute; inset-inline-start:14px; top:50%; transform:translateY(-50%);
+  color:var(--muted); pointer-events:none;
+}
+.search input{
+  width:100%; padding:12px 44px 12px 16px;
+  border:1px solid var(--line); border-radius:12px; background:#fff;
+  font-family:inherit; font-size:14.5px; color:var(--ink);
+  box-shadow:var(--shadow); transition:border-color .15s, box-shadow .15s;
+}
+.search input::placeholder{color:#9AA6BC}
+.search input:focus{
+  outline:none; border-color:var(--qu);
+  box-shadow:0 0 0 4px rgba(15,61,110,.10);
+}
+.count{font-size:13px; color:var(--muted); white-space:nowrap}
+.count b{color:var(--qu-dark); font-weight:600}
+
+/* ---------- Table card ---------- */
+.tablecard{
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden;
+}
+table{width:100%; border-collapse:collapse}
+thead th{
+  background:var(--qu-soft); color:var(--qu-dark);
+  font-weight:600; font-size:13px; text-align:start;
+  padding:14px 16px; border-bottom:1px solid var(--line); white-space:nowrap;
+}
+tbody td{
+  padding:14px 16px; border-bottom:1px solid var(--line);
+  font-size:14px; vertical-align:middle;
+}
+.course-row:hover td{background:#FAFBFE}
+.course-row.open-detail td{background:var(--qu-soft)}
+.c-code{font-weight:600; color:var(--qu); white-space:nowrap; letter-spacing:.3px}
+.c-name{font-weight:500}
+.c-loc{color:var(--muted); font-size:13px}
+.c-sec{font-variant-numeric:tabular-nums; color:var(--ink)}
+.act{
+  display:inline-block; font-size:12px; font-weight:500;
+  padding:3px 10px; border-radius:999px; background:#EEF1F6; color:#556072;
+}
+.status{
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:12.5px; font-weight:600; padding:4px 11px; border-radius:999px;
+  white-space:nowrap;
+}
+.status .dot{width:7px; height:7px; border-radius:50%}
+.status.open{background:var(--open-bg); color:var(--open)}
+.status.open .dot{background:var(--open)}
+.status.closed{background:var(--closed-bg); color:var(--closed)}
+.status.closed .dot{background:var(--closed)}
+.details-btn{
+  display:inline-flex; align-items:center; gap:7px;
+  font-family:inherit; font-size:13px; font-weight:500; color:var(--qu);
+  background:#fff; border:1px solid var(--line); border-radius:10px;
+  padding:7px 13px; cursor:pointer; white-space:nowrap;
+  transition:background .15s, border-color .15s;
+}
+.details-btn:hover{background:var(--qu-soft); border-color:#CBDBF0}
+.details-btn:focus-visible{outline:2px solid var(--qu); outline-offset:2px}
+.details-btn .chev{transition:transform .2s}
+.course-row.open-detail .details-btn .chev{transform:rotate(180deg)}
+
+/* ---------- Detail panel ---------- */
+.detail-row td{padding:0; border-bottom:1px solid var(--line); background:#fff}
+.detail-inner{padding:18px 20px; display:grid; gap:14px}
+.detail-title{
+  font-size:12px; font-weight:600; letter-spacing:1px; text-transform:uppercase;
+  color:var(--muted);
+}
+.meetings{display:flex; flex-wrap:wrap; gap:10px}
+.meeting{
+  display:flex; align-items:center; gap:12px;
+  background:var(--qu-soft); border:1px solid #DCE8F6; border-radius:12px;
+  padding:10px 14px;
+}
+.meeting .mt-time{
+  font-weight:600; color:var(--qu-dark); font-size:14px;
+  font-variant-numeric:tabular-nums; white-space:nowrap;
+}
+.meeting .mt-room{
+  font-size:13px; color:var(--muted); padding-inline-start:12px;
+  border-inline-start:1px solid #CBDBF0;
+}
+.exam{font-size:13.5px; color:var(--ink)}
+.exam b{color:var(--qu); font-weight:600}
+.exam .none{color:var(--muted); font-weight:400}
+
+.empty{padding:48px 20px; text-align:center; color:var(--muted)}
+.empty b{display:block; color:var(--ink); font-weight:600; margin-bottom:4px; font-size:15px}
+
+footer{
+  max-width:1080px; margin:0 auto; padding:22px; text-align:center;
+  color:var(--muted); font-size:12.5px;
+}
+
+/* ---------- Responsive: collapse table to cards ---------- */
+@media (max-width:780px){
+  thead{display:none}
+  table, tbody, tr, td{display:block; width:100%}
+  .course-row{
+    border-bottom:8px solid var(--bg); padding:6px 4px 10px; position:relative;
+  }
+  .course-row:hover td, .course-row.open-detail td{background:transparent}
+  .course-row td{
+    border:none; padding:7px 16px; display:flex; justify-content:space-between;
+    align-items:center; gap:14px;
+  }
+  .course-row td::before{
+    content:attr(data-th); color:var(--muted); font-size:12.5px; font-weight:500;
+    flex:none;
+  }
+  .course-row td.cell-details{justify-content:flex-end; padding-top:4px}
+  .course-row td.cell-details::before{display:none}
+  .details-btn{width:100%; justify-content:center}
+  .detail-row td{border:none}
+  .detail-inner{padding:4px 16px 16px}
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{transition:none !important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <div class="brand">
+      <div class="emblem" aria-hidden="true"><span>ق</span></div>
+      <div class="brand-text">
+        <div class="brand-ar">جامعة القصيم</div>
+        <div class="brand-en">Qassim University</div>
+      </div>
+    </div>
+    <div class="portal-tag">البوابة الأكاديمية</div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div class="pagehead">
+    <div class="eyebrow">التسجيل</div>
+    <h1>المقررات المطروحة وفق الخطة</h1>
+    <div class="meta">
+      <span class="chip">الفصل: <strong>الفصل الأول 1448</strong></span>
+      <span class="chip" id="totalChip">—</span>
+    </div>
+    <div class="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+      <span>لا تظهر المقررات التي لها متطلب سابق ولم يجتزهُ الطالب.</span>
+    </div>
+  </div>
+
+  <div class="toolbar">
+    <div class="search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="ابحث برمز المقرر أو اسمه أو رقم الشعبة…" autocomplete="off">
+    </div>
+    <div class="count" id="count"></div>
+  </div>
+
+  <div class="tablecard">
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">رمز المقرر</th>
+          <th scope="col">اسم المقرر</th>
+          <th scope="col">المقر</th>
+          <th scope="col">الشعبة</th>
+          <th scope="col">النشاط</th>
+          <th scope="col">الساعات</th>
+          <th scope="col">الحالة</th>
+          <th scope="col">التفاصيل</th>
+        </tr>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+</main>
+
+<footer>جامعة القصيم · البوابة الأكاديمية — عرض المقررات المطروحة</footer>
+
+<script id="data" type="application/json">[{"code":"QU 101","name":"المقرر ١","loc":"مقر الجامعة الرئيس طلاب","sec":"1833","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r فصل دراسي","exam":"35"},{"code":"QU 101","name":"المقرر ١","loc":"مقر الجامعة الرئيس طلاب","sec":"1835","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r فصل دراسي","exam":""},{"code":"QU 101","name":"المقرر ١","loc":"مقر الجامعة الرئيس طلاب","sec":"1834","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r ","exam":"35"},{"code":"QU 101","name":"المقرر ١","loc":"مقر الجامعة الرئيس طلاب","sec":"1836","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r ","exam":""},{"code":"QU 102","name":"المقرر ٢","loc":"مقر الجامعة الرئيس طلاب","sec":"1837","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r فصل دراسي","exam":"35"},{"code":"QU 102","name":"المقرر ٢","loc":"مقر الجامعة الرئيس طلاب","sec":"1839","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r فصل دراسي","exam":""},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"135","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 08:00 ص - 09:40 ص @r C1-L2-R-2041","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2295","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 12:30 م - 02:00 م @r 4099 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2297","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 10:30 ص - 12:10 م @r 4013 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2298","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 10:00 ص - 11:40 ص @r A20 كلية التربية - بكالوريوس","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2299","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 08:00 ص - 09:40 ص @r A15 كلية التربية - بكالوريوس","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2300","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 12:30 م - 02:10 م @r 5062 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2301","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 12:00 م - 01:40 م @r ","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2302","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 08:30 م - 10:10 م @r 3060 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2303","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 12:00 م - 01:40 م @r 3061 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2304","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 10:30 ص - 12:10 م @r 4138 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2305","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 10:30 ص - 12:10 م @r 4098 كلية اللغات","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2307","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 02:40 م - 04:20 م @r B.1-G225","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2308","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 12:20 م - 02:00 م @r B.1-G225","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2309","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 12:35 م - 01:25 م @r القاعة 119 @n  3 @t 01:30 م - 02:20 م @r القاعة 119","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2310","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 08:00 ص - 09:40 ص @r COC-204IT","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2311","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 08:00 ص - 09:40 ص @r COC-207IT","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2312","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 12:00 م - 01:40 م @r كلية الاقتصاد-207و","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2313","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 03:00 م - 04:40 م @r كلية الاقتصاد-204ب","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2315","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 12:00 م - 01:40 م @r ط ت - 216","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2316","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 12:00 م - 01:40 م @r ط ت - 215","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"5633","act":"نظري","hrs":"2","status":"مغلقة","section":"","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"6432","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 07:00 م - 08:40 م @r ","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"6522","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:00 ص - 09:40 ص @r COC-204IT","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"7011","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 01:00 م - 03:00 م @r ","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"7013","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 01:00 م - 02:50 م @r ","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"7343","act":"نظري","hrs":"2","status":"مغلقة","section":"","exam":"55"},{"code":"QU 103","name":"المقرر ٣","loc":"مقر الجامعة الرئيس طلاب","sec":"7776","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 12:00 م - 01:40 م @r ","exam":"55"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"95","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 08:00 ص - 09:40 ص @r C1-L1-R-1062","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"748","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 08:00 ص - 09:40 ص @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"749","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r 5133 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"750","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 12:00 م - 01:40 م @r 5131 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"751","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 08:00 ص - 09:40 ص @r 5133 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"752","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 10:15 ص - 12:00 م @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"753","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 12:00 م - 01:40 م @r 5169 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"754","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 08:00 ص - 09:40 ص @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"755","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 01:00 م - 02:50 م @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"756","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 12:30 م - 02:10 م @r 5061 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"757","act":"نظري","hrs":"2","status":"مفتوحة","section":" 4 @t 08:00 ص - 09:40 ص @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"758","act":"نظري","hrs":"2","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"759","act":"نظري","hrs":"2","status":"مفتوحة","section":" 4 @t 12:00 م - 01:40 م @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"760","act":"نظري","hrs":"2","status":"مفتوحة","section":" 5 @t 08:00 ص - 09:40 ص @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"761","act":"نظري","hrs":"2","status":"مفتوحة","section":" 5 @t 10:15 ص - 12:00 م @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"762","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 08:00 ص - 09:40 ص @r 5098كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"763","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 08:00 ص - 09:40 ص @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"764","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 10:15 ص - 12:00 م @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"765","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 12:30 م - 02:10 م @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"766","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 08:00 ص - 09:40 ص @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"767","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 12:15 م - 02:00 م @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"768","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 12:00 م - 01:40 م @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"769","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 12:00 م - 01:40 م @r 5179 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"770","act":"نظري","hrs":"2","status":"مفتوحة","section":" 4 @t 10:30 ص - 12:10 م @r 5178 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"771","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 12:30 م - 02:00 م @r 4109 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"773","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 08:00 ص - 09:40 ص @r A18 كلية التربية - بكالوريوس","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"774","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 10:00 ص - 11:40 ص @r A20 كلية التربية - بكالوريوس","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"775","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 12:15 م - 02:00 م @r 3060 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"776","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 12:15 م - 02:00 م @r 3153 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"777","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 09:20 ص - 11:00 ص @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"778","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:00 ص - 09:40 ص @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"779","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 08:00 ص - 09:40 ص @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"780","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 09:45 ص - 11:25 ص @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"783","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 08:30 ص - 10:10 ص @r 3-116","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"784","act":"نظري","hrs":"2","status":"مغلقة","section":" 3 @t 08:30 ص - 10:10 ص @r 3-117","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"785","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 10:30 ص - 12:10 م @r 3-106","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"786","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 10:30 ص - 12:10 م @r 3-107","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"787","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 08:30 ص - 10:10 ص @r 3-108","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"788","act":"نظري","hrs":"2","status":"مغلقة","section":" 5 @t 12:30 م - 02:10 م @r 3-109","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"789","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:30 ص - 10:10 ص @r 5133 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"790","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:30 ص - 10:10 ص @r 5131 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"791","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:30 ص - 10:10 ص @r 4206 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"792","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 12:00 م - 01:40 م @r 5060 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"793","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 10:30 ص - 12:10 م @r 5-310","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"794","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 08:30 ص - 10:10 ص @r 4-225","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"795","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 08:30 ص - 10:10 ص @r 4-210","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"796","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 10:30 ص - 12:10 م @r 4-211","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"797","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 12:00 م - 01:40 م @r 5169 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"798","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 12:00 م - 01:40 م @r 5100 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"799","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 09:50 ص - 10:40 ص @r  @n  1 @t 10:45 ص - 11:35 ص @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"800","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 01:45 م - 03:30 م @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"801","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 11:45 ص - 01:25 م @r 5177 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"802","act":"نظري","hrs":"2","status":"مفتوحة","section":" 4 @t 11:45 ص - 01:25 م @r 5134 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"803","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 10:00 ص - 11:40 ص @r 5098كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"804","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 11:45 ص - 01:25 م @r 5133 كلية اللغات","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"5631","act":"نظري","hrs":"2","status":"مغلقة","section":"","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"6258","act":"نظري","hrs":"2","status":"مغلقة","section":"","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"7088","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 01:00 م - 02:50 م @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"7091","act":"نظري","hrs":"2","status":"مغلقة","section":" 4 @t 01:00 م - 02:50 م @r ","exam":"64"},{"code":"QU 104","name":"المقرر ٤","loc":"مقر الجامعة الرئيس طلاب","sec":"7609","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 12:00 م - 01:40 م @r ","exam":"64"},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2783","act":"نظري","hrs":"3","status":"مفتوحة","section":" 3 @t 10:00 ص - 10:50 ص @r B1-F083","exam":"41"},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2787","act":"عملي","hrs":"","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r معمل المساحة","exam":""},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2786","act":"عملي","hrs":"","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r معمل المساحة","exam":""},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2792","act":"تدريب","hrs":"","status":"مفتوحة","section":" 2 @t 12:40 م - 02:20 م @r B1-F083","exam":""},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2784","act":"نظري","hrs":"3","status":"مفتوحة","section":" 3 @t 11:00 ص - 11:50 ص @r B1-F083","exam":"41"},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2793","act":"تدريب","hrs":"","status":"مفتوحة","section":" 2 @t 08:00 ص - 09:40 ص @r B1-F083","exam":""},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2788","act":"عملي","hrs":"","status":"مفتوحة","section":" 5 @t 08:00 ص - 09:40 ص @r معمل المساحة","exam":""},{"code":"QU 105","name":"المقرر ٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2789","act":"عملي","hrs":"","status":"مفتوحة","section":" 3 @t 12:40 م - 02:20 م @r معمل المساحة","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3201","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 01:00 م - 01:50 م @r B1-F161","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3210","act":"عملي","hrs":"","status":"مغلقة","section":" 5 @t 12:40 م - 02:20 م @r B1-F161","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3202","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 10:30 ص - 11:20 ص @r B1-F161","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3211","act":"عملي","hrs":"","status":"مغلقة","section":" 5 @t 10:00 ص - 11:40 ص @r B1-F161","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3204","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 01:00 م - 01:50 م @r B1-F189","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3213","act":"عملي","hrs":"","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r B1-F189","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3205","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 08:30 ص - 09:20 ص @r B1-F162","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3214","act":"عملي","hrs":"","status":"مفتوحة","section":" 4 @t 08:00 ص - 09:40 ص @r B1-F162","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3206","act":"نظري","hrs":"2","status":"مغلقة","section":" 2 @t 10:00 ص - 10:50 ص @r B1-F162","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3215","act":"عملي","hrs":"","status":"مغلقة","section":" 5 @t 10:00 ص - 11:40 ص @r B1-F162","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3208","act":"نظري","hrs":"2","status":"مغلقة","section":" 1 @t 02:40 م - 03:30 م @r B1-F161","exam":""},{"code":"QU 106","name":"المقرر ٦","loc":"مقر الجامعة الرئيس طلاب","sec":"3217","act":"عملي","hrs":"","status":"مغلقة","section":" 4 @t 02:40 م - 04:20 م @r B1-F161","exam":""},{"code":"QU 107","name":"المقرر ٧","loc":"مقر الجامعة الرئيس طلاب","sec":"2795","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 10:00 ص - 11:40 ص @r B1-F240","exam":"35"},{"code":"QU 107","name":"المقرر ٧","loc":"مقر الجامعة الرئيس طلاب","sec":"2798","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 10:00 ص - 11:40 ص @r B1-F240","exam":""},{"code":"QU 107","name":"المقرر ٧","loc":"مقر الجامعة الرئيس طلاب","sec":"2796","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r B1-.F226","exam":"35"},{"code":"QU 107","name":"المقرر ٧","loc":"مقر الجامعة الرئيس طلاب","sec":"2799","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r B1-.F226","exam":""},{"code":"QU 108","name":"المقرر ٨","loc":"مقر الجامعة الرئيس طلاب","sec":"2801","act":"عملي","hrs":"1","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r FLUID MECHANICE LAB","exam":""},{"code":"QU 108","name":"المقرر ٨","loc":"مقر الجامعة الرئيس طلاب","sec":"2802","act":"عملي","hrs":"1","status":"مفتوحة","section":" 3 @t 08:00 ص - 09:40 ص @r FLUID MECHANICE LAB","exam":""},{"code":"QU 108","name":"المقرر ٨","loc":"مقر الجامعة الرئيس طلاب","sec":"2803","act":"عملي","hrs":"1","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r FLUID MECHANICE LAB","exam":""},{"code":"QU 108","name":"المقرر ٨","loc":"مقر الجامعة الرئيس طلاب","sec":"2804","act":"عملي","hrs":"1","status":"مفتوحة","section":" 3 @t 12:40 م - 02:20 م @r FLUID MECHANICE LAB","exam":""},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"2842","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 08:00 ص - 09:40 ص @r B1-F080","exam":"49"},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"2844","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 08:00 ص - 09:40 ص @r B1-F080","exam":""},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"2843","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 10:00 ص - 11:40 ص @r B1-F080","exam":"49"},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"2845","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 10:00 ص - 11:40 ص @r B1-F080","exam":""},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"7851","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 12:40 م - 02:20 م @r ","exam":"49"},{"code":"QU 109","name":"المقرر ٩","loc":"مقر الجامعة الرئيس طلاب","sec":"7852","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r ","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2846","act":"عملي","hrs":"1","status":"مفتوحة","section":" 2 @t 12:40 م - 02:20 م @r معمل ميكانيكا التربة","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2847","act":"عملي","hrs":"1","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r معمل ميكانيكا التربة","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2848","act":"عملي","hrs":"1","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r معمل ميكانيكا التربة","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2849","act":"عملي","hrs":"1","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r معمل ميكانيكا التربة","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2850","act":"عملي","hrs":"1","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r معمل ميكانيكا التربة","exam":""},{"code":"QU 110","name":"المقرر ١٠","loc":"مقر الجامعة الرئيس طلاب","sec":"2851","act":"عملي","hrs":"1","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r معمل ميكانيكا التربة","exam":""},{"code":"QU 111","name":"المقرر ١١","loc":"مقر الجامعة الرئيس طلاب","sec":"1841","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 02:40 م - 04:20 م @r فصل دراسي","exam":"36"},{"code":"QU 111","name":"المقرر ١١","loc":"مقر الجامعة الرئيس طلاب","sec":"1843","act":"تمارين","hrs":"","status":"مفتوحة","section":" 4 @t 02:40 م - 04:20 م @r فصل دراسي","exam":""},{"code":"QU 112","name":"المقرر ١٢","loc":"مقر الجامعة الرئيس طلاب","sec":"3382","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 10:00 ص - 12:30 م @r ","exam":"36"},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2768","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 11:00 ص - 11:50 ص @r B1-F080","exam":"39"},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2771","act":"عملي","hrs":"","status":"مفتوحة","section":" 3 @t 08:00 ص - 09:40 ص @r MECHANICS OF MATERIAL LAB","exam":""},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2772","act":"عملي","hrs":"","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r MECHANICS OF MATERIAL LAB","exam":""},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2769","act":"نظري","hrs":"2","status":"مفتوحة","section":" 3 @t 10:00 ص - 10:50 ص @r B1-F080","exam":"39"},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2773","act":"عملي","hrs":"","status":"مفتوحة","section":" 5 @t 08:00 ص - 09:40 ص @r MECHANICS OF MATERIAL LAB","exam":""},{"code":"QU 113","name":"المقرر ١٣","loc":"مقر الجامعة الرئيس طلاب","sec":"2774","act":"عملي","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r MECHANICS OF MATERIAL LAB","exam":""},{"code":"QU 114","name":"المقرر ١٤","loc":"مقر الجامعة الرئيس طلاب","sec":"2777","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r B1-F083","exam":"31"},{"code":"QU 114","name":"المقرر ١٤","loc":"مقر الجامعة الرئيس طلاب","sec":"2780","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r B1-F083","exam":""},{"code":"QU 114","name":"المقرر ١٤","loc":"مقر الجامعة الرئيس طلاب","sec":"2778","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 10:00 ص - 11:40 ص @r B1-F083","exam":"31"},{"code":"QU 114","name":"المقرر ١٤","loc":"مقر الجامعة الرئيس طلاب","sec":"2781","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 10:00 ص - 11:40 ص @r B1-F083","exam":""},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2838","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 08:00 ص - 09:40 ص @r B1-F080","exam":"35"},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2840","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 08:00 ص - 09:40 ص @r B1-F080","exam":""},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2839","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r B1-F080","exam":"35"},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"2841","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r B1-F080","exam":""},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"7844","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 12:40 م - 02:20 م @r ","exam":"35"},{"code":"QU 115","name":"المقرر ١٥","loc":"مقر الجامعة الرئيس طلاب","sec":"7850","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r ","exam":""},{"code":"QU 116","name":"المقرر ١٦","loc":"مقر الجامعة الرئيس طلاب","sec":"2870","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 10:00 ص - 11:40 ص @r B1-F076","exam":"31"},{"code":"QU 116","name":"المقرر ١٦","loc":"مقر الجامعة الرئيس طلاب","sec":"2871","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 10:00 ص - 11:40 ص @r B1-F076","exam":""},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"3249","act":"نظري","hrs":"2","status":"مفتوحة","section":" 1 @t 12:40 م - 01:30 م @r B1-F083","exam":"45"},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"3251","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 12:40 م - 02:20 م @r B1-F083","exam":""},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"3250","act":"نظري","hrs":"2","status":"مفتوحة","section":" 2 @t 12:40 م - 01:30 م @r B1-F165","exam":"45"},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"3252","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 12:40 م - 02:20 م @r B1-F083","exam":""},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"7862","act":"نظري","hrs":"2","status":"مفتوحة","section":" 5 @t 11:00 ص - 11:50 ص @r ","exam":"45"},{"code":"QU 117","name":"المقرر ١٧","loc":"مقر الجامعة الرئيس طلاب","sec":"7864","act":"تدريب","hrs":"","status":"مفتوحة","section":" 2 @t 10:00 ص - 11:40 ص @r ","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3404","act":"نظري","hrs":"3","status":"مغلقة","section":" 1 @t 12:40 م - 02:20 م @r فصل دراسي","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3413","act":"تدريب","hrs":"","status":"مغلقة","section":" 4 @t 12:40 م - 02:20 م @r فصل دراسي","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3405","act":"نظري","hrs":"3","status":"مغلقة","section":" 1 @t 12:40 م - 02:20 م @r فصل دراسي","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3414","act":"تدريب","hrs":"","status":"مغلقة","section":" 4 @t 12:40 م - 02:20 م @r فصل دراسي","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3407","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 08:00 ص - 09:40 ص @r B1-F074","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3416","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 08:00 ص - 09:40 ص @r B1-F074","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3408","act":"نظري","hrs":"3","status":"مفتوحة","section":" 1 @t 08:00 ص - 09:40 ص @r B1-F083","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3417","act":"تدريب","hrs":"","status":"مفتوحة","section":" 4 @t 08:00 ص - 09:40 ص @r B1-F083","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3410","act":"نظري","hrs":"3","status":"مغلقة","section":" 1 @t 08:00 ص - 09:50 ص @r فصل دراسي","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3419","act":"تدريب","hrs":"","status":"مغلقة","section":" 4 @t 08:00 ص - 09:50 ص @r فصل دراسي","exam":""},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3411","act":"نظري","hrs":"3","status":"مغلقة","section":" 1 @t 12:40 م - 02:20 م @r فصل دراسي","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3412","act":"نظري","hrs":"3","status":"مفتوحة","section":" 2 @t 02:40 م - 04:20 م @r B1-F241","exam":"45"},{"code":"QU 118","name":"المقرر ١٨","loc":"مقر الجامعة الرئيس طلاب","sec":"3421","act":"تدريب","hrs":"","status":"مفتوحة","section":" 5 @t 02:40 م - 04:20 م @r B1-F241","exam":""}]</script>
+<script>
+(function(){
+  const DATA = JSON.parse(document.getElementById('data').textContent);
+  const tbody = document.getElementById('tbody');
+  const countEl = document.getElementById('count');
+  const totalChip = document.getElementById('totalChip');
+  const q = document.getElementById('q');
+  totalChip.textContent = toAr(DATA.length) + ' شعبة مطروحة';
+
+  function toAr(n){return String(n).replace(/[0-9]/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);}
+
+  function parseMeetings(section){
+    // format: " <sec> @t <time> @r <room> @n <sec> @t <time> @r <room>"
+    if(!section) return [];
+    return section.split('@n').map(part=>{
+      const m = part.match(/@t\s*([\s\S]*?)\s*@r\s*([\s\S]*)$/);
+      if(!m) return null;
+      return {time:(m[1]||'').trim(), room:(m[2]||'').trim()};
+    }).filter(Boolean);
+  }
+
+  function render(list){
+    tbody.innerHTML='';
+    countEl.innerHTML = list.length
+      ? 'عدد النتائج: <b>'+toAr(list.length)+'</b>'
+      : '';
+    if(!list.length){
+      const tr=document.createElement('tr');
+      tr.innerHTML='<td colspan="8"><div class="empty"><b>لا توجد نتائج</b>جرّب رمزًا أو اسمًا آخر.</div></td>';
+      tbody.appendChild(tr); return;
+    }
+    const frag=document.createDocumentFragment();
+    list.forEach((c,i)=>{
+      const open = c.status.indexOf('مفتوح')!==-1;
+      const meetings = parseMeetings(c.section);
+      const tr=document.createElement('tr');
+      tr.className='course-row '+(i%2===0?'ROW1':'ROW2');
+      tr.innerHTML =
+        '<td data-th="رمز المقرر"><span class="c-code">'+esc(c.code)+'</span></td>'+
+        '<td data-th="اسم المقرر"><span class="c-name">'+esc(c.name)+'</span></td>'+
+        '<td data-th="المقر"><span class="c-loc">'+esc(c.loc||'—')+'</span></td>'+
+        '<td data-th="الشعبة"><span class="c-sec">'+esc(c.sec)+'</span></td>'+
+        '<td data-th="النشاط"><span class="act">'+esc(c.act||'—')+'</span></td>'+
+        '<td data-th="الساعات">'+esc(c.hrs?c.hrs:'')+'</td>'+
+        '<td data-th="الحالة"><span class="status '+(open?'open':'closed')+'"><span class="dot"></span>'+esc(c.status)+'</span></td>'+
+        '<td class="cell-details" data-th="التفاصيل"></td>';
+      const btn=document.createElement('button');
+      btn.className='details-btn'; btn.type='button';
+      btn.setAttribute('aria-expanded','false');
+      btn.innerHTML='التفاصيل<svg class="chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+      const dcell=tr.querySelector('.cell-details');
+      dcell.appendChild(btn);
+      /* hidden fields matching the portal contract so the original extractor works.
+         instructor is intentionally omitted so doctor names stay hidden. */
+      const hSec=document.createElement('input');
+      hSec.type='hidden'; hSec.id='qu:offeredCoursesTable:'+i+':section'; hSec.value=c.section||'';
+      const hExam=document.createElement('input');
+      hExam.type='hidden'; hExam.id='qu:offeredCoursesTable:'+i+':examPeriod'; hExam.value=c.exam||'';
+      dcell.appendChild(hSec); dcell.appendChild(hExam);
+
+      const dtr=document.createElement('tr');
+      dtr.className='detail-row'; dtr.hidden=true;
+      const examTxt = c.exam
+        ? 'فترة الاختبار: <b>'+esc(toAr(c.exam))+'</b>'
+        : 'فترة الاختبار: <span class="none">غير محددة</span>';
+      const meetHtml = meetings.length
+        ? meetings.map(m=>'<div class="meeting"><span class="mt-time">'+esc(toAr(m.time))+'</span>'+(m.room?'<span class="mt-room">'+esc(m.room)+'</span>':'')+'</div>').join('')
+        : '<div class="meeting"><span class="mt-time">لا توجد أوقات محددة</span></div>';
+      dtr.innerHTML =
+        '<td colspan="8"><div class="detail-inner">'+
+          '<div><div class="detail-title">أوقات الشعبة</div><div class="meetings">'+meetHtml+'</div></div>'+
+          '<div class="exam">'+examTxt+'</div>'+
+        '</div></td>';
+
+      btn.addEventListener('click',()=>{
+        const isOpen = !dtr.hidden;
+        dtr.hidden = isOpen;
+        tr.classList.toggle('open-detail', !isOpen);
+        btn.setAttribute('aria-expanded', String(!isOpen));
+      });
+
+      frag.appendChild(tr); frag.appendChild(dtr);
+    });
+    tbody.appendChild(frag);
+  }
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
+
+  function filter(){
+    const term=q.value.trim().toLowerCase();
+    if(!term){ render(DATA); return; }
+    const t = term.replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));
+    render(DATA.filter(c=>{
+      return (c.code+' '+c.name+' '+c.sec+' '+c.loc+' '+c.act+' '+c.status)
+        .toLowerCase().includes(t) || (c.code+' '+c.name+' '+c.sec).toLowerCase().includes(term);
+    }));
+  }
+
+  q.addEventListener('input', filter);
+  render(DATA);
+})();
+</script>
+</body>
+</html>
